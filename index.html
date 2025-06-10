@@ -110,10 +110,11 @@
             <div class="proyectos-grid">
                 <!-- Proyecto 1 -->
                 <div class="proyecto-card">
-                    <img src="img/foto5.jpg" alt="Cas Mut">
+                    <img src="img/foto10.png" alt="Cas Mut">
                     <div class="proyecto-info">
-                        <h3>Villa Cas Mut (Ibiza)</h3>
-                        <a href="#" class="ver-mas">Ver Proyecto <i class="fas fa-arrow-right"></i></a>
+                        <h3>Ses Torres II (Ibiza)</h3>
+                        <a href="https://www.idealista.com/inmueble/108240315/?at_medium=email&at_campaign=private_sendadtofriend&at_campaigntype=retention&at_project=others&at_provider=notifications&at_date_send=2025-06-10T13:15:11&at_recipient_id=QhtxgDQOVtluwDMyMwJ1cbO268iYLasR2rVIkG6kzV4=&at_link=adLink&utm_medium=email&utm_source=notifications&utm_campaign=private_sendadtofriend"
+                            class="ver-mas">Ver Proyecto <i class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -303,18 +304,6 @@
                 });
             }
 
-            // Animación al hacer scroll (AOS)
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.servicio-card, .proyecto-card').forEach(card => {
-                observer.observe(card);
-            });
         });
     </script>
 

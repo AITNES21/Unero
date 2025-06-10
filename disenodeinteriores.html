@@ -56,8 +56,7 @@
             <div class="gallery-container">
                 <!-- Proyecto 1 -->
                 <div class="gallery-item">
-                    <img src="Casas/Diseñointeriores/Salon.JPG"
-                        alt="Salón moderno">
+                    <img src="Casas/Diseñointeriores/Salon.JPG" alt="Salón moderno">
                     <div class="gallery-overlay">
                         <h3>Salón contemporáneo</h3>
                         <p>Diseño minimalista con muebles personalizados</p>
@@ -66,8 +65,7 @@
 
                 <!-- Proyecto 2 -->
                 <div class="gallery-item">
-                    <img src="Casas/Diseñointeriores/cocina.JPG"
-                        alt="Cocina integrada">
+                    <img src="Casas/Diseñointeriores/cocina.JPG" alt="Cocina integrada">
                     <div class="gallery-overlay">
                         <h3>Cocina abierta</h3>
                         <p>Integración perfecta entre cocina y salón</p>
@@ -76,8 +74,7 @@
 
                 <!-- Proyecto 3 -->
                 <div class="gallery-item">
-                    <img src="Casas/Diseñointeriores/suite1.jpg"
-                        alt="Dormitorio principal">
+                    <img src="Casas/Diseñointeriores/suite1.jpg" alt="Dormitorio principal">
                     <div class="gallery-overlay">
                         <h3>Suite principal</h3>
                         <p>Armonía entre confort y elegancia</p>
@@ -86,8 +83,7 @@
 
                 <!-- Proyecto 4 -->
                 <div class="gallery-item">
-                    <img src="Casas/Diseñointeriores/baño.JPG"
-                        alt="Baño de lujo">
+                    <img src="Casas/Diseñointeriores/baño.JPG" alt="Baño de lujo">
                     <div class="gallery-overlay">
                         <h3>Baño premium</h3>
                         <p>Materiales nobles y acabados de alta gama</p>
@@ -96,8 +92,7 @@
 
                 <!-- Proyecto 5 -->
                 <div class="gallery-item">
-                    <img src="Casas/Diseñointeriores/espacioext.jpg"
-                        alt="Terraza exterior">
+                    <img src="Casas/Diseñointeriores/espacioext.jpg" alt="Terraza exterior">
                     <div class="gallery-overlay">
                         <h3>Espacios exteriores</h3>
                         <p>Integración interior-exterior fluida</p>
@@ -106,8 +101,7 @@
 
                 <!-- Proyecto 6 -->
                 <div class="gallery-item">
-                    <img src="Casas/Diseñointeriores/gimnasio.JPG"
-                        alt="Oficina en casa">
+                    <img src="Casas/Diseñointeriores/gimnasio.JPG" alt="Oficina en casa">
                     <div class="gallery-overlay">
                         <h3>Gimnasio</h3>
                         <p>Gimnasio</p>
@@ -180,125 +174,113 @@
     <script src="js/main.js"></script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Menú móvil
-        const menuToggle = document.querySelector('.menu-toggle');
-        const navbar = document.querySelector('.navbar');
+        document.addEventListener('DOMContentLoaded', function () {
+            // Menú móvil
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navbar = document.querySelector('.navbar');
 
-        menuToggle.addEventListener('click', () => {
-            navbar.classList.toggle('active');
-            menuToggle.innerHTML = navbar.classList.contains('active')
-                ? '<i class="fas fa-times"></i>'
-                : '<i class="fas fa-bars"></i>';
-        });
-
-        // Dropdowns
-        const dropdowns = document.querySelectorAll('.dropdown');
-        const dropdownToggles = document.querySelectorAll('.dropdown > a');
-
-        // Desktop: abrir al pasar el mouse
-        dropdowns.forEach(dropdown => {
-            dropdown.addEventListener('mouseenter', () => {
-                if (window.innerWidth > 992) {
-                    closeAllDropdowns();
-                    dropdown.querySelector('.dropdown-menu').style.display = 'flex';
-                }
+            menuToggle.addEventListener('click', () => {
+                navbar.classList.toggle('active');
+                menuToggle.innerHTML = navbar.classList.contains('active')
+                    ? '<i class="fas fa-times"></i>'
+                    : '<i class="fas fa-bars"></i>';
             });
 
-            dropdown.addEventListener('mouseleave', () => {
-                if (window.innerWidth > 992) {
-                    dropdown.querySelector('.dropdown-menu').style.display = 'none';
-                }
-            });
-        });
+            // Dropdowns
+            const dropdowns = document.querySelectorAll('.dropdown');
+            const dropdownToggles = document.querySelectorAll('.dropdown > a');
 
-        // Móvil: abrir al hacer clic
-        dropdownToggles.forEach(toggle => {
-            toggle.addEventListener('click', function (e) {
-                if (window.innerWidth <= 992) {
-                    e.preventDefault();
-                    const dropdown = this.parentNode;
-                    const menu = dropdown.querySelector('.dropdown-menu');
-                    const isOpen = menu.style.display === 'flex';
-
-                    closeAllDropdowns();
-
-                    if (!isOpen) {
-                        menu.style.display = 'flex';
-                        dropdown.classList.add('active');
+            // Desktop: abrir al pasar el mouse
+            dropdowns.forEach(dropdown => {
+                dropdown.addEventListener('mouseenter', () => {
+                    if (window.innerWidth > 992) {
+                        closeAllDropdowns();
+                        dropdown.querySelector('.dropdown-menu').style.display = 'flex';
                     }
+                });
+
+                dropdown.addEventListener('mouseleave', () => {
+                    if (window.innerWidth > 992) {
+                        dropdown.querySelector('.dropdown-menu').style.display = 'none';
+                    }
+                });
+            });
+
+            // Móvil: abrir al hacer clic
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function (e) {
+                    if (window.innerWidth <= 992) {
+                        e.preventDefault();
+                        const dropdown = this.parentNode;
+                        const menu = dropdown.querySelector('.dropdown-menu');
+                        const isOpen = menu.style.display === 'flex';
+
+                        closeAllDropdowns();
+
+                        if (!isOpen) {
+                            menu.style.display = 'flex';
+                            dropdown.classList.add('active');
+                        }
+                    }
+                });
+            });
+
+            // Cerrar dropdowns al hacer clic fuera
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.dropdown')) {
+                    closeAllDropdowns();
                 }
             });
-        });
 
-        // Cerrar dropdowns al hacer clic fuera
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('.dropdown')) {
-                closeAllDropdowns();
+            function closeAllDropdowns() {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.style.display = 'none';
+                });
+                document.querySelectorAll('.dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('active');
+                });
             }
-        });
 
-        function closeAllDropdowns() {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                menu.style.display = 'none';
-            });
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                dropdown.classList.remove('active');
-            });
-        }
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if (
+                        !this.classList.contains('dropdown-toggle') &&
+                        !this.parentNode.classList.contains('dropdown-menu')
+                    ) {
+                        const targetId = this.getAttribute('href');
+                        if (targetId && targetId !== '#') {
+                            const target = document.querySelector(targetId);
+                            if (target) {
+                                e.preventDefault();
+                                window.scrollTo({
+                                    top: target.offsetTop - 80,
+                                    behavior: 'smooth'
+                                });
 
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                if (
-                    !this.classList.contains('dropdown-toggle') &&
-                    !this.parentNode.classList.contains('dropdown-menu')
-                ) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId && targetId !== '#') {
-                        const target = document.querySelector(targetId);
-                        if (target) {
-                            e.preventDefault();
-                            window.scrollTo({
-                                top: target.offsetTop - 80,
-                                behavior: 'smooth'
-                            });
-
-                            // Cerrar menú móvil
-                            if (window.innerWidth <= 992) {
-                                navbar.classList.remove('active');
-                                menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                                closeAllDropdowns();
+                                // Cerrar menú móvil
+                                if (window.innerWidth <= 992) {
+                                    navbar.classList.remove('active');
+                                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                                    closeAllDropdowns();
+                                }
                             }
                         }
                     }
-                }
+                });
             });
+
+            // Efecto parallax en el hero
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                window.addEventListener('scroll', () => {
+                    const scrollPosition = window.scrollY;
+                    hero.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+                });
+            }
+
         });
-
-        // Efecto parallax en el hero
-        const hero = document.querySelector('.hero');
-        if (hero) {
-            window.addEventListener('scroll', () => {
-                const scrollPosition = window.scrollY;
-                hero.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
-            });
-        }
-
-        // Animación al hacer scroll (AOS)
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.servicio-card, .proyecto-card').forEach(card => {
-            observer.observe(card);
-        });
-    });
-</script>
+    </script>
 </body>
 
 </html>

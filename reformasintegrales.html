@@ -265,18 +265,6 @@
                 });
             }
 
-            // Animación al hacer scroll (AOS)
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.servicio-card, .proyecto-card').forEach(card => {
-                observer.observe(card);
-            });
         });
     </script>
 </body>

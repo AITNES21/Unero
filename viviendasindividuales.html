@@ -61,7 +61,7 @@
                         <i class="fas fa-home"></i>
                         <h3>Vista Alegre</h3>
                         <p>Proyectos desde cero con diseño y materiales personalizados.</p>
-                        <a href="construccion-nueva.html" class="servicio-btn">Ver más <i
+                        <a href="vista-Alegre.html" class="servicio-btn">Ver más <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         <i class="fas fa-home"></i>
                         <h3>Ses Torres II</h3>
                         <p>Proyectos desde cero con diseño y materiales personalizados.</p>
-                        <a href="construccion-nueva.html" class="servicio-btn">Ver más <i
+                        <a href="sestorres2.html" class="servicio-btn">Ver más <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -86,14 +86,14 @@
                         <i class="fas fa-home"></i>
                         <h3>Can Cana</h3>
                         <p>Proyectos desde cero con diseño y materiales personalizados.</p>
-                        <a href="construccion-nueva.html" class="servicio-btn">Ver más <i
+                        <a href="cancana.html" class="servicio-btn">Ver más <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
 
                 <!-- Villa individual con piscina 4-->
                 <div class="servicio-card">
-                    <div class="servicio-card-bg" style="background-image: url('');"></div>
+                    <div class="servicio-card-bg" style="background-image: url('img/foto10.png');"></div>
                     <div class="servicio-card-content">
                         <i class="fas fa-home"></i>
                         <h3>Ses Torres I</h3>
@@ -265,18 +265,6 @@
                 });
             }
 
-            // Animación al hacer scroll (AOS)
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.servicio-card, .proyecto-card').forEach(card => {
-                observer.observe(card);
-            });
         });
     </script>
 </body>

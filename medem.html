@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación del Proyecto | Unero Espacio</title>
+    <meta name="description" content="Consulta la documentación completa de nuestro proyecto exclusivo en Marbella.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS */
+        :root {
+            --color-primary: #0a1a2f;
+            --color-secondary: #ffffff;
+            --color-accent: #d4af37;
+            --color-accent-light: #f5e6c8;
+            --color-bg: #f8f9fa;
+            --color-text: #333333;
+            --box-shadow: 0 10px 30px rgba(10, 26, 47, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* Reset y Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background: var(--color-secondary);
+            overflow-x: hidden;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+
+        /* Utilidades */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title span {
+            color: var(--color-accent);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--color-accent);
+            animation: expandWidth 0.8s ease-out 0.5s backwards;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: var(--color-secondary);
+        }
+
+        .loading-logo img {
+            height: 80px;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-accent);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent) 0%, #f5d782 100%);
+            z-index: 9998;
+            transition: width 0.3s ease;
+        }
+
+        /* Header */
+        .header {
+            background: var(--color-primary);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .header.scrolled {
+            background: rgba(10, 26, 47, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Navegación */
+        .navbar ul {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem;
+            align-items: center;
+            margin: 0;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: var(--color-secondary);
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.8rem 0;
+            display: block;
+        }
+
+        .navbar a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            bottom: 0;
+            left: 0;
+            transition: var(--transition-bounce);
+        }
+
+        .navbar a:hover::after,
+        .navbar a.active::after {
+            width: 100%;
+        }
+
+        .cta-nav {
+            background: var(--color-accent) !important;
+            color: var(--color-primary) !important;
+            padding: 0.8rem 2rem !important;
+            border-radius: 30px !important;
+            transition: var(--transition-bounce) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            font-size: 1rem !important;
+            white-space: nowrap !important;
+            margin-left: 1rem !important;
+        }
+
+        .cta-nav:hover {
+            background: var(--color-secondary) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .cta-nav::after {
+            display: none !important;
+        }
+
+        /* Menú Hamburguesa */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            z-index: 1001;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hamburger-line {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: var(--color-secondary);
+            margin: 3px 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 2px;
+            transform-origin: center;
+        }
+
+        .menu-toggle.active .hamburger-line:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+            background: var(--color-accent);
+        }
+
+        .menu-toggle.active .hamburger-line:nth-child(2) {
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        .menu-toggle.active .hamburger-line:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+            background: var(--color-accent);
+        }
+
+        /* Hero Section */
+        .hero-video {
+            position: relative;
+            height: 60vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.6) 0%, rgba(22, 58, 103, 0.8) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23163a67" width="1200" height="600"/><path fill="%230a1a2f" d="M0 600L400 400L800 500L1200 300V600z"/></svg>') no-repeat center center/cover;
+        }
+
+        .hero-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.6) 100%);
+            z-index: 2;
+        }
+
+        .hero-video-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: var(--color-secondary);
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-video-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: var(--color-secondary);
+        }
+
+        .hero-video-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-glow {
+            color: var(--color-accent);
+            display: inline-block;
+            animation: gentleGlow 3s ease-in-out infinite alternate;
+        }
+
+        /* Botones */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(90deg, var(--color-accent) 0%, #f5d782 100%);
+            color: var(--color-primary);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-bounce);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        .button-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .button-arrow {
+            transform: translateX(5px);
+        }
+
+        /* PDF Section */
+        .pdf-section {
+            padding: 5rem 0;
+            background: var(--color-bg);
+        }
+
+        /* PDF Container */
+        .pdf-container {
+            background: var(--color-secondary);
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            display: block;
+        }
+
+        .pdf-fallback {
+            padding: 3rem;
+            text-align: center;
+            background: var(--color-bg);
+        }
+
+        .pdf-fallback h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .pdf-fallback p {
+            color: var(--color-text);
+            margin-bottom: 2rem;
+        }
+
+        .download-btn {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-bounce);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(10, 26, 47, 0.3);
+        }
+
+        /* Loading para PDF */
+        .pdf-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            background: var(--color-bg);
+            border-radius: 15px;
+        }
+
+        .pdf-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* Information Section */
+        .document-info {
+            padding: 5rem 0;
+            background: var(--color-secondary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .info-card {
+            background: var(--color-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition-bounce);
+            box-shadow: var(--box-shadow);
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(10, 26, 47, 0.15);
+        }
+
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--color-accent);
+            color: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover .info-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .info-card h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-card p {
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--color-accent);
+            color: var(--color-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition-bounce);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--color-primary);
+            color: var(--color-accent);
+            box-shadow: 0 10px 20px rgba(10, 26, 47, 0.3);
+        }
+
+        /* Footer */
+        .location-section {
+            padding: 3rem 0;
+            background: var(--color-primary);
+            color: var(--color-accent);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition-bounce);
+            backdrop-filter: blur(10px);
+        }
+
+        .location-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .location-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .location-header i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .location-body a {
+            color: var(--color-accent-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .location-body a:hover {
+            color: var(--color-accent);
+        }
+
+        .contact-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        /* Animaciones */
+        @keyframes expandWidth {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 80px;
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes gentleGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            }
+
+            100% {
+                text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .navbar {
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100vh;
+                background: var(--color-primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: left 0.3s ease;
+                z-index: 999;
+            }
+
+            .navbar.active {
+                left: 0;
+            }
+
+            .navbar ul {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .navbar a {
+                font-size: 1.2rem;
+                padding: 1rem 0;
+            }
+
+            .cta-nav {
+                margin-left: 0 !important;
+                margin-top: 1rem !important;
+            }
+
+            .hero-video-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-video-content p {
+                font-size: 1.1rem;
+            }
+
+            .pdf-viewer {
+                height: 60vh;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-video-content h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
+    <!-- Navbar -->
+    <header class="header" id="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo" loading="lazy">
+            </a>
+            <nav class="navbar" id="navbar">
+                <ul>
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#servicios">Servicios</a></li>
+                    <li><a href="construccion.html">Construcción</a></li>
+                    <li><a href="reformasintegrales.html">Reformas</a></li>
+                    <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
+                    <li><a href="index.html#proyectos">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
+                    <li><a href="index.html#contacto" class="cta-nav">Contacto</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-video">
+        <div class="hero-video-overlay"></div>
+        <div class="hero-video-content">
+            <h1 class="text-glow">Documentación del <span class="text-glow">Proyecto</span></h1>
+            <p>Consulta todos los detalles técnicos, planos y especificaciones de nuestro desarrollo exclusivo.</p>
+            <a href="#documento" class="cta-button" data-scroll="documento">
+                Ver Documento <i class="fas fa-file-pdf button-arrow"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- PDF Section -->
+    <section class="pdf-section" id="documento">
+        <div class="container">
+            <h2 class="section-title">Documentación <span>Técnica</span></h2>
+
+            <!-- PDF Container -->
+            <div class="pdf-container" id="pdf-container">
+                <!-- PDF Viewer -->
+                <iframe id="pdf-viewer" class="pdf-viewer" src="" title="Documentación del proyecto">
+                </iframe>
+
+                <!-- Loading State -->
+                <div class="pdf-loading" id="pdf-loading">
+                    <div class="pdf-loading-spinner"></div>
+                </div>
+
+                <!-- Fallback Content -->
+                <div class="pdf-fallback" id="pdf-fallback" style="display: none;">
+                    <h3>No se puede mostrar el PDF</h3>
+                    <p>Tu navegador no puede mostrar archivos PDF directamente. Por favor, actualiza tu navegador o usa
+                        uno compatible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Document Information -->
+    <section class="document-info">
+        <div class="container">
+            <h2 class="section-title">Información del <span>Documento</span></h2>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Documento Técnico</h3>
+                    <p>Planos arquitectónicos, memorias técnicas y especificaciones detalladas del proyecto de
+                        construcción.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-ruler-combined"></i>
+                    </div>
+                    <h3>Planos y Medidas</h3>
+                    <p>Dimensiones exactas, distribución de espacios y detalles constructivos profesionales.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Especificaciones</h3>
+                    <p>Materiales de alta calidad, acabados premium y sistemas de instalaciones de última generación.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Certificaciones</h3>
+                    <p>Cumplimiento de normativas vigentes, eficiencia energética y estándares de construcción
+                        sostenible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <section class="location-section">
+        <div class="container">
+            <div class="location-grid">
+                <!-- Ubicación -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Marbella</h3>
+                    </div>
+                    <div class="location-body">
+                        <p style="color: var(--color-accent-light);">Costa del Sol, Málaga</p>
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-envelope" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Contacta con nosotros</h3>
+                    </div>
+                    <div class="location-body">
+                        <a href="mailto:eva@unero.es" style="color: var(--color-accent-light);">eva@unero.es</a>
+                        <div class="contact-numbers">
+                            <a href="tel:687885319" style="color: var(--color-accent-light);">687 885 319</a>
+                            <a href="tel:679418741" style="color: var(--color-accent-light);">679 418 741</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-clock" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Horario</h3>
+                    </div>
+                    <div class="location-body">
+                        <div class="schedule-item" style="border-bottom: 1px solid var(--color-accent-light);">
+                            <span style="color: var(--color-accent-light);">Lun - Vie</span>
+                            <span style="color: var(--color-accent-light);">10:00 - 18:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span style="color: var(--color-accent-light);">Sáb - Dom</span>
+                            <span style="color: var(--color-accent-light);">Cerrado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        // ==============================================
+        // CONFIGURACIÓN DEL PDF - CAMBIAR AQUÍ
+        // ==============================================
+
+        // ✅ CAMBIAR ESTA RUTA POR LA DE TU ARCHIVO PDF LOCAL
+        const PDF_PATH = 'pdf/planos-medem.pdf';  // Ruta relativa desde la página
+
+        // Alternativamente, puedes usar una ruta absoluta:
+        // const PDF_PATH = '/ruta/completa/al/archivo.pdf';
+
+        // ==============================================
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function () {
+            initPDFViewer();
+            initNavigation();
+            initScrollEffects();
+        });
+
+        // Cargar PDF automáticamente
+        function initPDFViewer() {
+            loadPDF();
+        }
+
+        // Función principal para cargar PDF
+        function loadPDF() {
+            showLoading();
+
+            const pdfViewer = document.getElementById('pdf-viewer');
+
+            // Cargar PDF desde ruta local
+            pdfViewer.src = PDF_PATH;
+
+            // Manejar eventos de carga
+            pdfViewer.onload = function () {
+                hideLoading();
+            };
+
+            pdfViewer.onerror = function () {
+                hideLoading();
+                showFallback();
+            };
+
+            // Timeout por si no carga
+            setTimeout(() => {
+                if (document.getElementById('pdf-loading').style.display !== 'none') {
+                    hideLoading();
+                }
+            }, 10000);
+        }
+
+        // Mostrar loading
+        function showLoading() {
+            document.getElementById('pdf-loading').style.display = 'flex';
+            document.getElementById('pdf-viewer').style.display = 'none';
+            document.getElementById('pdf-fallback').style.display = 'none';
+        }
+
+        // Ocultar loading
+        function hideLoading() {
+            document.getElementById('pdf-loading').style.display = 'none';
+            document.getElementById('pdf-viewer').style.display = 'block';
+        }
+
+        // Mostrar fallback
+        function showFallback() {
+            document.getElementById('pdf-loading').style.display = 'none';
+            document.getElementById('pdf-viewer').style.display = 'none';
+            document.getElementById('pdf-fallback').style.display = 'block';
+        }
+
+        // ===== NAVEGACIÓN Y EFECTOS =====
+
+        // Inicializar navegación
+        function initNavigation() {
+            initMobileMenu();
+            initSmoothScroll();
+            initBackToTop();
+        }
+
+        // Menú móvil
+        function initMobileMenu() {
+            const menuToggle = document.getElementById('menu-toggle');
+            const navbar = document.getElementById('navbar');
+            const body = document.body;
+
+            if (!menuToggle || !navbar) return;
+
+            menuToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                menuToggle.classList.toggle('active');
+                navbar.classList.toggle('active');
+                body.classList.toggle('menu-open');
+            });
+
+            navbar.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        menuToggle.classList.remove('active');
+                        navbar.classList.remove('active');
+                        body.classList.remove('menu-open');
+                    }
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    navbar.classList.remove('active');
+                    body.classList.remove('menu-open');
+                }
+            });
+        }
+
+        // Scroll suave
+        function initSmoothScroll() {
+            document.querySelectorAll('a[data-scroll], a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', (e) => {
+                    const href = anchor.getAttribute('href') || anchor.getAttribute('data-scroll');
+
+                    if (!href || href === '#' || href.startsWith('http') || href.includes('.html')) {
+                        return;
+                    }
+
+                    e.preventDefault();
+
+                    const targetId = href.startsWith('#') ? href.substring(1) : href;
+                    const target = document.getElementById(targetId);
+
+                    if (target) {
+                        const header = document.querySelector('.header');
+                        const headerHeight = header ? header.offsetHeight : 80;
+                        const targetPosition = target.offsetTop - headerHeight - 20;
+
+                        smoothScrollTo(targetPosition, 800);
+                    }
+                });
+            });
+        }
+
+        // Función de scroll suave
+        function smoothScrollTo(target, duration) {
+            const start = window.pageYOffset;
+            const distance = target - start;
+            let startTime = null;
+
+            const animation = (currentTime) => {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const progress = Math.min(timeElapsed / duration, 1);
+
+                const easeInOutCubic = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : (progress - 1) * (2 * progress - 2) * (2 * progress - 2) + 1;
+
+                window.scrollTo(0, start + distance * easeInOutCubic);
+
+                if (timeElapsed < duration) {
+                    requestAnimationFrame(animation);
+                }
+            };
+
+            requestAnimationFrame(animation);
+        }
+
+        // Back to top
+        function initBackToTop() {
+            const backToTop = document.getElementById('back-to-top');
+
+            if (!backToTop) return;
+
+            backToTop.addEventListener('click', (e) => {
+                e.preventDefault();
+                smoothScrollTo(0, 600);
+            });
+
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+        }
+
+        // Efectos de scroll
+        function initScrollEffects() {
+            const header = document.querySelector('.header');
+            const progressBar = document.getElementById('progress-bar');
+            let lastScrollTop = 0;
+
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset;
+
+                // Progress bar
+                if (progressBar) {
+                    const docHeight = document.body.scrollHeight - window.innerHeight;
+                    const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+                    progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+                }
+
+                // Header hide/show
+                if (header) {
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        header.classList.add('hidden');
+                    } else {
+                        header.classList.remove('hidden');
+                    }
+
+                    if (scrollTop > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+
+                    lastScrollTop = Math.max(scrollTop, 0);
+                }
+            });
+        }
+
+        // Loading screen
+        window.addEventListener('load', function () {
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                }, 1000);
+            }
+        });
+
+        // Responsive adjustments
+        window.addEventListener('resize', function () {
+            if (window.innerWidth <= 768) {
+                const navbar = document.getElementById('navbar');
+                const menuToggle = document.getElementById('menu-toggle');
+
+                if (navbar && menuToggle) {
+                    navbar.classList.remove('active');
+                    menuToggle.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            }
+        });
+
+        // Detectar si no se puede cargar PDF
+        document.getElementById('pdf-viewer').addEventListener('error', function () {
+            showFallback();
+        });
+
+        // Console info para desarrolladores
+        console.log('📄 PDF Viewer - Unero Espacio');
+        console.log('🔧 Para cambiar el PDF, modifica la variable PDF_PATH en el JavaScript');
+        console.log('📁 PDF actual:', PDF_PATH);
+    </script>
+</body>
+
+</html>

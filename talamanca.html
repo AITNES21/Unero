@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Talamanca | Unero Espacio</title>
+    <meta name="description"
+        content="Descubre nuestro exclusivo proyecto en Marbella. Diseño de lujo y acabados premium.">
+    <link rel="stylesheet" href="inde.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
+    <style>
+        /* Estilos específicos para la galería mejorada */
+        .hero-video {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-video video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        .hero-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.6) 0%, rgba(22, 58, 103, 0.7) 100%);
+            z-index: 2;
+        }
+
+        .hero-video-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: var(--color-secondary);
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-video-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-video-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 4;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .video-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: var(--color-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .video-btn:hover {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+            color: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        .gallery-enhanced {
+            padding: 5rem 0;
+            background: var(--color-bg);
+        }
+
+        .gallery-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .gallery-tab {
+            background: transparent;
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition-bounce);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .gallery-tab:hover,
+        .gallery-tab.active {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        .gallery-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            grid-auto-rows: 250px;
+        }
+
+        .gallery-item-enhanced {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition-bounce);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .gallery-item-enhanced.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .gallery-item-enhanced:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(10, 26, 47, 0.3);
+        }
+
+        .gallery-item-enhanced.large {
+            grid-row: span 2;
+        }
+
+        .gallery-item-enhanced.wide {
+            grid-column: span 2;
+        }
+
+        .gallery-item-enhanced img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .gallery-item-enhanced:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay-enhanced {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(10, 26, 47, 0.9));
+            color: white;
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .gallery-item-enhanced:hover .gallery-overlay-enhanced {
+            transform: translateY(0);
+        }
+
+        .gallery-category {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 0.8rem;
+        }
+
+        .gallery-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .gallery-description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.show .lightbox-content {
+            transform: scale(1);
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            color: var(--color-accent);
+            transform: scale(1.2);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-nav:hover {
+            background: var(--color-accent);
+            color: var(--color-primary);
+        }
+
+        .lightbox-prev {
+            left: -80px;
+        }
+
+        .lightbox-next {
+            right: -80px;
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Sección de información del proyecto */
+        .project-info {
+            padding: 5rem 0;
+            background: var(--color-secondary);
+        }
+
+        .project-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .project-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            background: var(--color-bg);
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+
+        .feature-item:hover {
+            background: var(--color-accent-light);
+            transform: translateX(10px);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--color-accent);
+            color: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .project-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 2rem;
+            background: var(--color-bg);
+            border-radius: 15px;
+            transition: var(--transition-bounce);
+        }
+
+        .stat-box:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--color-text);
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-video-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-video-content p {
+                font-size: 1.1rem;
+            }
+
+            .video-controls {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .gallery-tabs {
+                gap: 0.5rem;
+            }
+
+            .gallery-tab {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .gallery-masonry {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .gallery-item-enhanced.wide {
+                grid-column: span 1;
+            }
+
+            .project-details {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .project-features {
+                grid-template-columns: 1fr;
+            }
+
+            .project-stats {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .timeline::before {
+                left: 2rem;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 4rem;
+                margin-right: 0;
+                text-align: left;
+            }
+
+            .timeline-marker {
+                left: 2rem;
+            }
+
+            .lightbox-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .lightbox-prev {
+                left: 1rem;
+            }
+
+            .lightbox-next {
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
+    <!-- Navbar -->
+    <header class="header" id="header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo" loading="lazy">
+            </a>
+            <nav class="navbar" id="navbar">
+                <ul>
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#servicios">Servicios</a></li>
+                    <li class="dropdown">
+                        <a href="construccion.html">Construcción</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                            <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="reformasintegrales.html">Reformas</a></li>
+                    <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
+                    <li><a href="index.html#proyectos">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
+                    <li><a href="index.html#contacto" class="cta-nav">Contacto</a></li>
+                </ul>
+            </nav>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Video Section -->
+    <section class="hero-video">
+        <video id="hero-video" autoplay muted loop>
+            <source src="Casas/imgtalamanca/0fcd0427-5345-4df2-bd3c-a891eb011b63 (1).MP4" type="video/mp4">
+            Tu navegador no soporta el tag de video.
+        </video>
+        <div class="hero-video-overlay"></div>
+        <div class="hero-video-content">
+            <h1 class="text-glow">Proyecto <span class="text-glow">Talamanca</span></h1>
+            <p>Exclusivo desarrollo residencial donde el lujo y la elegancia se encuentran con la innovación
+                arquitectónica.</p>
+            <a href="#galeria" class="cta-button" data-scroll="galeria">
+                Explorar Galería <i class="fas fa-camera button-arrow"></i>
+            </a>
+        </div>
+        <div class="video-controls">
+            <button class="video-btn" id="play-pause-btn" onclick="toggleVideo()">
+                <i class="fas fa-pause"></i>
+            </button>
+            <button class="video-btn" onclick="toggleMute()">
+                <i class="fas fa-volume-mute"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Información del Proyecto -->
+    <section class="project-info">
+        <div class="container">
+            <div class="project-details">
+                <div class="project-text">
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+
+                    <div class="project-stats">
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="450">0</span>
+                            <span class="stat-label">m² Construidos</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="5">0</span>
+                            <span class="stat-label">Dormitorios</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="4">0</span>
+                            <span class="stat-label">Baños</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="1200">0</span>
+                            <span class="stat-label">m² Parcela</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="3">0</span>
+                            <span class="stat-label">Plantas</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="2">0</span>
+                            <span class="stat-label">Garajes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Galería Mejorada -->
+    <section class="gallery-enhanced" id="galeria">
+        <div class="container">
+            <h2 class="section-title">Galería del <span>Proyecto</span></h2>
+
+            <div class="gallery-tabs">
+                <button class="gallery-tab active" data-category="all">Todas</button>
+                <button class="gallery-tab" data-category="exterior">Exteriores</button>
+                <button class="gallery-tab" data-category="interior">Interiores</button>
+            </div>
+
+            <div class="gallery-masonry" id="gallery-masonry">
+                <!-- Imagen destacada grande -->
+                <div class="gallery-item-enhanced large wide" data-category="exterior">
+                    <img src="img/foto9.png" alt="Vista principal de la villa">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Exterior</div>
+                        <h3 class="gallery-title">Fachada Principal</h3>
+                        <p class="gallery-description">Vista panorámica de la entrada principal con jardines
+                            mediterráneos</p>
+                    </div>
+                </div>
+
+                <!-- Salón -->
+                <div class="gallery-item-enhanced" data-category="interior">
+                    <img src="Casas/imgtalamanca/foto13.jpeg" alt="Salón principal">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Interior</div>
+                        <h3 class="gallery-title">Salón Principal</h3>
+                        <p class="gallery-description">Amplio salón con doble altura y ventanales panorámicos</p>
+                    </div>
+                </div>
+
+                <!-- Cocina -->
+                <div class="gallery-item-enhanced" data-category="interior">
+                    <img src="Casas/imgtalamanca/foto22.jpeg" alt="Cocina de diseño">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Interior</div>
+                        <h3 class="gallery-title">Cocina Gourmet</h3>
+                        <p class="gallery-description">Cocina de diseño con isla central y electrodomésticos premium</p>
+                    </div>
+                </div>
+
+                <!-- Dormitorio principal -->
+                <div class="gallery-item-enhanced large" data-category="interior">
+                    <img src="Casas/imgtalamanca/foto9.jpeg" alt="Dormitorio principal">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Interior</div>
+                        <h3 class="gallery-title">Suite Principal</h3>
+                        <p class="gallery-description">Dormitorio principal con vestidor y baño en suite con vistas al
+                            mar</p>
+                    </div>
+                </div>
+
+                <!-- Baño de lujo -->
+                <div class="gallery-item-enhanced" data-category="Interior">
+                    <img src="Casas/imgtalamanca/foto16.jpeg" alt="Baño de lujo">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Interior</div>
+                        <h3 class="gallery-title">Baño Principal</h3>
+                        <p class="gallery-description">Mármol Carrara y sanitarios de diseño exclusivo</p>
+                    </div>
+                </div>
+
+                <!-- Garaje -->
+                <div class="gallery-item-enhanced" data-category="interior">
+                    <img src="Casas/imgtalamanca/foto11.jpeg" alt="Garaje">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Exterior</div>
+                        <h3 class="gallery-title">Garaje</h3>
+                        <p class="gallery-description">Amplio Garaje con sitio para varios vehículos</p>
+                    </div>
+                </div>
+
+                <!-- Escaleras -->
+                <div class="gallery-item-enhanced" data-category="interior">
+                    <img src="Casas/imgtalamanca/foto14.jpeg" alt="Escaleras">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Interior</div>
+                        <h3 class="gallery-title">Escaleras</h3>
+                        <p class="gallery-description">Escaleras con acabaos profesionales</p>
+                    </div>
+                </div>
+
+                <!-- Baño 2 -->
+                <div class="gallery-item-enhanced" data-category="interior">
+                    <img src="Casas/imgtalamanca/foto24.jpeg" alt="Detalles arquitectónicos">
+                    <div class="gallery-overlay-enhanced">
+                        <div class="gallery-category">Interior</div>
+                        <h3 class="gallery-title">Baño invitados</h3>
+                        <p class="gallery-description">Detalles en piedra y maderas nobles</p>
+                    </div>
+                </div>
+
+                <div class="gallery-cta">
+                    <p>¿Te gustaría conocer más detalles sobre este proyecto exclusivo?</p>
+                    <a href="index.html#contacto" class="cta-button">
+                        Solicitar Información <i class="fas fa-arrow-right button-arrow"></i>
+                    </a>
+                </div>
+            </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="lightbox-nav lightbox-prev" onclick="prevImage()">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="lightbox-nav lightbox-next" onclick="nextImage()">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-counter" id="lightbox-counter"></div>
+        </div>
+    </div>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Contacto -->
+    <section class="location-section">
+        <div class="container">
+            <div class="location-grid">
+                <!-- Ubicación -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Marbella</h3>
+                    </div>
+                    <div class="location-body">
+                        <p style="color: var(--color-accent-light);">Costa del Sol, Málaga</p>
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-envelope" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Contacta con nosotros</h3>
+                    </div>
+                    <div class="location-body">
+                        <a href="mailto:eva@unero.es" style="color: var(--color-accent-light);">eva@unero.es</a>
+                        <div class="contact-numbers">
+                            <a href="tel:687885319" style="color: var(--color-accent-light);">687 885 319</a>
+                            <a href="tel:679418741" style="color: var(--color-accent-light);">679 418 741</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-clock" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Horario</h3>
+                    </div>
+                    <div class="location-body">
+                        <div class="schedule-item" style="border-bottom: 1px solid var(--color-accent-light);">
+                            <span style="color: var(--color-accent-light);">Lun - Vie</span>
+                            <span style="color: var(--color-accent-light);">10:00 - 18:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span style="color: var(--color-accent-light);">Sáb - Dom</span>
+                            <span style="color: var(--color-accent-light);">Cerrado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+    <script>
+        // Variables globales para la galería
+        let currentImageIndex = 0;
+        let galleryImages = [];
+        let currentCategory = 'all';
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function () {
+            initGallery();
+            initVideoControls();
+            collectGalleryImages();
+        });
+
+        // Controles de video
+        function toggleVideo() {
+            const video = document.getElementById('hero-video');
+            const btn = document.getElementById('play-pause-btn');
+            const icon = btn.querySelector('i');
+
+            if (video.paused) {
+                video.play();
+                icon.className = 'fas fa-pause';
+            } else {
+                video.pause();
+                icon.className = 'fas fa-play';
+            }
+        }
+
+        function toggleMute() {
+            const video = document.getElementById('hero-video');
+            const btn = event.target.closest('.video-btn');
+            const icon = btn.querySelector('i');
+
+            if (video.muted) {
+                video.muted = false;
+                icon.className = 'fas fa-volume-up';
+            } else {
+                video.muted = true;
+                icon.className = 'fas fa-volume-mute';
+            }
+        }
+
+        function initVideoControls() {
+            const video = document.getElementById('hero-video');
+
+            // Auto-hide controls
+            let controlsTimeout;
+            const videoContainer = document.querySelector('.hero-video');
+            const controls = document.querySelector('.video-controls');
+
+            function showControls() {
+                controls.style.opacity = '1';
+                clearTimeout(controlsTimeout);
+                controlsTimeout = setTimeout(() => {
+                    controls.style.opacity = '0.7';
+                }, 3000);
+            }
+
+            videoContainer.addEventListener('mousemove', showControls);
+            videoContainer.addEventListener('mouseenter', showControls);
+
+            // Error handling
+            video.addEventListener('error', function () {
+                console.log('Error loading video, hiding video section');
+                videoContainer.style.display = 'none';
+            });
+        }
+
+        // Funciones de la galería
+        function initGallery() {
+            const tabs = document.querySelectorAll('.gallery-tab');
+            const items = document.querySelectorAll('.gallery-item-enhanced');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    const category = this.dataset.category;
+
+                    // Update active tab
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Filter items
+                    filterGallery(category);
+                    currentCategory = category;
+                    collectGalleryImages();
+                });
+            });
+
+            items.forEach((item, index) => {
+                item.addEventListener('click', function () {
+                    openLightbox(index);
+                });
+            });
+        }
+
+        function filterGallery(category) {
+            const items = document.querySelectorAll('.gallery-item-enhanced');
+
+            items.forEach((item, index) => {
+                const itemCategory = item.dataset.category;
+                const shouldShow = category === 'all' || itemCategory === category;
+
+                if (shouldShow) {
+                    item.style.display = 'block';
+                    setTimeout(() => {
+                        item.classList.add('visible');
+                    }, index * 100);
+                } else {
+                    item.classList.remove('visible');
+                    setTimeout(() => {
+                        item.style.display = 'none';
+                    }, 300);
+                }
+            });
+        }
+
+        function collectGalleryImages() {
+            galleryImages = [];
+            const visibleItems = document.querySelectorAll('.gallery-item-enhanced[style*="block"], .gallery-item-enhanced:not([style*="none"])');
+
+            visibleItems.forEach(item => {
+                if (currentCategory === 'all' || item.dataset.category === currentCategory) {
+                    const img = item.querySelector('img');
+                    const title = item.querySelector('.gallery-title')?.textContent || '';
+                    const description = item.querySelector('.gallery-description')?.textContent || '';
+
+                    galleryImages.push({
+                        src: img.src,
+                        alt: img.alt,
+                        title: title,
+                        description: description
+                    });
+                }
+            });
+        }
+
+        // Lightbox functions
+        function openLightbox(index) {
+            collectGalleryImages();
+            currentImageIndex = index;
+            const lightbox = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('lightbox-counter');
+
+            if (galleryImages[currentImageIndex]) {
+                img.src = galleryImages[currentImageIndex].src;
+                img.alt = galleryImages[currentImageIndex].alt;
+                counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+
+                lightbox.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        function nextImage() {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            updateLightboxImage();
+        }
+
+        function prevImage() {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            updateLightboxImage();
+        }
+
+        function updateLightboxImage() {
+            const img = document.getElementById('lightbox-img');
+            const counter = document.getElementById('lightbox-counter');
+
+            if (galleryImages[currentImageIndex]) {
+                img.style.opacity = '0';
+
+                setTimeout(() => {
+                    img.src = galleryImages[currentImageIndex].src;
+                    img.alt = galleryImages[currentImageIndex].alt;
+                    counter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+                    img.style.opacity = '1';
+                }, 150);
+            }
+        }
+
+        // Keyboard navigation for lightbox
+        document.addEventListener('keydown', function (e) {
+            const lightbox = document.getElementById('lightbox');
+
+            if (lightbox.classList.contains('show')) {
+                switch (e.key) {
+                    case 'Escape':
+                        closeLightbox();
+                        break;
+                    case 'ArrowLeft':
+                        prevImage();
+                        break;
+                    case 'ArrowRight':
+                        nextImage();
+                        break;
+                }
+            }
+        });
+
+        // Close lightbox when clicking outside the image
+        document.getElementById('lightbox').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeLightbox();
+            }
+        });
+
+        // Lazy loading para el video
+        const video = document.getElementById('hero-video');
+        if (video) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            });
+            observer.observe(video);
+        }
+
+        // Animaciones adicionales para elementos de timeline
+        const timelineItems = document.querySelectorAll('.timeline-item');
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        timelineItems.forEach(item => timelineObserver.observe(item));
+
+        // Contador animado para estadísticas
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                let startTime = null;
+
+                function updateCounter(currentTime) {
+                    if (!startTime) startTime = currentTime;
+                    const progress = Math.min((currentTime - startTime) / duration, 1);
+
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const currentValue = Math.floor(easeOutQuart * target);
+
+                    counter.textContent = currentValue;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target;
+                    }
+                }
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            requestAnimationFrame(updateCounter);
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+
+                observer.observe(counter);
+            });
+        }
+
+        // Inicializar contadores cuando se carga la página
+        document.addEventListener('DOMContentLoaded', animateCounters);
+
+        // Efecto parallax suave para el video
+        window.addEventListener('scroll', function () {
+            const scrolled = window.pageYOffset;
+            const video = document.querySelector('.hero-video');
+            const videoContent = document.querySelector('.hero-video-content');
+
+            if (video && scrolled < window.innerHeight) {
+                video.style.transform = `translateY(${scrolled * 0.5}px)`;
+                videoContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+            }
+        });
+
+        // Inicialización final
+        window.addEventListener('load', function () {
+            // Mostrar todas las imágenes inicialmente
+            setTimeout(() => {
+                filterGallery('all');
+            }, 500);
+
+            // Precargar algunas imágenes para mejorar la experiencia
+            const preloadImages = [
+                'Casas/imgmarbella/foto2.jpg',
+                'Casas/imgmarbella/foto3.jpg',
+                'Casas/imgmarbella/foto4.jpg'
+            ];
+
+            preloadImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        });
+    </script>
+
+</body>
+
+</html>

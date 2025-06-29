@@ -16,105 +16,156 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="inde.css">
     <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
+
+     <!-- SEO Mejorado -->
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="Unero Espacio">
+    <meta name="keywords" content="unero, ibiza, casas de lujo ibiza, ibiza, interiores ibiza, reformas ibiza, construcción viviendas lujo, inmobiliaria ibiza, villas piscina">
 </head>
 
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
     <!-- Navbar -->
-    <header class="header">
+    <header class="header" id="header">
         <div class="container">
             <a href="#" class="logo">
                 <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
-                    alt="Unero Espacio Logo">
+                    alt="Unero Espacio Logo" loading="lazy">
             </a>
-            <nav class="navbar">
+            <nav class="navbar" id="navbar">
                 <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#inicio" data-scroll="inicio">Inicio</a></li>
+                    <li><a href="#servicios" data-scroll="servicios">Servicios</a></li>
                     <li class="dropdown">
-                        <a href="construccion.html">Construcción de vivienda</a>
+                        <a href="construccion.html">Construcción<i
+                                class="fas fa-chevron-down dropdown-arrow"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
                             <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
                         </ul>
                     </li>
-                    <li><a href="reformasintegrales.html">Reformas integrales</a></li>
+                    <li><a href="reformasintegrales.html">Reformas</a></li>
                     <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
-                    <li><a href="#proyectos">Proyectos</a></li>
-                    <li><a href="#contacto" class="cta-nav">Contacto</a></li>
+                    <li><a href="#proyectos" data-scroll="proyectos">Venta</a></li>
+                    <li><a href="alquiler.html" data-scroll="proyectos">Alquiler</a></li>
+                    <li><a href="#contacto" class="cta-nav" data-scroll="contacto">Contacto</a></li>
                 </ul>
             </nav>
-            <button class="menu-toggle" aria-label="Abrir menú">
-                <i class="fas fa-bars"></i>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
             </button>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section id="inicio" class="hero">
-        <div class="hero-content">
-            <h1>Inspirados por Ibiza, <span> creados para ti</span></h1>
-            <p>Diseñamos y construimos espacios únicos, a medida de tus sueños</p>
-            <a href="#contacto" class="cta-button">Solicitar Presupuesto</a>
+    <section id="inicio" class="hero parallax-section">
+        <div class="hero-content fade-in-up">
+            <h1 class="text-glow">Inspirados por Ibiza, <span class="text-glow">creados para ti</span></h1>
+            <p class="fade-in-up delay-1">Diseñamos y construimos espacios únicos, a medida de tus sueños</p>
+            <a href="#contacto" class="cta-button fade-in-up delay-2" data-scroll="contacto">
+                Solicitar Presupuesto
+                <i class="fas fa-arrow-right button-arrow"></i>
+            </a>
         </div>
         <div class="hero-overlay"></div>
+        <div class="scroll-indicator">
+            <div class="mouse">
+                <div class="wheel"></div>
+            </div>
+            <div class="scroll-text">Scroll</div>
+        </div>
     </section>
 
+    <!-- Servicios principales -->
     <section id="servicios" class="servicios">
         <div class="container">
-            <h2>Nuestros <span>Servicios</span></h2>
+            <h2 class="section-title fade-in-up">Nuestros <span>Servicios</span></h2>
             <div class="servicios-grid">
 
-                <!-- Servicio 1 (con botón) -->
-                <div class="servicio-card">
+                <!-- Servicio 1 -->
+                <div class="servicio-card fade-in-up" data-delay="0">
                     <div class="servicio-card-bg" style="background-image: url('img/foto1.jpg');">
                     </div>
                     <div class="servicio-card-content">
-                        <i class="fas fa-hammer"></i>
+                        <div class="servicio-icon">
+                            <i class="fas fa-hammer"></i>
+                        </div>
                         <h3>Construcción de Vivienda</h3>
                         <p>Desde el diseño hasta la entrega llave en mano.</p>
-                        <a href="construccion.html" class="servicio-btn">Saber más</a>
+                        <a href="construccion.html" class="servicio-btn">
+                            Saber más
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
 
                 <!-- Servicio 2 -->
-                <div class="servicio-card">
+                <div class="servicio-card fade-in-up" data-delay="200">
                     <div class="servicio-card-bg" style="background-image: url('img/foto2.jpg');">
                     </div>
                     <div class="servicio-card-content">
-                        <i class="fas fa-pencil-ruler"></i>
+                        <div class="servicio-icon">
+                            <i class="fas fa-pencil-ruler"></i>
+                        </div>
                         <h3>Reformas Integrales</h3>
                         <p>Renovamos tu espacio con materiales de alta calidad.</p>
-                        <a href="reformasintegrales.html" class="servicio-btn">Saber más</a>
+                        <a href="reformasintegrales.html" class="servicio-btn">
+                            Saber más
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
 
-
                 <!-- Servicio 3 -->
-                <div class="servicio-card">
+                <div class="servicio-card fade-in-up" data-delay="400">
                     <div class="servicio-card-bg" style="background-image: url('img/foto3.png');">
                     </div>
                     <div class="servicio-card-content">
-                        <i class="fas fa-couch"></i>
+                        <div class="servicio-icon">
+                            <i class="fas fa-couch"></i>
+                        </div>
                         <h3>Diseño de Interiores</h3>
                         <p>Creación de ambientes únicos y personalizados.</p>
-                        <a href="disenodeinteriores.html" class="servicio-btn">Saber más</a>
+                        <a href="disenodeinteriores.html" class="servicio-btn">
+                            Saber más
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 
     <!-- Proyectos Destacados -->
     <section id="proyectos" class="proyectos">
         <div class="container">
-            <h2>Viviendas <span>Disponibles</span></h2>
+            <h2 class="section-title fade-in-up">Viviendas <span>Disponibles</span></h2>
             <div class="proyectos-grid">
                 <!-- Proyecto 1 -->
-                <div class="proyecto-card">
-                    <img src="img/foto10.png" alt="Cas Mut">
+                <div class="proyecto-card fade-in-up">
+                    <img src="img/foto10.png" alt="Cas Mut" loading="lazy">
                     <div class="proyecto-info">
                         <h3>Ses Torres II (Ibiza)</h3>
                         <a href="https://www.idealista.com/inmueble/108240315/?at_medium=email&at_campaign=private_sendadtofriend&at_campaigntype=retention&at_project=others&at_provider=notifications&at_date_send=2025-06-10T13:15:11&at_recipient_id=QhtxgDQOVtluwDMyMwJ1cbO268iYLasR2rVIkG6kzV4=&at_link=adLink&utm_medium=email&utm_source=notifications&utm_campaign=private_sendadtofriend"
-                            class="ver-mas">Ver Proyecto <i class="fas fa-arrow-right"></i></a>
+                            class="ver-mas" target="_blank">
+                            Ver Proyecto
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -124,20 +175,41 @@
     <!-- Contacto -->
     <section id="contacto" class="contacto">
         <div class="container">
-            <h2 style="text-align: center;">¿Listo para transformar tu espacio?</h2>
-            <form class="contacto-form" action="https://formspree.io/f/mqabzkkj" method="POST">
+            <h2 class="section-title fade-in-up">¿Listo para transformar tu espacio?</h2>
+            <form class="contacto-form fade-in-up" action="https://formspree.io/f/mqabzkkj" method="POST"
+                id="contact-form">
                 <!-- Campos del formulario -->
-                <input type="text" name="nombre" placeholder="Nombre" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="tel" name="telefono" placeholder="Teléfono">
-                <textarea name="mensaje" placeholder="Cuéntanos sobre tu proyecto" required></textarea>
+                <div class="form-group">
+                    <input type="text" name="nombre" placeholder="Nombre" required class="form-input">
+                    <span class="form-error" id="nombre-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" required class="form-input">
+                    <span class="form-error" id="email-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" name="telefono" placeholder="Teléfono" class="form-input">
+                    <span class="form-error" id="telefono-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <textarea name="mensaje" placeholder="Cuéntanos sobre tu proyecto" required
+                        class="form-input"></textarea>
+                    <span class="form-error" id="mensaje-error"></span>
+                </div>
 
                 <!-- Configuración avanzada de Formspree -->
                 <input type="hidden" name="_next" value="https://aitnes21.github.io/Unero/Paginaagradecimiento.html">
                 <input type="hidden" name="_language" value="es">
                 <input type="text" name="_gotcha" style="display:none">
 
-                <button type="submit" class="cta-button">Enviar Mensaje</button>
+                <button type="submit" class="cta-button submit-btn">
+                    <span class="btn-text">Enviar Mensaje</span>
+                    <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
+                    <i class="fas fa-paper-plane button-icon"></i>
+                </button>
             </form>
         </div>
     </section>
@@ -145,11 +217,11 @@
     <!-- Footer -->
     <section class="location-section" style="background-color: var(--color-primary); color: var(--color-accent);">
         <div class="container">
-            <h2 class="location-title">Dónde estamos</h2>
+            <h2 class="location-title fade-in-up">Dónde estamos</h2>
 
             <div class="location-grid">
                 <!-- Ubicación -->
-                <div class="location-card">
+                <div class="location-card fade-in-up" data-delay="0">
                     <div class="location-header">
                         <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
                         <h3 style="color: var(--color-accent);">Ibiza</h3>
@@ -160,7 +232,7 @@
                 </div>
 
                 <!-- Contacto -->
-                <div class="location-card">
+                <div class="location-card fade-in-up" data-delay="200">
                     <div class="location-header">
                         <i class="fas fa-envelope" style="color: var(--color-accent);"></i>
                         <h3 style="color: var(--color-accent);">Contacta con nosotros</h3>
@@ -175,7 +247,7 @@
                 </div>
 
                 <!-- Horario -->
-                <div class="location-card">
+                <div class="location-card fade-in-up" data-delay="400">
                     <div class="location-header">
                         <i class="fas fa-clock" style="color: var(--color-accent);"></i>
                         <h3 style="color: var(--color-accent);">Horario</h3>
@@ -195,117 +267,13 @@
         </div>
     </section>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Volver arriba">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
     <!-- Scripts -->
-    <script src="js/main.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Menú móvil
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navbar = document.querySelector('.navbar');
-
-            menuToggle.addEventListener('click', () => {
-                navbar.classList.toggle('active');
-                menuToggle.innerHTML = navbar.classList.contains('active')
-                    ? '<i class="fas fa-times"></i>'
-                    : '<i class="fas fa-bars"></i>';
-            });
-
-            // Dropdowns
-            const dropdowns = document.querySelectorAll('.dropdown');
-            const dropdownToggles = document.querySelectorAll('.dropdown > a');
-
-            // Desktop: abrir al pasar el mouse
-            dropdowns.forEach(dropdown => {
-                dropdown.addEventListener('mouseenter', () => {
-                    if (window.innerWidth > 992) {
-                        closeAllDropdowns();
-                        dropdown.querySelector('.dropdown-menu').style.display = 'flex';
-                    }
-                });
-
-                dropdown.addEventListener('mouseleave', () => {
-                    if (window.innerWidth > 992) {
-                        dropdown.querySelector('.dropdown-menu').style.display = 'none';
-                    }
-                });
-            });
-
-            // Móvil: abrir al hacer clic
-            dropdownToggles.forEach(toggle => {
-                toggle.addEventListener('click', function (e) {
-                    if (window.innerWidth <= 992) {
-                        e.preventDefault();
-                        const dropdown = this.parentNode;
-                        const menu = dropdown.querySelector('.dropdown-menu');
-                        const isOpen = menu.style.display === 'flex';
-
-                        closeAllDropdowns();
-
-                        if (!isOpen) {
-                            menu.style.display = 'flex';
-                            dropdown.classList.add('active');
-                        }
-                    }
-                });
-            });
-
-            // Cerrar dropdowns al hacer clic fuera
-            document.addEventListener('click', function (e) {
-                if (!e.target.closest('.dropdown')) {
-                    closeAllDropdowns();
-                }
-            });
-
-            function closeAllDropdowns() {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    menu.style.display = 'none';
-                });
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            }
-
-            // Smooth scrolling
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    if (
-                        !this.classList.contains('dropdown-toggle') &&
-                        !this.parentNode.classList.contains('dropdown-menu')
-                    ) {
-                        const targetId = this.getAttribute('href');
-                        if (targetId && targetId !== '#') {
-                            const target = document.querySelector(targetId);
-                            if (target) {
-                                e.preventDefault();
-                                window.scrollTo({
-                                    top: target.offsetTop - 80,
-                                    behavior: 'smooth'
-                                });
-
-                                // Cerrar menú móvil
-                                if (window.innerWidth <= 992) {
-                                    navbar.classList.remove('active');
-                                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                                    closeAllDropdowns();
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-
-            // Efecto parallax en el hero
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                window.addEventListener('scroll', () => {
-                    const scrollPosition = window.scrollY;
-                    hero.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
-                });
-            }
-
-        });
-    </script>
+    <script src="main.js"></script>
 
 </body>
 

@@ -18,39 +18,57 @@
 </head>
 
 <body>
-    <!-- Header -->
-    <header class="header">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
+    <!-- Navbar -->
+    <header class="header" id="header">
         <div class="container">
             <a href="#" class="logo">
                 <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
-                    alt="Unero Espacio Logo">
+                    alt="Unero Espacio Logo" loading="lazy">
             </a>
-            <nav class="navbar">
+            <nav class="navbar" id="navbar">
                 <ul>
                     <li><a href="index.html#inicio">Inicio</a></li>
                     <li><a href="index.html#servicios">Servicios</a></li>
                     <li class="dropdown">
-                        <a href="construccion.html">Construcción de vivienda</a>
+                        <a href="construccion.html">Construcción</a>
                         <ul class="dropdown-menu">
                             <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
                             <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
                         </ul>
                     </li>
-                    <li><a href="reformasintegrales.html">Reformas integrales</a></li>
+                    <li><a href="reformasintegrales.html">Reformas </a></li>
                     <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
-                    <li><a href="index.html#proyectos">Proyectos</a></li>
+                    <li><a href="index.html#proyectos">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
                     <li><a href="index.html#contacto" class="cta-nav">Contacto</a></li>
                 </ul>
             </nav>
-            <button class="menu-toggle" aria-label="Abrir menú">
-                <i class="fas fa-bars"></i>
+            <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
             </button>
         </div>
     </header>
 
+
     <!-- Sección de Servicios -->
     <section class="servicios">
-        <class="container">
+        <div class="container">
             <h2 class="section-title">Promociones <span>de viviendas</span></h2>
 
             <div class="servicios-grid">
@@ -61,7 +79,7 @@
                         <i class="fas fa-home"></i>
                         <h3>Ricardo Meden</h3>
                         <p>Proyectos desde cero con diseño y materiales personalizados.</p>
-                        <a href="construccion-nueva.html" class="servicio-btn">Ver más <i
+                        <a href="medem.html" class="servicio-btn">Ver más <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -73,7 +91,7 @@
                         <i class="fas fa-home"></i>
                         <h3>Talamanca</h3>
                         <p>Proyectos desde cero con diseño y materiales personalizados.</p>
-                        <a href="construccion-nueva.html" class="servicio-btn">Ver más <i
+                        <a href="talamanca.html" class="servicio-btn">Ver más <i
                                 class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
@@ -132,116 +150,9 @@
     </section>
 
     <!-- Scripts -->
-    <script src="js/main.js"></script>
+    <script src="main.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Menú móvil
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navbar = document.querySelector('.navbar');
 
-            menuToggle.addEventListener('click', () => {
-                navbar.classList.toggle('active');
-                menuToggle.innerHTML = navbar.classList.contains('active')
-                    ? '<i class="fas fa-times"></i>'
-                    : '<i class="fas fa-bars"></i>';
-            });
-
-            // Dropdowns
-            const dropdowns = document.querySelectorAll('.dropdown');
-            const dropdownToggles = document.querySelectorAll('.dropdown > a');
-
-            // Desktop: abrir al pasar el mouse
-            dropdowns.forEach(dropdown => {
-                dropdown.addEventListener('mouseenter', () => {
-                    if (window.innerWidth > 992) {
-                        closeAllDropdowns();
-                        dropdown.querySelector('.dropdown-menu').style.display = 'flex';
-                    }
-                });
-
-                dropdown.addEventListener('mouseleave', () => {
-                    if (window.innerWidth > 992) {
-                        dropdown.querySelector('.dropdown-menu').style.display = 'none';
-                    }
-                });
-            });
-
-            // Móvil: abrir al hacer clic
-            dropdownToggles.forEach(toggle => {
-                toggle.addEventListener('click', function (e) {
-                    if (window.innerWidth <= 992) {
-                        e.preventDefault();
-                        const dropdown = this.parentNode;
-                        const menu = dropdown.querySelector('.dropdown-menu');
-                        const isOpen = menu.style.display === 'flex';
-
-                        closeAllDropdowns();
-
-                        if (!isOpen) {
-                            menu.style.display = 'flex';
-                            dropdown.classList.add('active');
-                        }
-                    }
-                });
-            });
-
-            // Cerrar dropdowns al hacer clic fuera
-            document.addEventListener('click', function (e) {
-                if (!e.target.closest('.dropdown')) {
-                    closeAllDropdowns();
-                }
-            });
-
-            function closeAllDropdowns() {
-                document.querySelectorAll('.dropdown-menu').forEach(menu => {
-                    menu.style.display = 'none';
-                });
-                document.querySelectorAll('.dropdown').forEach(dropdown => {
-                    dropdown.classList.remove('active');
-                });
-            }
-
-            // Smooth scrolling
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    if (
-                        !this.classList.contains('dropdown-toggle') &&
-                        !this.parentNode.classList.contains('dropdown-menu')
-                    ) {
-                        const targetId = this.getAttribute('href');
-                        if (targetId && targetId !== '#') {
-                            const target = document.querySelector(targetId);
-                            if (target) {
-                                e.preventDefault();
-                                window.scrollTo({
-                                    top: target.offsetTop - 80,
-                                    behavior: 'smooth'
-                                });
-
-                                // Cerrar menú móvil
-                                if (window.innerWidth <= 992) {
-                                    navbar.classList.remove('active');
-                                    menuToggle.innerHTML = '<i class="fas fa-bars"></i>';
-                                    closeAllDropdowns();
-                                }
-                            }
-                        }
-                    }
-                });
-            });
-
-            // Efecto parallax en el hero
-            const hero = document.querySelector('.hero');
-            if (hero) {
-                window.addEventListener('scroll', () => {
-                    const scrollPosition = window.scrollY;
-                    hero.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
-                });
-            }
-
-        });
-    </script>
 </body>
 
 </html>

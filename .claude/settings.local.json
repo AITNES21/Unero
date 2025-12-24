@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Bash(dir \"c:\\\\Users\\\\Néstor Díaz Hernando\\\\Desktop\\\\Unero\\\\img\" /B)",
-      "Bash(del \"c:\\\\Users\\\\Néstor Díaz Hernando\\\\Desktop\\\\Unero\\\\optimize-head.txt\")"
+      "Bash(del \"c:\\\\Users\\\\Néstor Díaz Hernando\\\\Desktop\\\\Unero\\\\optimize-head.txt\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nFix: Actualizar rutas de imágenes para GitHub Pages\n\n- Cambiar rutas relativas a absolutas con /Unero/\n- Ajustar formatos de imágenes \\(webp, jpg, png\\)\n- Corregir visualización del hero y tarjetas de servicios\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push)",
+      "Bash(git commit:*)"
     ]
   }
 }

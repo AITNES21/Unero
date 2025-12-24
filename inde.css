@@ -558,7 +558,7 @@ h4 {
 .hero {
     height: 100vh;
     background-image: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.8) 100%),
-        url('/Unero/img/fotoportada.webp');
+        url('img/fotoportada.webp');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;

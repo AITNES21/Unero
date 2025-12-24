@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación del Proyecto | Unero Espacio</title>
+    <meta name="description" content="Consulta la documentación completa de nuestro proyecto exclusivo en Marbella.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
+    <style>
+        /* ===== VARIABLES CSS ===== */
+        :root {
+            /* Colores principales */
+            --color-primary: #0a1a2f;
+            --color-secondary: #ffffff;
+            --color-accent: #d4af37;
+            --color-accent-light: #f5e6c8;
+            --color-bg: #f8f9fa;
+            --color-text: #333333;
+
+            /* Efectos */
+            --box-shadow: 0 10px 30px rgba(10, 26, 47, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* ===== RESET Y BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background: var(--color-secondary);
+            overflow-x: hidden;
+        }
+
+        body.loading {
+            overflow: hidden;
+        }
+
+        body.menu-open {
+            overflow: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 30px;
+            margin-top: 30px;
+        }
+
+        /* ===== UTILIDADES ===== */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title span {
+            color: var(--color-accent);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--color-accent);
+            animation: expandWidth 0.8s ease-out 0.5s backwards;
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loading-content {
+            text-align: center;
+            color: var(--color-secondary);
+        }
+
+        .loading-logo img {
+            height: 80px;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-accent);
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--color-accent) 0%, #f5d782 100%);
+            z-index: 9998;
+            transition: width 0.3s ease;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--color-primary);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: var(--box-shadow);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+
+        .header.scrolled {
+            background: rgba(10, 26, 47, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ===== NAVEGACIÓN DESKTOP ===== */
+        .desktop-menu {
+            display: flex;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .desktop-menu ul {
+            display: flex;
+            list-style: none;
+            gap: 1.8rem;
+            align-items: center;
+            margin: 0;
+        }
+
+        .desktop-menu a {
+            text-decoration: none;
+            color: var(--color-secondary);
+            font-weight: 600;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.8rem 0;
+            display: block;
+        }
+
+        .desktop-menu a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            bottom: 0;
+            left: 0;
+            transition: var(--transition-bounce);
+        }
+
+        .desktop-menu a:hover::after,
+        .desktop-menu a.active::after {
+            width: 100%;
+        }
+
+        /* CTA NAV */
+        .cta-nav {
+            background: var(--color-accent) !important;
+            color: var(--color-primary) !important;
+            padding: 0.8rem 2rem !important;
+            border-radius: 30px !important;
+            transition: var(--transition-bounce) !important;
+            position: relative !important;
+            overflow: hidden !important;
+            font-size: 1rem !important;
+            white-space: nowrap !important;
+            margin-left: 1rem !important;
+        }
+
+        .cta-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-nav:hover::before {
+            left: 100%;
+        }
+
+        .cta-nav:hover {
+            background: var(--color-secondary) !important;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .cta-nav::after {
+            display: none !important;
+        }
+
+        /* ===== DROPDOWN DESKTOP ===== */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .dropdown-icon {
+            font-size: 0.8rem;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-icon,
+        .dropdown.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 15px);
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            background: var(--color-primary);
+            min-width: 250px;
+            padding: 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            flex-direction: column;
+            gap: 0.3rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .desktop-menu .dropdown:hover .dropdown-menu,
+        .desktop-menu .dropdown.active .dropdown-menu {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .dropdown-menu::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid var(--color-primary);
+        }
+
+        .dropdown-menu li {
+            width: 100%;
+            list-style: none;
+        }
+
+        .dropdown-menu a {
+            padding: 0.8rem 1.5rem;
+            white-space: nowrap;
+            color: var(--color-secondary);
+            display: block;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 0.5rem;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .dropdown-menu a::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(212, 175, 55, 0.15);
+            transition: width 0.3s ease;
+            z-index: -1;
+        }
+
+        .dropdown-menu a:hover::before {
+            width: 100%;
+        }
+
+        .dropdown-menu a:hover {
+            color: var(--color-accent);
+            transform: translateX(8px);
+        }
+
+        /* ===== MENÚ HAMBURGUESA Y MÓVIL ===== */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-right: 1rem;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu-btn i {
+            pointer-events: none;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: var(--color-primary);
+            z-index: 99;
+            padding: 1rem;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+        }
+
+        .mobile-menu>ul>li {
+            margin-bottom: 1rem;
+        }
+
+        .mobile-menu a {
+            color: var(--color-secondary);
+            text-decoration: none;
+            font-size: 1.1rem;
+            display: block;
+            padding: 0.5rem;
+            border-left: 3px solid var(--color-accent);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            background-color: rgba(212, 175, 55, 0.1);
+            padding-left: 1rem;
+        }
+
+        /* Dropdown móvil */
+        .mobile-dropdown .dropdown-menu {
+            display: none;
+            position: static;
+            box-shadow: none;
+            padding-left: 15px;
+            background: transparent;
+            transform: none;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-dropdown.active .dropdown-menu {
+            display: block;
+        }
+
+        .mobile-dropdown .dropdown-icon {
+            transition: transform 0.3s;
+        }
+
+        .mobile-dropdown.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero-video {
+            position: relative;
+            height: 60vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.6) 0%, rgba(22, 58, 103, 0.8) 100%),
+                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23163a67" width="1200" height="600"/><path fill="%230a1a2f" d="M0 600L400 400L800 500L1200 300V600z"/></svg>') no-repeat center center/cover;
+        }
+
+        .hero-video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.6) 100%);
+            z-index: 2;
+        }
+
+        .hero-video-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: var(--color-secondary);
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero-video-content h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            color: var(--color-secondary);
+        }
+
+        .hero-video-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .text-glow {
+            color: var(--color-accent);
+            display: inline-block;
+            animation: gentleGlow 3s ease-in-out infinite alternate;
+        }
+
+        /* ===== BOTONES ===== */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(90deg, var(--color-accent) 0%, #f5d782 100%);
+            color: var(--color-primary);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-bounce);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        .button-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .button-arrow {
+            transform: translateX(5px);
+        }
+
+        /* ===== PDF SECTION ===== */
+        .pdf-section {
+            padding: 5rem 0;
+            background: var(--color-bg);
+        }
+
+        .pdf-container {
+            background: var(--color-secondary);
+            border-radius: 15px;
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            margin: 0 auto;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 80vh;
+            border: none;
+            display: block;
+        }
+
+        .pdf-fallback {
+            padding: 3rem;
+            text-align: center;
+            background: var(--color-bg);
+        }
+
+        .pdf-fallback h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .pdf-fallback p {
+            color: var(--color-text);
+            margin-bottom: 2rem;
+        }
+
+        .download-btn {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition-bounce);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .download-btn:hover {
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(10, 26, 47, 0.3);
+        }
+
+        /* Loading para PDF */
+        .pdf-loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            background: var(--color-bg);
+            border-radius: 15px;
+        }
+
+        .pdf-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-accent);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        /* ===== INFORMATION SECTION ===== */
+        .document-info {
+            padding: 5rem 0;
+            background: var(--color-secondary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .info-card {
+            background: var(--color-bg);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition-bounce);
+            box-shadow: var(--box-shadow);
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(10, 26, 47, 0.15);
+        }
+
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--color-accent);
+            color: var(--color-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover .info-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .info-card h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .info-card p {
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--color-accent);
+            color: var(--color-primary);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition-bounce);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            background: var(--color-primary);
+            color: var(--color-accent);
+            box-shadow: 0 10px 20px rgba(10, 26, 47, 0.3);
+        }
+
+        /* ===== FOOTER ===== */
+        .location-section {
+            padding: 3rem 0;
+            background: var(--color-primary);
+            color: var(--color-accent);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: var(--transition-bounce);
+            backdrop-filter: blur(10px);
+        }
+
+        .location-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .location-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .location-header i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .location-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .location-body a {
+            color: var(--color-accent-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .location-body a:hover {
+            color: var(--color-accent);
+        }
+
+        .contact-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        /* ===== ANIMACIONES ===== */
+        @keyframes expandWidth {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 80px;
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+        }
+
+        @keyframes gentleGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            }
+
+            100% {
+                text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+            }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+
+            /* Ocultar menú desktop y mostrar botón móvil */
+            .desktop-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            /* Ajustes del header */
+            .header-content {
+                padding: 0.5rem 1rem;
+            }
+
+            .logo img {
+                height: 50px;
+            }
+
+            /* Hero responsive */
+            .hero-video {
+                height: 50vh;
+            }
+
+            .hero-video-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-video-content p {
+                font-size: 1.1rem;
+            }
+
+            /* PDF responsive - MEJORADO */
+            .pdf-viewer {
+                height: 50vh;
+                min-height: 400px;
+            }
+
+            .pdf-container {
+                margin: 1rem;
+                border-radius: 10px;
+            }
+
+            .pdf-section {
+                padding: 3rem 0;
+            }
+
+            /* Info grid responsive */
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .info-card {
+                padding: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 2rem;
+            }
+
+            .container {
+                width: 95%;
+                padding: 0.5rem 0;
+            }
+
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+
+            /* Asegurar que los dropdowns no se muestren en hover en móvil */
+            .dropdown:hover .dropdown-menu {
+                display: none !important;
+            }
+
+            .location-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            /* Mobile PDF específico */
+            .mobile-pdf-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .mobile-pdf-actions .primary-btn,
+            .mobile-pdf-actions .secondary-btn,
+            .mobile-pdf-actions .view-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .mobile-pdf-container {
+                padding: 2rem 1rem;
+            }
+
+            .pdf-preview-icon i {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-video {
+                height: 40vh;
+            }
+
+            .hero-video-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-video-content p {
+                font-size: 1rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            /* PDF extra pequeño */
+            .pdf-viewer {
+                height: 40vh;
+                min-height: 300px;
+            }
+
+            .pdf-container {
+                margin: 0.5rem;
+                border-radius: 8px;
+            }
+
+            .cta-button {
+                padding: 0.7rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .mobile-menu a {
+                font-size: 1rem;
+            }
+        }
+
+        /* ===== LANDSCAPE ORIENTATION ===== */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .hero-video {
+                height: 80vh;
+            }
+
+            .pdf-viewer {
+                height: 60vh;
+                min-height: 350px;
+            }
+        }
+
+        /* ===== UTILIDADES ADICIONALES ===== */
+        .text-center {
+            text-align: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
+    <!-- Header Mejorado con estructura de TriInfinity -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo" loading="lazy">
+            </a>
+
+            <!-- Menú Desktop -->
+            <nav class="desktop-menu navbar" id="navbar" role="navigation" aria-label="Menú principal">
+                <ul>
+                    <li><a href="index.html#inicio" data-scroll="inicio">Inicio</a></li>
+                    <li><a href="index.html#servicios" data-scroll="servicios">Servicios</a></li>
+                    <li class="dropdown">
+                        <a href="construccion.html" class="dropdown-toggle">Construcción <i
+                                class="fas fa-chevron-down dropdown-icon"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                            <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="reformasintegrales.html">Reformas</a></li>
+                    <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
+                    <li><a href="index.html#proyectos" data-scroll="proyectos">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
+                    <li><a href="trasteros-mostoles.html">Trasteros Móstoles</a></li>
+                    <li><a href="index.html#contacto" class="cta-nav" data-scroll="contacto">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Botón Hamburguesa -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú móvil" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Menú Mobile -->
+        <nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menú móvil">
+            <ul>
+                <li><a href="index.html#inicio">
+                        <i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="index.html#servicios">
+                        <i class="fas fa-cogs"></i> Servicios</a></li>
+                <li class="mobile-dropdown">
+                    <a class="dropdown-toggle" aria-expanded="false">
+                        <i class="fas fa-hammer"></i> Construcción
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="promocionesdeviviendas.html">
+                                <i class="fas fa-building"></i> Promociones de viviendas</a></li>
+                        <li><a href="viviendasindividuales.html">
+                                <i class="fas fa-swimming-pool"></i> Villas con piscina</a></li>
+                    </ul>
+                </li>
+                <li><a href="reformasintegrales.html">
+                        <i class="fas fa-tools"></i> Reformas</a></li>
+                <li><a href="disenodeinteriores.html">
+                        <i class="fas fa-couch"></i> Diseño de interiores</a></li>
+                <li><a href="index.html#proyectos">
+                        <i class="fas fa-home"></i> Venta</a></li>
+                <li><a href="alquiler.html">
+                        <i class="fas fa-key"></i> Alquiler</a></li>
+                <li><a href="trasteros-mostoles.html">
+                        <i class="fas fa-key"></i> Trasteros Móstoles</a></li>
+                <li><a href="index.html#contacto">
+                        <i class="fas fa-envelope"></i> Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-video">
+        <div class="hero-video-overlay"></div>
+        <div class="hero-video-content">
+            <h1 class="text-glow">Documentación del <span class="text-glow">Proyecto</span></h1>
+            <p>Consulta todos los detalles técnicos, planos y especificaciones de nuestro desarrollo exclusivo.</p>
+            <a href="#documento" class="cta-button" data-scroll="documento">
+                Ver Documento <i class="fas fa-file-pdf button-arrow"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- PDF Section -->
+    <section class="pdf-section" id="documento">
+        <div class="container">
+            <h2 class="section-title">Documentación <span>Técnica</span></h2>
+
+            <!-- PDF Container -->
+            <div class="pdf-container" id="pdf-container">
+                <!-- PDF Viewer -->
+                <iframe id="pdf-viewer" class="pdf-viewer" src="" title="Documentación del proyecto">
+                </iframe>
+
+                <!-- Loading State -->
+                <div class="pdf-loading" id="pdf-loading">
+                    <div class="pdf-loading-spinner"></div>
+                </div>
+
+                <!-- Fallback Content -->
+                <div class="pdf-fallback" id="pdf-fallback" style="display: none;">
+                    <h3>No se puede mostrar el PDF</h3>
+                    <p>Tu navegador no puede mostrar archivos PDF directamente. Por favor, actualiza tu navegador o usa
+                        uno compatible.</p>
+                    <a href="#" class="download-btn" id="download-btn">
+                        <i class="fas fa-download"></i> Descargar PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Document Information -->
+    <section class="document-info">
+        <div class="container">
+            <h2 class="section-title">Información del <span>Documento</span></h2>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <h3>Documento Técnico</h3>
+                    <p>Planos arquitectónicos, memorias técnicas y especificaciones detalladas del proyecto de
+                        construcción.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-ruler-combined"></i>
+                    </div>
+                    <h3>Planos y Medidas</h3>
+                    <p>Dimensiones exactas, distribución de espacios y detalles constructivos profesionales.</p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3>Especificaciones</h3>
+                    <p>Materiales de alta calidad, acabados premium y sistemas de instalaciones de última generación.
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h3>Certificaciones</h3>
+                    <p>Cumplimiento de normativas vigentes, eficiencia energética y estándares de construcción
+                        sostenible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top -->
+    <button class="back-to-top" id="back-to-top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Footer -->
+    <section class="location-section">
+        <div class="container">
+            <div class="location-grid">
+                <!-- Ubicación -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Ibiza</h3>
+                    </div>
+                    <div class="location-body">
+                        <p style="color: var(--color-accent-light);">Islas Baleares, España</p>
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-envelope" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Contacta con nosotros</h3>
+                    </div>
+                    <div class="location-body">
+                        <a href="mailto:eva@unero.es" style="color: var(--color-accent-light);">eva@unero.es</a>
+                        <div class="contact-numbers">
+                            <a href="tel:687885319" style="color: var(--color-accent-light);">687 885 319</a>
+                            <a href="tel:679418741" style="color: var(--color-accent-light);">679 418 741</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-clock" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Horario</h3>
+                    </div>
+                    <div class="location-body">
+                        <div class="schedule-item" style="border-bottom: 1px solid var(--color-accent-light);">
+                            <span style="color: var(--color-accent-light);">Lun - Vie</span>
+                            <span style="color: var(--color-accent-light);">10:00 - 18:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span style="color: var(--color-accent-light);">Sáb - Dom</span>
+                            <span style="color: var(--color-accent-light);">Cerrado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        // ==============================================
+        // CONFIGURACIÓN DEL PDF - CAMBIAR AQUÍ
+        // ==============================================
+
+        // ✅ CAMBIAR ESTA RUTA POR LA DE TU ARCHIVO PDF LOCAL
+        const PDF_PATH = 'pdf/planos-medem.pdf';  // Ruta relativa desde la página
+
+        // Alternativamente, puedes usar una ruta absoluta:
+        // const PDF_PATH = '/ruta/completa/al/archivo.pdf';
+
+        // ==============================================
+
+        // Clase principal del sitio web
+        class MedemWebsite {
+            constructor() {
+                this.onScrollCallbacks = [];
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.initLoading();
+                this.initNavigation();
+                this.initScrollEffects();
+                this.initPDFViewer();
+            }
+
+            // ===== EVENTOS =====
+            bindEvents() {
+                document.addEventListener('DOMContentLoaded', () => {
+                    this.onDOMReady();
+                });
+
+                window.addEventListener('load', () => {
+                    this.onWindowLoad();
+                });
+
+                window.addEventListener('scroll', this.throttle(() => {
+                    this.onScroll();
+                }, 16));
+
+                window.addEventListener('resize', this.debounce(() => {
+                    this.onResize();
+                }, 250));
+            }
+
+            // ===== LOADING SCREEN =====
+            initLoading() {
+                const loadingScreen = document.getElementById('loading-screen');
+                const body = document.body;
+
+                if (!loadingScreen) return;
+
+                body.classList.add('loading');
+
+                setTimeout(() => {
+                    this.hideLoading();
+                }, 1500);
+            }
+
+            hideLoading() {
+                const loadingScreen = document.getElementById('loading-screen');
+                const body = document.body;
+
+                if (!loadingScreen) return;
+
+                loadingScreen.classList.add('hidden');
+                body.classList.remove('loading');
+
+                setTimeout(() => {
+                    if (loadingScreen && loadingScreen.parentNode) {
+                        loadingScreen.style.display = 'none';
+                    }
+                }, 500);
+            }
+
+            // ===== NAVEGACIÓN =====
+            initNavigation() {
+                this.initMobileMenu();
+                this.initDesktopDropdowns();
+                this.initMobileDropdowns();
+                this.initSmoothScroll();
+                this.initHeaderHide();
+                this.initBackToTop();
+            }
+
+            initMobileMenu() {
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+                const mobileMenu = document.getElementById('mobileMenu');
+
+                if (!mobileMenuBtn || !mobileMenu) return;
+
+                // Toggle menú móvil
+                mobileMenuBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    mobileMenu.classList.toggle('active');
+                    mobileMenuBtn.innerHTML = mobileMenu.classList.contains('active')
+                        ? '<i class="fas fa-times"></i>'
+                        : '<i class="fas fa-bars"></i>';
+
+                    // Prevenir scroll del body cuando el menú está abierto
+                    document.body.classList.toggle('menu-open', mobileMenu.classList.contains('active'));
+                });
+
+                // Cerrar menú al hacer clic en enlaces (excepto dropdowns)
+                mobileMenu.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        document.body.classList.remove('menu-open');
+                    });
+                });
+
+                // Cerrar menú al hacer clic fuera
+                document.addEventListener('click', (e) => {
+                    if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+                        mobileMenu.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        document.body.classList.remove('menu-open');
+                    }
+                });
+            }
+
+            initDesktopDropdowns() {
+                const desktopDropdowns = document.querySelectorAll('.desktop-menu .dropdown');
+
+                desktopDropdowns.forEach(dropdown => {
+                    const menu = dropdown.querySelector('.dropdown-menu');
+                    if (!menu) return;
+
+                    let hoverTimeout;
+
+                    // Mostrar en hover
+                    dropdown.addEventListener('mouseenter', () => {
+                        clearTimeout(hoverTimeout);
+                        menu.style.display = 'flex';
+                        requestAnimationFrame(() => {
+                            menu.style.opacity = '1';
+                            menu.style.visibility = 'visible';
+                            menu.style.transform = 'translateX(-50%) translateY(0)';
+                        });
+                    });
+
+                    // Ocultar al salir
+                    dropdown.addEventListener('mouseleave', () => {
+                        hoverTimeout = setTimeout(() => {
+                            menu.style.opacity = '0';
+                            menu.style.visibility = 'hidden';
+                            menu.style.transform = 'translateX(-50%) translateY(-10px)';
+
+                            setTimeout(() => {
+                                menu.style.display = 'none';
+                            }, 300);
+                        }, 100);
+                    });
+                });
+            }
+
+            initMobileDropdowns() {
+                document.querySelectorAll('.mobile-dropdown > .dropdown-toggle').forEach(toggle => {
+                    toggle.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        const parent = toggle.parentElement;
+                        const wasActive = parent.classList.contains('active');
+
+                        // Cerrar todos los demás dropdowns
+                        document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
+                            if (dropdown !== parent) {
+                                dropdown.classList.remove('active');
+                            }
+                        });
+
+                        // Toggle el dropdown actual
+                        parent.classList.toggle('active', !wasActive);
+
+                        // Rotar el ícono
+                        const icon = toggle.querySelector('.dropdown-icon');
+                        if (icon) {
+                            icon.style.transform = parent.classList.contains('active')
+                                ? 'rotate(180deg)'
+                                : 'rotate(0deg)';
+                        }
+                    });
+                });
+            }
+
+            initSmoothScroll() {
+                document.querySelectorAll('a[data-scroll], a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', (e) => {
+                        const href = anchor.getAttribute('href') || anchor.getAttribute('data-scroll');
+
+                        if (!href || href === '#' || href.startsWith('http') || href.includes('.html')) {
+                            return;
+                        }
+
+                        e.preventDefault();
+
+                        const targetId = href.startsWith('#') ? href.substring(1) : href;
+                        const target = document.getElementById(targetId);
+
+                        if (target) {
+                            const header = document.querySelector('.header');
+                            const headerHeight = header ? header.offsetHeight : 80;
+                            const targetPosition = target.offsetTop - headerHeight - 20;
+
+                            this.smoothScrollTo(targetPosition, 800);
+                        }
+                    });
+                });
+            }
+
+            smoothScrollTo(target, duration) {
+                const start = window.pageYOffset;
+                const distance = target - start;
+                let startTime = null;
+
+                const animation = (currentTime) => {
+                    if (startTime === null) startTime = currentTime;
+                    const timeElapsed = currentTime - startTime;
+                    const progress = Math.min(timeElapsed / duration, 1);
+
+                    const easeInOutCubic = progress < 0.5
+                        ? 4 * progress * progress * progress
+                        : (progress - 1) * (2 * progress - 2) * (2 * progress - 2) + 1;
+
+                    window.scrollTo(0, start + distance * easeInOutCubic);
+
+                    if (timeElapsed < duration) {
+                        requestAnimationFrame(animation);
+                    }
+                };
+
+                requestAnimationFrame(animation);
+            }
+
+            initHeaderHide() {
+                let lastScrollTop = 0;
+                const header = document.querySelector('.header');
+                let scrollDirection = 'up';
+
+                if (!header) return;
+
+                this.onScrollCallbacks.push(() => {
+                    const scrollTop = window.pageYOffset;
+
+                    if (scrollTop > lastScrollTop && scrollTop > 100) {
+                        if (scrollDirection !== 'down') {
+                            header.classList.add('hidden');
+                            scrollDirection = 'down';
+                        }
+                    } else {
+                        if (scrollDirection !== 'up') {
+                            header.classList.remove('hidden');
+                            scrollDirection = 'up';
+                        }
+                    }
+
+                    if (scrollTop > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+
+                    lastScrollTop = Math.max(scrollTop, 0);
+                });
+            }
+
+            initBackToTop() {
+                const backToTop = document.getElementById('back-to-top');
+
+                if (!backToTop) return;
+
+                backToTop.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.smoothScrollTo(0, 600);
+                });
+
+                this.onScrollCallbacks.push(() => {
+                    if (window.pageYOffset > 300) {
+                        backToTop.classList.add('visible');
+                    } else {
+                        backToTop.classList.remove('visible');
+                    }
+                });
+            }
+
+            // ===== SCROLL EFFECTS =====
+            initScrollEffects() {
+                this.progressBar = document.getElementById('progress-bar');
+            }
+
+            updateProgressBar() {
+                if (!this.progressBar) return;
+
+                const scrollTop = window.pageYOffset;
+                const docHeight = document.body.scrollHeight - window.innerHeight;
+                const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+                this.progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+            }
+
+            onScroll() {
+                this.updateProgressBar();
+                if (this.onScrollCallbacks) {
+                    this.onScrollCallbacks.forEach(callback => callback());
+                }
+            }
+
+            // ===== PDF VIEWER =====
+            initPDFViewer() {
+                this.loadPDF();
+            }
+
+            loadPDF() {
+                this.showPDFLoading();
+
+                const pdfViewer = document.getElementById('pdf-viewer');
+                const downloadBtn = document.getElementById('download-btn');
+
+                // Configurar enlace de descarga
+                if (downloadBtn) {
+                    downloadBtn.href = PDF_PATH;
+                    downloadBtn.download = 'documentacion-medem.pdf';
+                }
+
+                // Cargar PDF desde ruta local
+                pdfViewer.src = PDF_PATH;
+
+                // Manejar eventos de carga
+                pdfViewer.onload = () => {
+                    this.hidePDFLoading();
+                };
+
+                pdfViewer.onerror = () => {
+                    this.hidePDFLoading();
+                    this.showFallback();
+                };
+
+                // Timeout por si no carga
+                setTimeout(() => {
+                    const loading = document.getElementById('pdf-loading');
+                    if (loading && loading.style.display !== 'none') {
+                        this.hidePDFLoading();
+                    }
+                }, 10000);
+            }
+
+            showPDFLoading() {
+                const loading = document.getElementById('pdf-loading');
+                const viewer = document.getElementById('pdf-viewer');
+                const fallback = document.getElementById('pdf-fallback');
+
+                if (loading) loading.style.display = 'flex';
+                if (viewer) viewer.style.display = 'none';
+                if (fallback) fallback.style.display = 'none';
+            }
+
+            hidePDFLoading() {
+                const loading = document.getElementById('pdf-loading');
+                const viewer = document.getElementById('pdf-viewer');
+
+                if (loading) loading.style.display = 'none';
+                if (viewer) viewer.style.display = 'block';
+            }
+
+            showFallback() {
+                const loading = document.getElementById('pdf-loading');
+                const viewer = document.getElementById('pdf-viewer');
+                const fallback = document.getElementById('pdf-fallback');
+
+                if (loading) loading.style.display = 'none';
+                if (viewer) viewer.style.display = 'none';
+                if (fallback) fallback.style.display = 'block';
+            }
+
+            // ===== EVENT HANDLERS =====
+            onDOMReady() {
+                console.log('Medem Website loaded successfully');
+            }
+
+            onWindowLoad() {
+                setTimeout(() => {
+                    this.hideLoading();
+                }, 500);
+            }
+
+            onResize() {
+                if (window.innerWidth > 768) {
+                    const mobileMenu = document.getElementById('mobileMenu');
+                    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+                    if (mobileMenu && mobileMenuBtn) {
+                        mobileMenu.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        document.body.classList.remove('menu-open');
+                    }
+
+                    // Cerrar todos los dropdowns móviles
+                    document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('active');
+                    });
+                }
+            }
+
+            // ===== UTILITY FUNCTIONS =====
+            throttle(func, limit) {
+                let inThrottle;
+                return function () {
+                    const args = arguments;
+                    const context = this;
+                    if (!inThrottle) {
+                        func.apply(context, args);
+                        inThrottle = true;
+                        setTimeout(() => inThrottle = false, limit);
+                    }
+                };
+            }
+
+            debounce(func, wait, immediate) {
+                let timeout;
+                return function () {
+                    const context = this, args = arguments;
+                    const later = function () {
+                        timeout = null;
+                        if (!immediate) func.apply(context, args);
+                    };
+                    const callNow = immediate && !timeout;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                    if (callNow) func.apply(context, args);
+                };
+            }
+        }
+
+        // ===== INICIALIZACIÓN =====
+        const medemWebsite = new MedemWebsite();
+
+        // Exportar para uso global si es necesario
+        window.MedemWebsite = MedemWebsite;
+        window.medemWebsite = medemWebsite;
+
+        // Console info para desarrolladores
+        console.log('📄 PDF Viewer - Unero Espacio');
+        console.log('🔧 Para cambiar el PDF, modifica la variable PDF_PATH en el JavaScript');
+        console.log('📍 PDF actual:', PDF_PATH);
+    </script>
+</body>
+
+</html>

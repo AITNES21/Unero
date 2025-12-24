@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alquiler de Trasteros en Móstoles | Unero Espacio</title>
+    <meta name="description"
+        content="Alquiler de trasteros seguros en Móstoles. Acceso 24h, vigilancia, diferentes tamaños. Soluciones de almacenamiento para particulares y empresas.">
+    <meta name="keywords"
+        content="alquiler trasteros Móstoles, trasteros baratos Móstoles, almacenamiento Móstoles, guardamuebles Móstoles, trasteros 24 horas">
+    <!-- Preconnect para optimizar fuentes y CDN -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://le-de.cdn-website.com">
+
+    <!-- Preload para recursos críticos -->
+    <link rel="preload" href="inde.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" as="style">
+    <link rel="preload" href="img/trasteros-hero.jpg" as="image">
+
+    <!-- CSS crítico inline -->
+    <style>
+        /* Critical CSS - Above the fold */
+        :root {
+            --color-primary: #0a1a2f;
+            --color-secondary: #ffffff;
+            --color-accent: #d4af37;
+            --color-bg: #f8f9fa;
+            --color-text: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Loading screen - crítico */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+
+    <!-- CSS principal diferido -->
+    <link rel="stylesheet" href="inde.css" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Fuentes con font-display swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Font Awesome diferido -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Fallback para navegadores sin JS -->
+    <noscript>
+        <link rel="stylesheet" href="inde.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+
+    <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
+
+    <style>
+        /* ====================================
+           ESTILOS ESPECÍFICOS PÁGINA TRASTEROS
+           ==================================== */
+
+        /* Hero Section - Trasteros */
+        .trasteros-hero {
+            height: 80vh;
+            background: linear-gradient(135deg, rgba(10, 26, 47, 0.85) 0%, rgba(22, 58, 103, 0.75) 100%);
+            display: flex;
+            align-items: center;
+            color: var(--color-secondary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Background image como elemento separado para lazy loading */
+        .trasteros-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('img/trasteros-hero.jpg') no-repeat center center/cover;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .trasteros-hero.loaded::before {
+            opacity: 1;
+        }
+
+        .trasteros-hero-content {
+            max-width: 700px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .trasteros-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            color: var(--color-secondary);
+        }
+
+        .trasteros-hero h1 span {
+            color: var(--color-accent);
+        }
+
+        .trasteros-hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        /* Características principales */
+        .features-section {
+            padding: 5rem 0;
+            background: var(--color-bg);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--color-secondary);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition-bounce);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(10, 26, 47, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-accent) 0%, #f5d782 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--color-primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+        }
+
+        .feature-card p {
+            color: var(--color-text);
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        /* Carrusel de imágenes */
+        .gallery-carousel {
+            padding: 5rem 0;
+            background: var(--color-secondary);
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 1000px;
+            margin: 3rem auto;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(10, 26, 47, 0.2);
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(10, 26, 47, 0.9));
+            color: var(--color-secondary);
+            padding: 2rem;
+        }
+
+        .carousel-caption h3 {
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 1rem;
+            z-index: 10;
+        }
+
+        .carousel-btn {
+            background: rgba(212, 175, 55, 0.9);
+            color: var(--color-primary);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-btn:hover {
+            background: var(--color-accent);
+            transform: scale(1.1);
+        }
+
+        .carousel-indicators {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: 50%;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .indicator.active {
+            background: var(--color-accent);
+            width: 30px;
+            border-radius: 6px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 5rem 0;
+            background: var(--color-bg);
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--color-secondary);
+            margin-bottom: 1.5rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 15px 35px rgba(10, 26, 47, 0.12);
+        }
+
+        .faq-question {
+            padding: 1.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: var(--color-secondary);
+            transition: var(--transition);
+        }
+
+        .faq-question h4 {
+            font-size: 1.15rem;
+            color: var(--color-primary);
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .faq-question i {
+            color: var(--color-accent);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        .faq-answer-content {
+            padding: 0 2rem 2rem;
+        }
+
+        .faq-answer-content p {
+            color: var(--color-text);
+            line-height: 1.7;
+            opacity: 0.85;
+        }
+
+        /* Location Section */
+        .location-section {
+            padding: 5rem 0;
+            background: var(--color-primary);
+        }
+
+        .location-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--color-accent);
+        }
+
+        .location-card h3,
+        .location-card i {
+            color: var(--color-accent);
+        }
+
+        .location-body p,
+        .location-body a {
+            color: rgba(212, 175, 55, 0.8);
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            transition: var(--transition);
+        }
+
+        .location-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-5px);
+        }
+
+        .location-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .location-header i {
+            font-size: 2rem;
+        }
+
+        .location-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .location-body p {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .location-body a {
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .location-body a:hover {
+            color: var(--color-accent) !important;
+        }
+
+        .contact-numbers {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .schedule-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .schedule-item:last-of-type {
+            border-bottom: none;
+        }
+
+        .schedule-item span {
+            color: rgba(212, 175, 55, 0.8);
+        }
+
+        /* CTA Buttons */
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, var(--color-accent) 0%, #f5d782 100%);
+            color: var(--color-primary);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition-bounce);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .button-arrow,
+        .button-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .button-arrow,
+        .cta-button:hover .button-icon {
+            transform: translateX(5px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .trasteros-hero {
+                height: 70vh;
+            }
+
+            .trasteros-hero h1 {
+                font-size: 2rem;
+            }
+
+            .trasteros-hero p {
+                font-size: 1.1rem;
+            }
+
+            .carousel-slide img {
+                height: 300px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <a href="index.html" class="logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </a>
+
+            <!-- Menú Desktop -->
+            <nav class="desktop-menu navbar">
+                <ul>
+                    <li><a href="index.html#inicio">Inicio</a></li>
+                    <li><a href="index.html#servicios">Servicios</a></li>
+                    <li class="dropdown">
+                        <a href="construccion.html" class="dropdown-toggle">Construcción <i
+                                class="fas fa-chevron-down dropdown-icon"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                            <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="reformasintegrales.html">Reformas</a></li>
+                    <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
+                    <li><a href="index.html#proyectos">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
+                    <li><a href="trasteros-mostoles.html">Trasteros Móstoles</a></li>
+                    <li><a href="index.html#contacto" class="cta-nav">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Botón Hamburguesa -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú móvil">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Menú Mobile -->
+        <nav class="mobile-menu" id="mobileMenu">
+            <ul>
+                <li><a href="index.html#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="index.html#servicios"><i class="fas fa-cogs"></i> Servicios</a></li>
+                <li class="mobile-dropdown">
+                    <a class="dropdown-toggle">
+                        <i class="fas fa-hammer"></i> Construcción
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="promocionesdeviviendas.html"><i class="fas fa-building"></i> Promociones de
+                                viviendas</a></li>
+                        <li><a href="viviendasindividuales.html"><i class="fas fa-swimming-pool"></i> Villas con
+                                piscina</a></li>
+                    </ul>
+                </li>
+                <li><a href="reformasintegrales.html"><i class="fas fa-tools"></i> Reformas</a></li>
+                <li><a href="disenodeinteriores.html"><i class="fas fa-couch"></i> Diseño de interiores</a></li>
+                <li><a href="index.html#proyectos"><i class="fas fa-home"></i> Venta</a></li>
+                <li><a href="alquiler.html"><i class="fas fa-key"></i> Alquiler</a></li>
+                <li><a href="trasteros-mostoles.html"><i class="fas fa-key"></i> Trasteros Móstoles</a></li>
+                <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="trasteros-hero">
+        <div class="container">
+            <div class="trasteros-hero-content">
+                <h1>Trasteros en <span>Móstoles</span></h1>
+                <p>Soluciones de almacenamiento seguras y accesibles. Acceso 24h, vigilancia y la mejor ubicación en
+                    Móstoles.</p>
+                <div class="cta-buttons">
+                    <a href="index.html#contacto" class="cta-button">
+                        <span>Reserva Ahora</span>
+                        <i class="fas fa-arrow-right button-arrow"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Características Principales -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">¿Por qué elegir nuestros <span>trasteros</span>?</h2>
+            <p class="section-description">Ofrecemos las mejores instalaciones de almacenamiento en Móstoles con
+                servicios premium</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Acceso 24/7</h3>
+                    <p>Accede a tu trastero cuando quieras, los 365 días del año. Total flexibilidad horaria.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Máxima Seguridad</h3>
+                    <p>Vigilancia 24h, cámaras de seguridad, control de acceso y alarmas anti-intrusión.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Céntrica Ubicación</h3>
+                    <p>En el corazón de Móstoles, con fácil acceso desde la M-50 y transporte público cercano.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <h3>Varios Tamaños</h3>
+                    <p>Desde 2m² hasta 20m². Tenemos el trastero perfecto para tus necesidades de almacenamiento.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Sin Permanencia</h3>
+                    <p>Flexibilidad total: alquila por el tiempo que necesites sin compromisos a largo plazo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería Carrusel -->
+    <section class="gallery-carousel">
+        <div class="container">
+            <h2 class="section-title">Nuestras <span>Instalaciones</span></h2>
+            <p class="section-description">Descubre la calidad y seguridad de nuestros trasteros en Móstoles</p>
+
+            <div class="carousel-container">
+                <div class="carousel-slides" id="carouselSlides">
+                    <!-- Slide 1 - Primera imagen sin lazy loading -->
+                    <div class="carousel-slide">
+                        <img src="img/planos.jpg" alt="Entrada principal trasteros Móstoles" width="1000" height="500">
+                        <div class="carousel-caption">
+                            <h3>Acceso Principal</h3>
+                            <p>Entrada segura con control de acceso y amplio parking</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide">
+                        <img data-src="img/trastero-pasillo.jpg" alt="Pasillos amplios e iluminados" class="lazy-carousel" width="1000" height="500">
+                        <div class="carousel-caption">
+                            <h3>Pasillos Amplios</h3>
+                            <p>Espacios luminosos y ventilados para fácil acceso a tu trastero</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide">
+                        <img data-src="img/trastero-interior.jpg" alt="Interior trastero limpio" class="lazy-carousel" width="1000" height="500">
+                        <div class="carousel-caption">
+                            <h3>Trasteros Limpios</h3>
+                            <p>Espacios impecables y bien mantenidos para tus pertenencias</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 4 -->
+                    <div class="carousel-slide">
+                        <img data-src="img/trastero-seguridad.jpg" alt="Sistema de seguridad" class="lazy-carousel" width="1000" height="500">
+                        <div class="carousel-caption">
+                            <h3>Seguridad Avanzada</h3>
+                            <p>Cámaras de vigilancia y sistemas de alarma última generación</p>
+                        </div>
+                    </div>
+
+                    <!-- Slide 5 -->
+                    <div class="carousel-slide">
+                        <img data-src="img/trastero-tamaños.jpg" alt="Diferentes tamaños de trasteros" class="lazy-carousel" width="1000" height="500">
+                        <div class="carousel-caption">
+                            <h3>Diversos Tamaños</h3>
+                            <p>Desde pequeños a grandes, encuentra el espacio perfecto para ti</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="carousel-controls">
+                    <button class="carousel-btn" id="prevBtn" aria-label="Imagen anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-btn" id="nextBtn" aria-label="Siguiente imagen">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="carousel-indicators" id="indicators"></div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Preguntas <span>Frecuentes</span></h2>
+            <p class="section-description">Todo lo que necesitas saber sobre nuestros trasteros</p>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>¿Cuál es el periodo mínimo de alquiler?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>No tenemos periodo mínimo obligatorio. Puedes alquilar por el tiempo que necesites, desde
+                                un mes hasta varios años. La flexibilidad es una de nuestras principales ventajas.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>¿Cómo funciona el acceso 24/7?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Al contratar tu trastero, recibirás un código de acceso personal y una tarjeta
+                                magnética. Podrás entrar a la instalación cualquier día y a cualquier hora, incluidos
+                                festivos, para acceder a tu trastero cuando lo necesites.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>¿Puedo cambiar de tamaño de trastero?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Sí, puedes cambiar a un trastero más grande o más pequeño según tus necesidades. Solo
+                                tienes que notificárnoslo con 7 días de antelación y, si hay disponibilidad, hacemos el
+                                cambio sin coste adicional.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>¿Está incluido el seguro?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Las instalaciones cuentan con seguro de responsabilidad civil. Recomendamos que los
+                                clientes contraten un seguro de contenido para sus pertenencias, que podemos facilitar a
+                                través de nuestros partners aseguradores.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>¿Puedo guardar cualquier tipo de objeto?</h4>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            <p>Puedes almacenar la mayoría de objetos personales y mercancía legal. No se permiten:
+                                productos perecederos, materiales inflamables o peligrosos, armas, dinero en efectivo,
+                                animales o plantas vivas, ni objetos ilegales.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section class="location-section" id="contacto-trasteros">
+        <div class="container">
+            <h2 class="location-title">Visítanos en <span>Móstoles</span></h2>
+
+            <div class="location-grid">
+                <!-- Ubicación -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Ubicación</h3>
+                    </div>
+                    <div class="location-body">
+                        <p>Calle Ejemplo, 123</p>
+                        <p>28935 Móstoles, Madrid</p>
+                        <p style="margin-top: 1rem;">A 5 min de la M-50</p>
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Contacta con nosotros</h3>
+                    </div>
+                    <div class="location-body">
+                        <a href="mailto:trasteros@unero.es">trasteros@unero.es</a>
+                        <div class="contact-numbers">
+                            <a href="tel:687885319">687 885 319</a>
+                            <a href="tel:679418741">679 418 741</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-clock"></i>
+                        <h3>Horario de Oficina</h3>
+                    </div>
+                    <div class="location-body">
+                        <div class="schedule-item">
+                            <span>Lun - Vie</span>
+                            <span>9:00 - 19:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span>Sábados</span>
+                            <span>10:00 - 14:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span>Domingos</span>
+                            <span>Cerrado</span>
+                        </div>
+                        <p style="color: var(--color-accent); margin-top: 1rem; font-weight: 600;">Acceso a trasteros: 24/7</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="main.js" defer></script>
+
+    <script>
+        // ====================================
+        // OPTIMIZACIONES DE RENDIMIENTO
+        // ====================================
+
+        // Lazy load para imagen hero
+        document.addEventListener('DOMContentLoaded', function() {
+            const heroSection = document.querySelector('.trasteros-hero');
+            if (heroSection) {
+                // Precargar imagen hero de forma optimizada
+                const heroImg = new Image();
+                heroImg.onload = function() {
+                    heroSection.classList.add('loaded');
+                };
+                heroImg.src = 'img/trasteros-hero.jpg';
+            }
+
+            // Lazy loading para imágenes del carrusel
+            const lazyImages = document.querySelectorAll('.lazy-carousel');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('lazy-carousel');
+                        observer.unobserve(img);
+                    }
+                });
+            }, {
+                rootMargin: '50px'
+            });
+
+            lazyImages.forEach(img => imageObserver.observe(img));
+        });
+
+        // ====================================
+        // CARRUSEL DE IMÁGENES
+        // ====================================
+        const slides = document.querySelectorAll('.carousel-slide');
+        const slidesContainer = document.getElementById('carouselSlides');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const indicatorsContainer = document.getElementById('indicators');
+
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // Crear indicadores
+        for (let i = 0; i < totalSlides; i++) {
+            const indicator = document.createElement('span');
+            indicator.classList.add('indicator');
+            if (i === 0) indicator.classList.add('active');
+            indicator.addEventListener('click', () => goToSlide(i));
+            indicatorsContainer.appendChild(indicator);
+        }
+
+        const indicators = document.querySelectorAll('.indicator');
+
+        function updateCarousel() {
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            // Usar requestAnimationFrame para animaciones más suaves
+            requestAnimationFrame(() => {
+                indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === currentSlide);
+                });
+            });
+
+            // Cargar imagen siguiente de forma anticipada
+            const nextSlideIndex = (currentSlide + 1) % totalSlides;
+            const nextSlide = slides[nextSlideIndex];
+            const nextImg = nextSlide.querySelector('.lazy-carousel');
+            if (nextImg && nextImg.dataset.src) {
+                nextImg.src = nextImg.dataset.src;
+                nextImg.classList.remove('lazy-carousel');
+            }
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        // Auto-play del carrusel (optimizado)
+        let autoplayInterval = setInterval(nextSlide, 5000);
+
+        // Pausar autoplay al hacer hover
+        const carouselContainer = document.querySelector('.carousel-container');
+        carouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(autoplayInterval);
+        });
+
+        carouselContainer.addEventListener('mouseleave', () => {
+            autoplayInterval = setInterval(nextSlide, 5000);
+        });
+
+        // Pausar autoplay cuando la pestaña no es visible (ahorro de recursos)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                clearInterval(autoplayInterval);
+            } else {
+                autoplayInterval = setInterval(nextSlide, 5000);
+            }
+        });
+
+        // ====================================
+        // FAQ ACCORDION
+        // ====================================
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                // Cerrar todos los items
+                faqItems.forEach(faqItem => {
+                    faqItem.classList.remove('active');
+                });
+
+                // Abrir el clickeado si no estaba activo
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // ====================================
+        // SMOOTH SCROLL PARA ANCLAS
+        // ====================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

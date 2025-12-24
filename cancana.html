@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construcción de Vivienda | Unero Espacio</title>
+    <meta name="description"
+        content="Servicio completo de construcción de viviendas llave en mano. Desde el diseño hasta la entrega final.">
+    <link rel="stylesheet" href="inde.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar"></div>
+
+    <!-- Navbar -->
+    <header class="header" id="header">
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                    alt="Unero Espacio Logo" loading="lazy">
+            </a>
+
+            <!-- Menú Desktop -->
+            <nav class="desktop-menu navbar" id="navbar" role="navigation" aria-label="Menú principal">
+                <ul>
+                    <li><a href="index.html#inicio" data-scroll="inicio">Inicio</a></li>
+                    <li><a href="index.html#servicios" data-scroll="servicios">Servicios</a></li>
+                    <li class="dropdown">
+                        <a href="construccion.html" class="dropdown-toggle">Construcción <i
+                                class="fas fa-chevron-down dropdown-icon"></i></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                            <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="reformasintegrales.html">Reformas</a></li>
+                    <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
+                    <li><a href="index.html#proyectos" data-scroll="proyectos">Venta</a></li>
+                    <li><a href="alquiler.html">Alquiler</a></li>
+                    <li><a href="trasteros-mostoles.html">Trasteros Móstoles</a></li>
+                    <li><a href="index.html#contacto" class="cta-nav" data-scroll="contacto">Contacto</a></li>
+                </ul>
+            </nav>
+
+            <!-- Botón Hamburguesa -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú móvil" aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Menú Mobile -->
+        <nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menú móvil">
+            <ul>
+                <li><a href="index.html#inicio">
+                        <i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="index.html#servicios">
+                        <i class="fas fa-cogs"></i> Servicios</a></li>
+                <li class="mobile-dropdown">
+                    <a class="dropdown-toggle" aria-expanded="false">
+                        <i class="fas fa-hammer"></i> Construcción
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="promocionesdeviviendas.html">
+                                <i class="fas fa-building"></i> Promociones de viviendas</a></li>
+                        <li><a href="viviendasindividuales.html">
+                                <i class="fas fa-swimming-pool"></i> Villas con piscina</a></li>
+                    </ul>
+                </li>
+                <li><a href="reformasintegrales.html">
+                        <i class="fas fa-tools"></i> Reformas</a></li>
+                <li><a href="disenodeinteriores.html">
+                        <i class="fas fa-couch"></i> Diseño de interiores</a></li>
+                <li><a href="index.html#proyectos">
+                        <i class="fas fa-home"></i> Venta</a></li>
+                <li><a href="alquiler.html">
+                        <i class="fas fa-key"></i> Alquiler</a></li>
+                <li><a href="trasteros-mostoles.html">
+                        <i class="fas fa-key"></i> Trasteros Móstoles</a></li>
+                <li><a href="index.html#contacto">
+                        <i class="fas fa-envelope"></i> Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Sección de Servicios -->
+    <section class="servicios">
+        <div class="container">
+            <h2 class="section-title">Can <span>Cana</span></h2>
+
+            <div class="gallery-container">
+                <!-- Proyecto 1 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto1.JPG" alt="Salón moderno">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 2 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto2.JPG" alt="Cocina integrada">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 3 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto3.JPG" alt="Dormitorio principal">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 4 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto4.JPG" alt="Baño de lujo">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 5 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto5.JPG" alt="Terraza exterior">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 6 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto6.JPG" alt="Oficina en casa">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+
+                <!-- Proyecto 7 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto7.JPG" alt="Cocina integrada">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 8 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto8.JPG" alt="Dormitorio principal">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 9 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto9.JPG" alt="Baño de lujo">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 10 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto10.jpg" alt="Terraza exterior">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+
+                <!-- Proyecto 11 -->
+                <div class="gallery-item">
+                    <img src="Casas/imgcancana/foto11.jpg" alt="Oficina en casa">
+                    <div class="gallery-overlay">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="gallery-cta">
+                <p>¿Te gustaría ver más proyectos o hablar sobre tu próximo diseño?</p>
+                <a href="index.html#contacto" class="cta-button">Contacta con nosotros</a>
+            </div>
+        </div>
+    </section>
+
+
+    </section>
+
+    <!-- Contacto -->
+    <section class="location-section">
+        <div class="container">
+
+            <div class="location-grid">
+                <!-- Ubicación -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Ibiza</h3>
+                    </div>
+                    <div class="location-body">
+                        <p style="color: var(--color-accent-light);">Islas Baleares, España</p>
+                    </div>
+                </div>
+
+                <!-- Contacto -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-envelope" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Contacta con nosotros</h3>
+                    </div>
+                    <div class="location-body">
+                        <a href="mailto:eva@unero.es" style="color: var(--color-accent-light);">eva@unero.es</a>
+                        <div class="contact-numbers">
+                            <a href="tel:687885319" style="color: var(--color-accent-light);">687 885 319</a>
+                            <a href="tel:679418741" style="color: var(--color-accent-light);">679 418 741</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horario -->
+                <div class="location-card">
+                    <div class="location-header">
+                        <i class="fas fa-clock" style="color: var(--color-accent);"></i>
+                        <h3 style="color: var(--color-accent);">Horario</h3>
+                    </div>
+                    <div class="location-body">
+                        <div class="schedule-item" style="border-bottom: 1px solid var(--color-accent-light);">
+                            <span style="color: var(--color-accent-light);">Lun - Vie</span>
+                            <span style="color: var(--color-accent-light);">10:00 - 18:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span style="color: var(--color-accent-light);">Sáb - Dom</span>
+                            <span style="color: var(--color-accent-light);">Cerrado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+    <!-- Scripts -->
+    <script src="main.js"></script>
+
+</body>
+
+</html>

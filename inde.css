@@ -558,7 +558,7 @@ h4 {
 .hero {
     height: 100vh;
     background: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.8) 100%),
-        url('img/fotoportada.jpg') no-repeat center center/cover;
+        url('img/fotoportada.webp') no-repeat center center/cover;
     display: flex;
     align-items: center;
     color: var(--color-secondary);
@@ -824,9 +824,21 @@ h4 {
     box-shadow: var(--box-shadow);
 }
 
+.proyecto-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.8s ease;
+}
+
 .proyecto-card:hover {
     transform: translateY(-10px) scale(1.02);
     box-shadow: 0 20px 40px rgba(10, 26, 47, 0.15);
+}
+
+.proyecto-card:hover img {
+    transform: scale(1.15);
 }
 
 .proyecto-image {
@@ -876,6 +888,51 @@ h4 {
     font-size: 0.8rem;
     margin-right: 0.5rem;
     margin-bottom: 0.5rem;
+}
+
+.proyecto-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    background: linear-gradient(transparent, rgba(10, 26, 47, 0.95));
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.proyecto-card:hover .proyecto-info {
+    transform: translateY(0);
+}
+
+.proyecto-info h3 {
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.proyecto-info .ver-mas {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    margin-top: 0;
+    text-align: left;
+}
+
+.proyecto-info .ver-mas:hover {
+    color: var(--color-accent);
+}
+
+.proyecto-info .ver-mas i {
+    transition: transform 0.3s ease;
+}
+
+.proyecto-info .ver-mas:hover i {
+    transform: translateX(5px);
 }
 
 .ver-mas {

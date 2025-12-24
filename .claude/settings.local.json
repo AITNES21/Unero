@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dir \"c:\\\\Users\\\\Néstor Díaz Hernando\\\\Desktop\\\\Unero\\\\img\" /B)"
+      "Bash(dir \"c:\\\\Users\\\\Néstor Díaz Hernando\\\\Desktop\\\\Unero\\\\img\" /B)",
+      "Bash(del \"c:\\\\Users\\\\Néstor Díaz Hernando\\\\Desktop\\\\Unero\\\\optimize-head.txt\")"
     ]
   }
 }

@@ -557,8 +557,11 @@ h4 {
 /* ===== HERO SECTION ===== */
 .hero {
     height: 100vh;
-    background: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.8) 100%),
-        url('img/fotoportada.webp') no-repeat center center/cover;
+    background-image: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.8) 100%),
+        url('./img/fotoportada.webp');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
     display: flex;
     align-items: center;
     color: var(--color-secondary);

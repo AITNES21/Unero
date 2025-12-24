@@ -7,13 +7,84 @@
     <title>Unero Espacio | Diseño de Interiores & Reformas Premium</title>
     <meta name="description"
         content="Diseño de interiores, reformas y mobiliario a medida. Transformamos tus espacios con elegancia y funcionalidad.">
+
+    <!-- Preconnect para optimizar fuentes y CDN -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="inde.css">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://le-de.cdn-website.com">
+
+    <!-- Preload para recursos críticos -->
+    <link rel="preload" href="inde.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" as="style">
+
+    <!-- CSS crítico inline -->
+    <style>
+        /* Critical CSS - Above the fold */
+        :root {
+            --color-primary: #0a1a2f;
+            --color-secondary: #ffffff;
+            --color-accent: #d4af37;
+            --color-bg: #f8f9fa;
+            --color-text: #333333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Loading screen - crítico */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--color-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+
+    <!-- CSS principal diferido -->
+    <link rel="stylesheet" href="inde.css" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Fuentes con font-display swap -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Font Awesome diferido -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'; this.onload=null;">
+
+    <!-- Fallback para navegadores sin JS -->
+    <noscript>
+        <link rel="stylesheet" href="inde.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+
     <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
 
     <!-- SEO Mejorado -->

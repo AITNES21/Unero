@@ -44,77 +44,63 @@
     <!-- Progress Bar -->
     <div id="progress-bar" class="progress-bar"></div>
 
-    <!-- Navbar -->
+    <!-- Header -->
     <header class="header" id="header">
-        <div class="container header-content">
-            <a href="#" class="logo">
-                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
-                    alt="Unero Espacio Logo" loading="lazy">
-            </a>
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
+                        alt="Unero Espacio Logo">
+                </a>
 
-            <!-- Menú Desktop -->
-            <nav class="desktop-menu navbar" id="navbar" role="navigation" aria-label="Menú principal">
-                <ul>
-                    <li><a href="index.html#inicio" data-scroll="inicio">Inicio</a></li>
-                    <li><a href="index.html#servicios" data-scroll="servicios">Servicios</a></li>
-                    <li class="dropdown">
-                        <a href="construccion.html" class="dropdown-toggle">Construcción <i
-                                class="fas fa-chevron-down dropdown-icon"></i></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
-                            <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="reformasintegrales.html">Reformas</a></li>
-                    <li><a href="disenodeinteriores.html">Diseño de interiores</a></li>
-                    <li><a href="index.html#proyectos" data-scroll="proyectos">Venta</a></li>
-                    <li><a href="alquiler.html">Alquiler</a></li>
-                    <li><a href="trasteros-mostoles.html">Trasteros Móstoles</a></li>
-                    <li><a href="index.html#contacto" class="cta-nav" data-scroll="contacto">Contacto</a></li>
-                </ul>
-            </nav>
+                <!-- Menú Desktop -->
+                <nav class="desktop-menu">
+                    <ul>
+                        <li><a href="index.html#inicio">INICIO</a></li>
+                        <li><a href="index.html#servicios">SERVICIOS</a></li>
+                        <li class="dropdown">
+                            <a href="construccion.html">CONSTRUCCIÓN</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                                <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="reformasintegrales.html">REFORMAS</a></li>
+                        <li><a href="disenodeinteriores.html">DISEÑO</a></li>
+                        <li><a href="index.html#proyectos">VENTA</a></li>
+                        <li><a href="alquiler.html">ALQUILER</a></li>
+                        <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
+                        <li><a href="index.html#contacto">CONTACTO</a></li>
+                    </ul>
+                </nav>
 
-            <!-- Botón Hamburguesa -->
-            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menú móvil" aria-expanded="false">
-                <i class="fas fa-bars"></i>
-            </button>
+                <!-- Botón Mobile -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Menú Mobile -->
-        <nav class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Menú móvil">
-            <ul>
-                <li><a href="index.html#inicio">
-                        <i class="fas fa-home"></i> Inicio</a></li>
-                <li><a href="index.html#servicios">
-                        <i class="fas fa-cogs"></i> Servicios</a></li>
-                <li class="mobile-dropdown">
-                    <a class="dropdown-toggle" aria-expanded="false">
-                        <i class="fas fa-hammer"></i> Construcción
-                        <i class="fas fa-chevron-down dropdown-icon"></i>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="promocionesdeviviendas.html">
-                                <i class="fas fa-building"></i> Promociones de viviendas</a></li>
-                        <li><a href="viviendasindividuales.html">
-                                <i class="fas fa-swimming-pool"></i> Villas con piscina</a></li>
-                    </ul>
-                </li>
-                <li><a href="reformasintegrales.html">
-                        <i class="fas fa-tools"></i> Reformas</a></li>
-                <li><a href="disenodeinteriores.html">
-                        <i class="fas fa-couch"></i> Diseño de interiores</a></li>
-                <li><a href="index.html#proyectos">
-                        <i class="fas fa-home"></i> Venta</a></li>
-                <li><a href="alquiler.html">
-                        <i class="fas fa-key"></i> Alquiler</a></li>
-                <li><a href="trasteros-mostoles.html">
-                        <i class="fas fa-key"></i> Trasteros Móstoles</a></li>
-                <li><a href="index.html#contacto">
-                        <i class="fas fa-envelope"></i> Contacto</a></li>
-            </ul>
-        </nav>
     </header>
 
+    <!-- Overlay Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Menú Mobile -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html#inicio">INICIO</a></li>
+            <li><a href="index.html#servicios">SERVICIOS</a></li>
+            <li><a href="construccion.html">CONSTRUCCIÓN</a></li>
+            <li><a href="reformasintegrales.html">REFORMAS</a></li>
+            <li><a href="disenodeinteriores.html">DISEÑO</a></li>
+            <li><a href="index.html#proyectos">VENTA</a></li>
+            <li><a href="alquiler.html">ALQUILER</a></li>
+            <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
+            <li><a href="index.html#contacto">CONTACTO</a></li>
+        </ul>
+    </nav>
 
     <!-- Sección de Servicios -->
     <section class="servicios">

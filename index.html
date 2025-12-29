@@ -230,27 +230,31 @@
             </div>
         </div>
 
-        <!-- Menú Mobile -->
-        <nav class="mobile-menu" id="mobileMenu">
-            <ul>
-                <li><a href="#inicio">INICIO</a></li>
-                <li><a href="#servicios">SERVICIOS</a></li>
-                <li><a href="construccion.html">CONSTRUCCIÓN</a></li>
-                <li><a href="reformasintegrales.html">REFORMAS</a></li>
-                <li><a href="disenodeinteriores.html">DISEÑO</a></li>
-                <li><a href="#proyectos">VENTA</a></li>
-                <li><a href="alquiler.html">ALQUILER</a></li>
-                <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
-                <li><a href="#contacto">CONTACTO</a></li>
-            </ul>
-        </nav>
     </header>
+
+    <!-- Overlay Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Menú Mobile -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#inicio">INICIO</a></li>
+            <li><a href="#servicios">SERVICIOS</a></li>
+            <li><a href="construccion.html">CONSTRUCCIÓN</a></li>
+            <li><a href="reformasintegrales.html">REFORMAS</a></li>
+            <li><a href="disenodeinteriores.html">DISEÑO</a></li>
+            <li><a href="#proyectos">VENTA</a></li>
+            <li><a href="alquiler.html">ALQUILER</a></li>
+            <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
+            <li><a href="#contacto">CONTACTO</a></li>
+        </ul>
+    </nav>
 
     <!-- Hero Section -->
     <section id="inicio" class="hero parallax-section">
         <div class="hero-content fade-in-up">
-            <h1 class="text-glow">Constructora en Ibiza | <span class="text-glow">Casas de Lujo y Villas con Piscina</span></h1>
-            <p class="fade-in-up delay-1">Diseñamos y construimos casas exclusivas en Ibiza. Promociones de viviendas, villas de lujo y reformas integrales</p>
+            <h1 class="text-glow">Inspirados por Ibiza, <span class="text-glow">creados para ti</span></h1>
+            <p class="fade-in-up delay-1">Constructora líder en Ibiza. Diseñamos y construimos casas de lujo, villas con piscina y promociones de viviendas exclusivas</p>
             <a href="#contacto" class="cta-button fade-in-up delay-2" data-scroll="contacto">
                 Solicitar Presupuesto
                 <i class="fas fa-arrow-right button-arrow"></i>
@@ -329,17 +333,51 @@
     <section id="proyectos" class="proyectos">
         <div class="container">
             <h2 class="section-title fade-in-up">Viviendas <span>Disponibles</span></h2>
+            <p class="section-description fade-in-up">Descubre nuestras exclusivas promociones de villas de lujo en Ibiza</p>
             <div class="proyectos-grid">
-                <!-- Proyecto 1 -->
-                <div class="proyecto-card fade-in-up">
-                    <img src="img/foto10.png" alt="Cas Mut" loading="lazy">
-                    <div class="proyecto-info">
-                        <h3>Ses Torres II (Ibiza)</h3>
-                        <a href="https://www.idealista.com/inmueble/108240315/?at_medium=email&at_campaign=private_sendadtofriend&at_campaigntype=retention&at_project=others&at_provider=notifications&at_date_send=2025-06-10T13:15:11&at_recipient_id=QhtxgDQOVtluwDMyMwJ1cbO268iYLasR2rVIkG6kzV4=&at_link=adLink&utm_medium=email&utm_source=notifications&utm_campaign=private_sendadtofriend"
-                            class="ver-mas" target="_blank">
-                            Ver Proyecto
-                            <i class="fas fa-arrow-right"></i>
-                        </a>
+                <!-- Proyecto 1 - Mejorado -->
+                <div class="proyecto-card-premium fade-in-up">
+                    <div class="proyecto-imagen">
+                        <img src="img/foto10.png" alt="Villa de lujo Ses Torres II en Ibiza" loading="lazy">
+                        <div class="proyecto-badge">DISPONIBLE</div>
+                        <div class="proyecto-overlay">
+                            <div class="proyecto-icons">
+                                <span><i class="fas fa-bed"></i> 4 Hab</span>
+                                <span><i class="fas fa-bath"></i> 3 Baños</span>
+                                <span><i class="fas fa-swimming-pool"></i> Piscina</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="proyecto-contenido">
+                        <div class="proyecto-ubicacion">
+                            <i class="fas fa-map-marker-alt"></i> Ibiza, Islas Baleares
+                        </div>
+                        <h3>Ses Torres II</h3>
+                        <p>Villa de lujo con piscina privada, jardín mediterráneo y vistas espectaculares al mar. Acabados premium y diseño exclusivo.</p>
+                        <div class="proyecto-caracteristicas">
+                            <div class="caracteristica">
+                                <i class="fas fa-ruler-combined"></i>
+                                <span>250m²</span>
+                            </div>
+                            <div class="caracteristica">
+                                <i class="fas fa-tree"></i>
+                                <span>800m² parcela</span>
+                            </div>
+                            <div class="caracteristica">
+                                <i class="fas fa-car"></i>
+                                <span>2 Garajes</span>
+                            </div>
+                        </div>
+                        <div class="proyecto-acciones">
+                            <a href="https://www.idealista.com/inmueble/108240315/?at_medium=email&at_campaign=private_sendadtofriend&at_campaigntype=retention&at_project=others&at_provider=notifications&at_date_send=2025-06-10T13:15:11&at_recipient_id=QhtxgDQOVtluwDMyMwJ1cbO268iYLasR2rVIkG6kzV4=&at_link=adLink&utm_medium=email&utm_source=notifications&utm_campaign=private_sendadtofriend"
+                                class="btn-ver-proyecto" target="_blank" rel="noopener">
+                                Ver Detalles Completos
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                            <a href="#contacto" class="btn-contacto-proyecto">
+                                <i class="fas fa-phone-alt"></i> Contactar
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

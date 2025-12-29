@@ -226,7 +226,7 @@ nav.desktop-menu a:hover {
     color: var(--color-accent);
 }
 
-/* Dropdown para Construcción */
+/* Dropdown para Construcción - Centrado y simétrico */
 nav.desktop-menu .dropdown {
     position: relative;
 }
@@ -234,42 +234,65 @@ nav.desktop-menu .dropdown {
 nav.desktop-menu .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: 0;
-    background: var(--color-primary);
-    min-width: 220px;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    padding: 0.5rem 0;
-    margin-top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    background: rgba(10, 26, 47, 0.98);
+    backdrop-filter: blur(10px);
+    min-width: 240px;
+    border-radius: 10px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    padding: 0.8rem 0;
+    margin-top: 0.3rem;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     list-style: none;
     z-index: 1000;
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 nav.desktop-menu .dropdown:hover .dropdown-menu {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0);
+    transform: translateX(-50%) translateY(0);
 }
 
 nav.desktop-menu .dropdown-menu li {
     margin: 0;
+    padding: 0 0.5rem;
 }
 
 nav.desktop-menu .dropdown-menu a {
     display: block;
-    padding: 0.8rem 1.2rem;
-    font-size: 0.85rem;
-    border-radius: 0;
+    padding: 0.9rem 1.2rem;
+    font-size: 0.88rem;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+nav.desktop-menu .dropdown-menu a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 0;
+    background: var(--color-accent);
+    transition: height 0.25s ease;
 }
 
 nav.desktop-menu .dropdown-menu a:hover {
-    background: rgba(212, 175, 55, 0.15);
+    background: rgba(212, 175, 55, 0.12);
+    padding-left: 1.5rem;
+}
+
+nav.desktop-menu .dropdown-menu a:hover::before {
+    height: 70%;
 }
 
 /* Botón Menú Mobile */
@@ -686,31 +709,33 @@ nav.mobile-menu a:hover {
 .servicio-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     color: var(--color-accent);
     text-decoration: none;
     font-weight: 600;
+    font-size: 0.85rem;
     transition: var(--transition);
-    padding: 0.5rem 1rem;
-    border: 2px solid var(--color-accent);
-    border-radius: 25px;
+    padding: 0.4rem 0.9rem;
+    border: 1.5px solid var(--color-accent);
+    border-radius: 20px;
     background: transparent;
 }
 
 .servicio-btn:hover {
-    gap: 1rem;
+    gap: 0.7rem;
     background: var(--color-accent);
     color: var(--color-primary);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(212, 175, 55, 0.3);
 }
 
 .servicio-btn i {
+    font-size: 0.75rem;
     transition: transform 0.3s ease;
 }
 
 .servicio-btn:hover i {
-    transform: translateX(5px);
+    transform: translateX(3px);
 }
 
 /* ===== PROYECTOS ===== */

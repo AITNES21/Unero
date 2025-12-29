@@ -667,8 +667,18 @@ nav.mobile-menu a.active {
     overflow: hidden;
 }
 
-.parallax-section {
-    background-attachment: fixed;
+/* Parallax solo en desktop - en móvil causa problemas */
+@media (min-width: 769px) {
+    .parallax-section {
+        background-attachment: fixed;
+    }
+}
+
+/* En móvil usar scroll normal */
+@media (max-width: 768px) {
+    .parallax-section {
+        background-attachment: scroll;
+    }
 }
 
 .hero-content {

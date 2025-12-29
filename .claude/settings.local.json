@@ -12,7 +12,8 @@
       "Bash(Casas de Lujo y Villas con Piscina\"\n- Meta description optimizada con keywords\n- H1: \"Constructora en Ibiza)",
       "Bash(Casas de Lujo y Villas con Piscina\"\n- Keywords: constructora ibiza, casas ibiza, villas ibiza, etc.\n- Open Graph completo \\(Facebook/Twitter\\)\n- JSON-LD Schema.org \\(GeneralContractor\\)\n- Datos estructurados con servicios\n- Geolocalización Ibiza\n- Canonical URL\n- Meta robots optimizado\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(git reset:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(ls:*)"
     ]
   }
 }

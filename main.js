@@ -161,8 +161,18 @@ class UneroWebsite {
             document.body.classList.toggle('menu-open', mobileMenu.classList.contains('active'));
         });
 
+        // Toggle dropdown móvil de Construcción
+        const mobileDropdownToggle = mobileMenu.querySelector('.dropdown-toggle-mobile');
+        if (mobileDropdownToggle) {
+            mobileDropdownToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                const parentLi = mobileDropdownToggle.closest('.mobile-dropdown');
+                parentLi.classList.toggle('active');
+            });
+        }
+
         // Cerrar menú al hacer clic en enlaces (excepto dropdowns)
-        mobileMenu.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
+        mobileMenu.querySelectorAll('a:not(.dropdown-toggle):not(.dropdown-toggle-mobile)').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.remove('active');
                 if (mobileMenuOverlay) {

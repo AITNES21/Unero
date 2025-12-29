@@ -372,21 +372,59 @@ nav.mobile-menu a.active {
     color: var(--color-accent);
 }
 
-/* Sub-items del menú móvil (sub-opciones de Construcción) */
-nav.mobile-menu a[href*="promociones"],
-nav.mobile-menu a[href*="villas"] {
-    font-size: 0.85rem;
-    padding: 0.7rem 2rem;
-    background: rgba(0, 0, 0, 0.2);
-    font-weight: 400;
-    text-align: left;
-    padding-left: 3rem;
+/* Dropdown móvil */
+.mobile-dropdown {
+    position: relative;
 }
 
-nav.mobile-menu a[href*="promociones"]:hover,
-nav.mobile-menu a[href*="villas"]:hover {
-    background: rgba(212, 175, 55, 0.2);
-    padding-left: 3.5rem;
+.dropdown-toggle-mobile {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.dropdown-toggle-mobile i {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.mobile-dropdown.active .dropdown-toggle-mobile i {
+    transform: rotate(180deg);
+}
+
+.mobile-dropdown-menu {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.mobile-dropdown.active .mobile-dropdown-menu {
+    display: block;
+}
+
+.mobile-dropdown-menu li {
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mobile-dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+.mobile-dropdown-menu a {
+    font-size: 0.85rem !important;
+    padding: 0.7rem 2rem !important;
+    font-weight: 400 !important;
+    text-align: left !important;
+    padding-left: 3rem !important;
+}
+
+.mobile-dropdown-menu a:hover {
+    background: rgba(212, 175, 55, 0.2) !important;
+    padding-left: 3.5rem !important;
 }
 
 /* Overlay - Deshabilitado en estilo TriInfinity */

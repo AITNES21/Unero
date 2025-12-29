@@ -558,7 +558,7 @@ h4 {
 .hero {
     height: 100vh;
     background-image: linear-gradient(135deg, rgba(10, 26, 47, 0.4) 0%, rgba(22, 58, 103, 0.8) 100%),
-        url('img/fotoportada.webp');
+        url('/Unero/img/fotoportada.webp');
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
@@ -791,10 +791,18 @@ h4 {
     text-decoration: none;
     font-weight: 600;
     transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--color-accent);
+    border-radius: 25px;
+    background: transparent;
 }
 
 .servicio-btn:hover {
     gap: 1rem;
+    background: var(--color-accent);
+    color: var(--color-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
 }
 
 .servicio-btn i {

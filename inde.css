@@ -321,22 +321,22 @@ nav.desktop-menu .dropdown-menu a:hover::before {
 
 /* Menú Mobile */
 nav.mobile-menu {
+    display: none;
     position: fixed;
-    top: 0;
-    left: -100%;
-    width: 80%;
-    max-width: 400px;
-    height: 100vh;
+    top: 70px;
+    left: 0;
+    right: 0;
+    width: 100%;
     background: var(--color-primary);
-    padding: 5rem 0 2rem;
+    padding: 1rem 0;
     overflow-y: auto;
+    max-height: calc(100vh - 70px);
     z-index: 999;
-    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 nav.mobile-menu.active {
-    left: 0;
+    display: block;
 }
 
 nav.mobile-menu ul {
@@ -346,46 +346,35 @@ nav.mobile-menu ul {
 }
 
 nav.mobile-menu > ul > li {
-    margin-bottom: 0.5rem;
+    margin: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+nav.mobile-menu > ul > li:last-child {
+    border-bottom: none;
 }
 
 nav.mobile-menu a {
     color: white;
     text-decoration: none;
     font-weight: 500;
-    font-size: 1.05rem;
-    padding: 1rem 2rem;
+    font-size: 0.95rem;
+    padding: 0.9rem 2rem;
     display: block;
-    border-left: 4px solid transparent;
     transition: all 0.3s ease;
     position: relative;
+    text-align: center;
 }
 
 nav.mobile-menu a:hover,
 nav.mobile-menu a.active {
-    background: rgba(212, 175, 55, 0.1);
-    border-left-color: var(--color-accent);
-    padding-left: 2.5rem;
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--color-accent);
 }
 
-/* Overlay para cerrar el menú */
+/* Overlay - Deshabilitado en estilo TriInfinity */
 .mobile-menu-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 998;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(4px);
-}
-
-.mobile-menu-overlay.active {
-    opacity: 1;
-    visibility: visible;
+    display: none;
 }
 
 /* ===== MEDIA QUERIES NAVBAR ===== */

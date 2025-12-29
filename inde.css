@@ -372,7 +372,7 @@ nav.mobile-menu a.active {
     color: var(--color-accent);
 }
 
-/* Dropdown móvil */
+/* Dropdown móvil - Mejorado y más bonito */
 .mobile-dropdown {
     position: relative;
 }
@@ -383,24 +383,54 @@ nav.mobile-menu a.active {
     justify-content: center;
     gap: 0.5rem;
     cursor: pointer;
-    pointer-events: none;
+    position: relative;
+    transition: all 0.3s ease;
+    background: transparent;
+    border-radius: 8px;
+}
+
+.dropdown-toggle-mobile:hover {
+    background: rgba(212, 175, 55, 0.1);
 }
 
 .dropdown-toggle-mobile i {
-    font-size: 0.8rem;
-    transition: transform 0.3s ease;
+    font-size: 0.75rem;
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    color: var(--color-accent);
+    margin-left: 0.3rem;
 }
 
 .mobile-dropdown:hover .dropdown-toggle-mobile i {
     transform: rotate(180deg);
+    color: var(--color-secondary);
 }
 
 .mobile-dropdown-menu {
     display: none;
     list-style: none;
-    margin: 0;
+    margin: 0.5rem 0 0 0;
     padding: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(10, 26, 47, 0.5) 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: slideDown 0.3s ease-out;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 500px;
+    }
 }
 
 .mobile-dropdown:hover .mobile-dropdown-menu {
@@ -409,24 +439,80 @@ nav.mobile-menu a.active {
 
 .mobile-dropdown-menu li {
     margin: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    position: relative;
+}
+
+.mobile-dropdown-menu li:first-child a {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
 }
 
 .mobile-dropdown-menu li:last-child {
     border-bottom: none;
 }
 
+.mobile-dropdown-menu li:last-child a {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.mobile-dropdown-menu li::before {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--color-accent);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.mobile-dropdown-menu li:hover::before {
+    opacity: 1;
+    left: 2.5rem;
+}
+
 .mobile-dropdown-menu a {
-    font-size: 0.85rem !important;
-    padding: 0.7rem 2rem !important;
+    font-size: 0.88rem !important;
+    padding: 1rem 2rem !important;
     font-weight: 400 !important;
     text-align: left !important;
     padding-left: 3rem !important;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    display: flex;
+    align-items: center;
+}
+
+.mobile-dropdown-menu a::after {
+    content: '→';
+    position: absolute;
+    right: 2rem;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    color: var(--color-accent);
+    font-weight: 600;
 }
 
 .mobile-dropdown-menu a:hover {
-    background: rgba(212, 175, 55, 0.2) !important;
-    padding-left: 3.5rem !important;
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.15) 0%, rgba(212, 175, 55, 0.25) 100%) !important;
+    padding-left: 3.8rem !important;
+    color: var(--color-accent) !important;
+    transform: translateX(5px);
+}
+
+.mobile-dropdown-menu a:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.mobile-dropdown-menu a:active {
+    transform: scale(0.98);
 }
 
 /* Overlay - Deshabilitado en estilo TriInfinity */

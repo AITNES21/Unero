@@ -485,9 +485,9 @@ nav.mobile-menu a.active {
         display: none;
     }
 
-    /* Mostrar botÃ³n hamburguesa */
+    /* Mostrar botón hamburguesa */
     .mobile-menu-btn {
-        display: block;
+        display: block !important;
     }
 
     .header-content {

@@ -372,6 +372,23 @@ nav.mobile-menu a.active {
     color: var(--color-accent);
 }
 
+/* Sub-items del menú móvil (sub-opciones de Construcción) */
+nav.mobile-menu a[href*="promociones"],
+nav.mobile-menu a[href*="villas"] {
+    font-size: 0.85rem;
+    padding: 0.7rem 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    font-weight: 400;
+    text-align: left;
+    padding-left: 3rem;
+}
+
+nav.mobile-menu a[href*="promociones"]:hover,
+nav.mobile-menu a[href*="villas"]:hover {
+    background: rgba(212, 175, 55, 0.2);
+    padding-left: 3.5rem;
+}
+
 /* Overlay - Deshabilitado en estilo TriInfinity */
 .mobile-menu-overlay {
     display: none;

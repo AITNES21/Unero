@@ -480,9 +480,11 @@ nav.mobile-menu a.active {
 /* PANTALLAS PEQUEÃ‘AS (menos de 900px) - MOBILE */
 @media (max-width: 999px) {
 
-    /* Ocultar menÃº desktop */
-    .desktop-menu {
-        display: none;
+    /* Ocultar menú desktop */
+    .desktop-menu,
+    nav.desktop-menu,
+    .navbar {
+        display: none !important;
     }
 
     /* Mostrar botón hamburguesa */

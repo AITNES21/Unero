@@ -382,6 +382,8 @@ nav.mobile-menu a.active {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    cursor: pointer;
+    pointer-events: none;
 }
 
 .dropdown-toggle-mobile i {
@@ -389,7 +391,7 @@ nav.mobile-menu a.active {
     transition: transform 0.3s ease;
 }
 
-.mobile-dropdown.active .dropdown-toggle-mobile i {
+.mobile-dropdown:hover .dropdown-toggle-mobile i {
     transform: rotate(180deg);
 }
 
@@ -401,7 +403,7 @@ nav.mobile-menu a.active {
     background: rgba(0, 0, 0, 0.3);
 }
 
-.mobile-dropdown.active .mobile-dropdown-menu {
+.mobile-dropdown:hover .mobile-dropdown-menu {
     display: block;
 }
 

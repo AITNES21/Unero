@@ -1097,38 +1097,9 @@
         <div class="hero-video-content">
             <h1 class="text-glow">Documentación del <span class="text-glow">Proyecto</span></h1>
             <p>Consulta todos los detalles técnicos, planos y especificaciones de nuestro desarrollo exclusivo.</p>
-            <a href="#documento" class="cta-button" data-scroll="documento">
-                Ver Documento <i class="fas fa-file-pdf button-arrow"></i>
+            <a href="pdf/planos-medem.pdf" class="cta-button" target="_blank" rel="noopener noreferrer">
+                Ver Documento PDF <i class="fas fa-file-pdf button-arrow"></i>
             </a>
-        </div>
-    </section>
-
-    <!-- PDF Section -->
-    <section class="pdf-section" id="documento">
-        <div class="container">
-            <h2 class="section-title">Documentación <span>Técnica</span></h2>
-
-            <!-- PDF Container -->
-            <div class="pdf-container" id="pdf-container">
-                <!-- PDF Viewer -->
-                <iframe id="pdf-viewer" class="pdf-viewer" src="" title="Documentación del proyecto">
-                </iframe>
-
-                <!-- Loading State -->
-                <div class="pdf-loading" id="pdf-loading">
-                    <div class="pdf-loading-spinner"></div>
-                </div>
-
-                <!-- Fallback Content -->
-                <div class="pdf-fallback" id="pdf-fallback" style="display: none;">
-                    <h3>No se puede mostrar el PDF</h3>
-                    <p>Tu navegador no puede mostrar archivos PDF directamente. Por favor, actualiza tu navegador o usa
-                        uno compatible.</p>
-                    <a href="#" class="download-btn" id="download-btn">
-                        <i class="fas fa-download"></i> Descargar PDF
-                    </a>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -1234,18 +1205,6 @@
 
     <!-- Scripts -->
     <script>
-        // ==============================================
-        // CONFIGURACIÓN DEL PDF - CAMBIAR AQUÍ
-        // ==============================================
-
-        // ✅ CAMBIAR ESTA RUTA POR LA DE TU ARCHIVO PDF LOCAL
-        const PDF_PATH = 'pdf/planos-medem.pdf';  // Ruta relativa desde la página
-
-        // Alternativamente, puedes usar una ruta absoluta:
-        // const PDF_PATH = '/ruta/completa/al/archivo.pdf';
-
-        // ==============================================
-
         // Clase principal del sitio web
         class MedemWebsite {
             constructor() {
@@ -1258,7 +1217,6 @@
                 this.initLoading();
                 this.initNavigation();
                 this.initScrollEffects();
-                this.initPDFViewer();
             }
 
             // ===== EVENTOS =====
@@ -1547,72 +1505,6 @@
             }
 
             // ===== PDF VIEWER =====
-            initPDFViewer() {
-                this.loadPDF();
-            }
-
-            loadPDF() {
-                this.showPDFLoading();
-
-                const pdfViewer = document.getElementById('pdf-viewer');
-                const downloadBtn = document.getElementById('download-btn');
-
-                // Configurar enlace de descarga
-                if (downloadBtn) {
-                    downloadBtn.href = PDF_PATH;
-                    downloadBtn.download = 'documentacion-medem.pdf';
-                }
-
-                // Cargar PDF desde ruta local
-                pdfViewer.src = PDF_PATH;
-
-                // Manejar eventos de carga
-                pdfViewer.onload = () => {
-                    this.hidePDFLoading();
-                };
-
-                pdfViewer.onerror = () => {
-                    this.hidePDFLoading();
-                    this.showFallback();
-                };
-
-                // Timeout por si no carga
-                setTimeout(() => {
-                    const loading = document.getElementById('pdf-loading');
-                    if (loading && loading.style.display !== 'none') {
-                        this.hidePDFLoading();
-                    }
-                }, 10000);
-            }
-
-            showPDFLoading() {
-                const loading = document.getElementById('pdf-loading');
-                const viewer = document.getElementById('pdf-viewer');
-                const fallback = document.getElementById('pdf-fallback');
-
-                if (loading) loading.style.display = 'flex';
-                if (viewer) viewer.style.display = 'none';
-                if (fallback) fallback.style.display = 'none';
-            }
-
-            hidePDFLoading() {
-                const loading = document.getElementById('pdf-loading');
-                const viewer = document.getElementById('pdf-viewer');
-
-                if (loading) loading.style.display = 'none';
-                if (viewer) viewer.style.display = 'block';
-            }
-
-            showFallback() {
-                const loading = document.getElementById('pdf-loading');
-                const viewer = document.getElementById('pdf-viewer');
-                const fallback = document.getElementById('pdf-fallback');
-
-                if (loading) loading.style.display = 'none';
-                if (viewer) viewer.style.display = 'none';
-                if (fallback) fallback.style.display = 'block';
-            }
-
             // ===== EVENT HANDLERS =====
             onDOMReady() {
                 console.log('Medem Website loaded successfully');

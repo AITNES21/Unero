@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentación del Proyecto | Unero Espacio</title>
-    <meta name="description" content="Consulta la documentación completa de nuestro proyecto exclusivo en Marbella.">
+    <title>Project Documentation | Unero Espacio</title>
+    <meta name="description" content="View the complete documentation of our exclusive project in Marbella.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="shortcut icon" href="img/logop.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../img/logop.ico" type="image/x-icon">
     <style>
-        /* ===== VARIABLES CSS ===== */
+        /* ===== CSS VARIABLES ===== */
         :root {
-            /* Colores principales */
+            /* Main colors */
             --color-primary: #0a1a2f;
             --color-secondary: #ffffff;
             --color-accent: #d4af37;
@@ -24,13 +24,13 @@
             --color-bg: #f8f9fa;
             --color-text: #333333;
 
-            /* Efectos */
+            /* Effects */
             --box-shadow: 0 10px 30px rgba(10, 26, 47, 0.1);
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
-        /* ===== RESET Y BASE ===== */
+        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -68,7 +68,7 @@
             margin-top: 30px;
         }
 
-        /* ===== UTILIDADES ===== */
+        /* ===== UTILITIES ===== */
         .container {
             width: 90%;
             max-width: 1200px;
@@ -196,7 +196,7 @@
             transform: scale(1.05);
         }
 
-        /* ===== NAVEGACIÓN DESKTOP ===== */
+        /* ===== DESKTOP NAVIGATION ===== */
         .desktop-menu {
             display: flex;
             justify-content: center;
@@ -276,7 +276,7 @@
             display: none !important;
         }
 
-        /* ===== DROPDOWN DESKTOP ===== */
+        /* ===== DESKTOP DROPDOWN ===== */
         .dropdown {
             position: relative;
         }
@@ -378,7 +378,7 @@
             transform: translateX(8px);
         }
 
-        /* ===== MENÚ HAMBURGUESA Y MÓVIL ===== */
+        /* ===== HAMBURGER MENU & MOBILE ===== */
         .mobile-menu-btn {
             display: none;
             background: none;
@@ -433,7 +433,7 @@
             padding-left: 1rem;
         }
 
-        /* Dropdown móvil */
+        /* Mobile dropdown */
         .mobile-dropdown .dropdown-menu {
             display: none;
             position: static;
@@ -508,7 +508,7 @@
             animation: gentleGlow 3s ease-in-out infinite alternate;
         }
 
-        /* ===== BOTONES ===== */
+        /* ===== BUTTONS ===== */
         .cta-button {
             display: inline-flex;
             align-items: center;
@@ -624,7 +624,7 @@
             box-shadow: 0 10px 20px rgba(10, 26, 47, 0.3);
         }
 
-        /* Loading para PDF */
+        /* PDF loading */
         .pdf-loading {
             display: flex;
             justify-content: center;
@@ -796,7 +796,7 @@
             padding: 0.5rem 0;
         }
 
-        /* ===== ANIMACIONES ===== */
+        /* ===== ANIMATIONS ===== */
         @keyframes expandWidth {
             from {
                 width: 0;
@@ -840,7 +840,7 @@
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
 
-            /* Ocultar menú desktop y mostrar botón móvil */
+            /* Hide desktop menu and show mobile button */
             .desktop-menu {
                 display: none;
             }
@@ -849,7 +849,7 @@
                 display: block;
             }
 
-            /* Ajustes del header */
+            /* Header adjustments */
             .header-content {
                 padding: 0.5rem 1rem;
             }
@@ -858,7 +858,7 @@
                 height: 50px;
             }
 
-            /* Hero responsive */
+            /* Responsive hero */
             .hero-video {
                 height: 50vh;
             }
@@ -871,7 +871,7 @@
                 font-size: 1.1rem;
             }
 
-            /* PDF responsive - MEJORADO */
+            /* Responsive PDF - IMPROVED */
             .pdf-viewer {
                 height: 50vh;
                 min-height: 400px;
@@ -886,7 +886,7 @@
                 padding: 3rem 0;
             }
 
-            /* Info grid responsive */
+            /* Responsive info grid */
             .info-grid {
                 grid-template-columns: 1fr;
                 gap: 1.5rem;
@@ -913,7 +913,7 @@
                 height: 45px;
             }
 
-            /* Asegurar que los dropdowns no se muestren en hover en móvil */
+            /* Ensure dropdowns don't show on hover on mobile */
             .dropdown:hover .dropdown-menu {
                 display: none !important;
             }
@@ -923,7 +923,7 @@
                 gap: 1.5rem;
             }
 
-            /* Mobile PDF específico */
+            /* Mobile PDF specific */
             .mobile-pdf-actions {
                 flex-direction: column;
                 align-items: center;
@@ -963,7 +963,7 @@
                 font-size: 1.8rem;
             }
 
-            /* PDF extra pequeño */
+            /* Extra small PDF */
             .pdf-viewer {
                 height: 40vh;
                 min-height: 300px;
@@ -996,7 +996,7 @@
             }
         }
 
-        /* ===== UTILIDADES ADICIONALES ===== */
+        /* ===== ADDITIONAL UTILITIES ===== */
         .text-center {
             text-align: center;
         }
@@ -1039,33 +1039,42 @@
         <div class="container">
             <div class="header-content">
                 <!-- Logo -->
-                <a href="index.html" class="logo">
+                <a href="../index.html" class="logo">
                     <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png"
                         alt="Unero Espacio Logo">
                 </a>
 
-                <!-- Menú Desktop -->
+                <!-- Desktop Menu -->
                 <nav class="desktop-menu">
                     <ul>
-                        <li><a href="index.html#inicio">INICIO</a></li>
-                        <li><a href="index.html#servicios">SERVICIOS</a></li>
+                        <li><a href="../index.html#inicio">HOME</a></li>
+                        <li><a href="../index.html#servicios">SERVICES</a></li>
                         <li class="dropdown">
-                            <a href="construccion.html">CONSTRUCCIÓN</a>
+                            <a href="../construccion.html">CONSTRUCTION</a>
                             <ul class="dropdown-menu">
-                                <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
-                                <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                                <li><a href="../promocionesdeviviendas.html">Housing Developments</a></li>
+                                <li><a href="../viviendasindividuales.html">Villas with Pool</a></li>
                             </ul>
                         </li>
-                        <li><a href="reformasintegrales.html">REFORMAS</a></li>
-                        <li><a href="disenodeinteriores.html">DISEÑO</a></li>
-                        <li><a href="index.html#proyectos">VENTA</a></li>
-                        <li><a href="alquiler.html">ALQUILER</a></li>
-                        <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
-                        <li><a href="index.html#contacto">CONTACTO</a></li>
+                        <li><a href="../reformasintegrales.html">RENOVATIONS</a></li>
+                        <li><a href="../disenodeinteriores.html">DESIGN</a></li>
+                        <li><a href="../index.html#proyectos">SALES</a></li>
+                        <li><a href="../alquiler.html">RENTALS</a></li>
+                        <li><a href="../trasteros-mostoles.html">STORAGE</a></li>
+                        <li><a href="../index.html#contacto">CONTACT</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle">
+                                EN <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../medem.html">ES</a></li>
+                                <li><a href="medem.html">EN</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
 
-                <!-- Botón Mobile -->
+                <!-- Mobile Button -->
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -1074,29 +1083,38 @@
 
     </header>
 
-    <!-- Overlay Mobile Menu -->
+    <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
-    <!-- Menú Mobile -->
+    <!-- Mobile Menu -->
     <nav class="mobile-menu" id="mobileMenu">
         <ul>
-            <li><a href="index.html#inicio">INICIO</a></li>
-            <li><a href="index.html#servicios">SERVICIOS</a></li>
+            <li><a href="../index.html#inicio">HOME</a></li>
+            <li><a href="../index.html#servicios">SERVICES</a></li>
             <li class="mobile-dropdown">
-                <a href="construccion.html" class="dropdown-toggle-mobile">
-                    CONSTRUCCIÓN <i class="fas fa-chevron-down"></i>
+                <a href="../construccion.html" class="dropdown-toggle-mobile">
+                    CONSTRUCTION <i class="fas fa-chevron-down"></i>
                 </a>
                 <ul class="mobile-dropdown-menu">
-                    <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
-                    <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                    <li><a href="../promocionesdeviviendas.html">Housing Developments</a></li>
+                    <li><a href="../viviendasindividuales.html">Villas with Pool</a></li>
                 </ul>
             </li>
-            <li><a href="reformasintegrales.html">REFORMAS</a></li>
-            <li><a href="disenodeinteriores.html">DISEÑO</a></li>
-            <li><a href="index.html#proyectos">VENTA</a></li>
-            <li><a href="alquiler.html">ALQUILER</a></li>
-            <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
-            <li><a href="index.html#contacto">CONTACTO</a></li>
+            <li><a href="../reformasintegrales.html">RENOVATIONS</a></li>
+            <li><a href="../disenodeinteriores.html">DESIGN</a></li>
+            <li><a href="../index.html#proyectos">SALES</a></li>
+            <li><a href="../alquiler.html">RENTALS</a></li>
+            <li><a href="../trasteros-mostoles.html">STORAGE</a></li>
+            <li><a href="../index.html#contacto">CONTACT</a></li>
+            <li class="mobile-dropdown">
+                <a href="#" class="dropdown-toggle">
+                    English <i class="fas fa-chevron-down dropdown-icon"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="../medem.html">Español</a></li>
+                    <li><a href="medem.html">English</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -1104,10 +1122,10 @@
     <section class="hero-video">
         <div class="hero-video-overlay"></div>
         <div class="hero-video-content">
-            <h1 class="text-glow">Documentación del <span class="text-glow">Proyecto</span></h1>
-            <p>Consulta todos los detalles técnicos, planos y especificaciones de nuestro desarrollo exclusivo.</p>
-            <a href="pdf/planos-medem.pdf" class="cta-button" target="_blank" rel="noopener noreferrer">
-                Ver Documento PDF <i class="fas fa-file-pdf button-arrow"></i>
+            <h1 class="text-glow">Project <span class="text-glow">Documentation</span></h1>
+            <p>View all technical details, plans and specifications of our exclusive development.</p>
+            <a href="../pdf/planos-medem.pdf" class="cta-button" target="_blank" rel="noopener noreferrer">
+                View PDF Document <i class="fas fa-file-pdf button-arrow"></i>
             </a>
         </div>
     </section>
@@ -1115,32 +1133,31 @@
     <!-- Document Information -->
     <section class="document-info">
         <div class="container">
-            <h2 class="section-title">Información del <span>Documento</span></h2>
+            <h2 class="section-title">Document <span>Information</span></h2>
 
             <div class="info-grid">
                 <div class="info-card">
                     <div class="info-icon">
                         <i class="fas fa-file-pdf"></i>
                     </div>
-                    <h3>Documento Técnico</h3>
-                    <p>Planos arquitectónicos, memorias técnicas y especificaciones detalladas del proyecto de
-                        construcción.</p>
+                    <h3>Technical Document</h3>
+                    <p>Architectural plans, technical reports and detailed specifications of the construction project.</p>
                 </div>
 
                 <div class="info-card">
                     <div class="info-icon">
                         <i class="fas fa-ruler-combined"></i>
                     </div>
-                    <h3>Planos y Medidas</h3>
-                    <p>Dimensiones exactas, distribución de espacios y detalles constructivos profesionales.</p>
+                    <h3>Plans and Measurements</h3>
+                    <p>Exact dimensions, space distribution and professional construction details.</p>
                 </div>
 
                 <div class="info-card">
                     <div class="info-icon">
                         <i class="fas fa-clipboard-check"></i>
                     </div>
-                    <h3>Especificaciones</h3>
-                    <p>Materiales de alta calidad, acabados premium y sistemas de instalaciones de última generación.
+                    <h3>Specifications</h3>
+                    <p>High-quality materials, premium finishes and state-of-the-art installation systems.
                     </p>
                 </div>
 
@@ -1148,9 +1165,8 @@
                     <div class="info-icon">
                         <i class="fas fa-certificate"></i>
                     </div>
-                    <h3>Certificaciones</h3>
-                    <p>Cumplimiento de normativas vigentes, eficiencia energética y estándares de construcción
-                        sostenible.</p>
+                    <h3>Certifications</h3>
+                    <p>Compliance with current regulations, energy efficiency and sustainable construction standards.</p>
                 </div>
             </div>
         </div>
@@ -1165,22 +1181,22 @@
     <section class="location-section">
         <div class="container">
             <div class="location-grid">
-                <!-- Ubicación -->
+                <!-- Location -->
                 <div class="location-card">
                     <div class="location-header">
                         <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
                         <h3 style="color: var(--color-accent);">Ibiza</h3>
                     </div>
                     <div class="location-body">
-                        <p style="color: var(--color-accent-light);">Islas Baleares, España</p>
+                        <p style="color: var(--color-accent-light);">Balearic Islands, Spain</p>
                     </div>
                 </div>
 
-                <!-- Contacto -->
+                <!-- Contact -->
                 <div class="location-card">
                     <div class="location-header">
                         <i class="fas fa-envelope" style="color: var(--color-accent);"></i>
-                        <h3 style="color: var(--color-accent);">Contacta con nosotros</h3>
+                        <h3 style="color: var(--color-accent);">Contact Us</h3>
                     </div>
                     <div class="location-body">
                         <a href="mailto:eva@unero.es" style="color: var(--color-accent-light);">eva@unero.es</a>
@@ -1191,20 +1207,20 @@
                     </div>
                 </div>
 
-                <!-- Horario -->
+                <!-- Schedule -->
                 <div class="location-card">
                     <div class="location-header">
                         <i class="fas fa-clock" style="color: var(--color-accent);"></i>
-                        <h3 style="color: var(--color-accent);">Horario</h3>
+                        <h3 style="color: var(--color-accent);">Schedule</h3>
                     </div>
                     <div class="location-body">
                         <div class="schedule-item" style="border-bottom: 1px solid var(--color-accent-light);">
-                            <span style="color: var(--color-accent-light);">Lun - Vie</span>
-                            <span style="color: var(--color-accent-light);">10:00 - 18:00</span>
+                            <span style="color: var(--color-accent-light);">Mon - Fri</span>
+                            <span style="color: var(--color-accent-light);">10:00 AM - 6:00 PM</span>
                         </div>
                         <div class="schedule-item">
-                            <span style="color: var(--color-accent-light);">Sáb - Dom</span>
-                            <span style="color: var(--color-accent-light);">Cerrado</span>
+                            <span style="color: var(--color-accent-light);">Sat - Sun</span>
+                            <span style="color: var(--color-accent-light);">Closed</span>
                         </div>
                     </div>
                 </div>
@@ -1214,7 +1230,7 @@
 
     <!-- Scripts -->
     <script>
-        // Clase principal del sitio web
+        // Main website class
         class MedemWebsite {
             constructor() {
                 this.onScrollCallbacks = [];
@@ -1228,7 +1244,7 @@
                 this.initScrollEffects();
             }
 
-            // ===== EVENTOS =====
+            // ===== EVENTS =====
             bindEvents() {
                 document.addEventListener('DOMContentLoaded', () => {
                     this.onDOMReady();
@@ -1277,7 +1293,7 @@
                 }, 500);
             }
 
-            // ===== NAVEGACIÓN =====
+            // ===== NAVIGATION =====
             initNavigation() {
                 this.initMobileMenu();
                 this.initDesktopDropdowns();
@@ -1293,7 +1309,7 @@
 
                 if (!mobileMenuBtn || !mobileMenu) return;
 
-                // Toggle menú móvil
+                // Toggle mobile menu
                 mobileMenuBtn.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -1303,11 +1319,11 @@
                         ? '<i class="fas fa-times"></i>'
                         : '<i class="fas fa-bars"></i>';
 
-                    // Prevenir scroll del body cuando el menú está abierto
+                    // Prevent body scroll when menu is open
                     document.body.classList.toggle('menu-open', mobileMenu.classList.contains('active'));
                 });
 
-                // Cerrar menú al hacer clic en enlaces (excepto dropdowns)
+                // Close menu when clicking links (except dropdowns)
                 mobileMenu.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
                     link.addEventListener('click', () => {
                         mobileMenu.classList.remove('active');
@@ -1316,7 +1332,7 @@
                     });
                 });
 
-                // Cerrar menú al hacer clic fuera
+                // Close menu when clicking outside
                 document.addEventListener('click', (e) => {
                     if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
                         mobileMenu.classList.remove('active');
@@ -1335,7 +1351,7 @@
 
                     let hoverTimeout;
 
-                    // Mostrar en hover
+                    // Show on hover
                     dropdown.addEventListener('mouseenter', () => {
                         clearTimeout(hoverTimeout);
                         menu.style.display = 'flex';
@@ -1346,7 +1362,7 @@
                         });
                     });
 
-                    // Ocultar al salir
+                    // Hide on leave
                     dropdown.addEventListener('mouseleave', () => {
                         hoverTimeout = setTimeout(() => {
                             menu.style.opacity = '0';
@@ -1370,17 +1386,17 @@
                         const parent = toggle.parentElement;
                         const wasActive = parent.classList.contains('active');
 
-                        // Cerrar todos los demás dropdowns
+                        // Close all other dropdowns
                         document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
                             if (dropdown !== parent) {
                                 dropdown.classList.remove('active');
                             }
                         });
 
-                        // Toggle el dropdown actual
+                        // Toggle current dropdown
                         parent.classList.toggle('active', !wasActive);
 
-                        // Rotar el ícono
+                        // Rotate icon
                         const icon = toggle.querySelector('.dropdown-icon');
                         if (icon) {
                             icon.style.transform = parent.classList.contains('active')
@@ -1536,7 +1552,7 @@
                         document.body.classList.remove('menu-open');
                     }
 
-                    // Cerrar todos los dropdowns móviles
+                    // Close all mobile dropdowns
                     document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
                         dropdown.classList.remove('active');
                     });
@@ -1573,17 +1589,17 @@
             }
         }
 
-        // ===== INICIALIZACIÓN =====
+        // ===== INITIALIZATION =====
         const medemWebsite = new MedemWebsite();
 
-        // Exportar para uso global si es necesario
+        // Export for global use if needed
         window.MedemWebsite = MedemWebsite;
         window.medemWebsite = medemWebsite;
 
-        // Console info para desarrolladores
+        // Console info for developers
         console.log('📄 PDF Viewer - Unero Espacio');
-        console.log('🔧 Para cambiar el PDF, modifica la variable PDF_PATH en el JavaScript');
-        console.log('📍 PDF actual:', PDF_PATH);
+        console.log('🔧 To change the PDF, modify the PDF_PATH variable in JavaScript');
+        console.log('📍 Current PDF:', PDF_PATH);
     </script>
 </body>
 

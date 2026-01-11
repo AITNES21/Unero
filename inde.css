@@ -923,6 +923,114 @@ nav.mobile-menu a.active {
     transform: translateX(3px);
 }
 
+/* ===== WHY CHOOSE US / POR QUÉ ELEGIRNOS ===== */
+.why-choose-us {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    position: relative;
+}
+
+.why-choose-us::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.benefit-card {
+    background: var(--color-secondary);
+    padding: 2.5rem 2rem;
+    border-radius: 15px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(10, 26, 47, 0.08);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.benefit-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-accent), #f5d782);
+    transition: left 0.4s ease;
+}
+
+.benefit-card:hover::before {
+    left: 0;
+}
+
+.benefit-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+.benefit-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--color-accent), #f5d782);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    transition: transform 0.4s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.benefit-icon i {
+    font-size: 2rem;
+    color: var(--color-primary);
+}
+
+.benefit-card h3 {
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.benefit-card p {
+    color: var(--color-text);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.benefit-card strong {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+/* Responsive Benefits */
+@media (max-width: 768px) {
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .benefit-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
 /* ===== PROYECTOS ===== */
 .proyectos {
     padding: 5rem 0;
@@ -1100,6 +1208,96 @@ nav.mobile-menu a.active {
     letter-spacing: 1px;
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
     z-index: 2;
+}
+
+/* Badge VENDIDA */
+.sold-badge {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+    color: white !important;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.5rem;
+    animation: pulse-sold 2s infinite;
+    box-shadow: 0 4px 20px rgba(231, 76, 60, 0.5) !important;
+}
+
+@keyframes pulse-sold {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 4px 20px rgba(231, 76, 60, 0.5);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 6px 25px rgba(231, 76, 60, 0.7);
+    }
+}
+
+/* Overlay VENDIDA - Marca de agua diagonal */
+.sold-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.sold-overlay i {
+    font-size: 4rem;
+    color: #e74c3c;
+    text-shadow: 0 0 20px rgba(231, 76, 60, 0.8);
+    animation: check-pulse 2s ease-in-out infinite;
+}
+
+.sold-overlay span {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    transform: rotate(-15deg);
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    padding: 0.8rem 2rem;
+    border-radius: 10px;
+    border: 3px solid white;
+    box-shadow: 0 5px 25px rgba(231, 76, 60, 0.6);
+}
+
+@keyframes check-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* Atenuar imagen de propiedad vendida */
+.sold-property .proyecto-imagen img {
+    filter: grayscale(30%) brightness(0.85);
+}
+
+.sold-property:hover .proyecto-imagen img {
+    filter: grayscale(30%) brightness(0.85);
+    transform: scale(1.02);
+}
+
+/* Deshabilitar botones en propiedad vendida */
+.sold-property .btn-ver-proyecto {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.sold-property .btn-contacto-proyecto {
+    background: linear-gradient(135deg, #95a5a6, #7f8c8d);
 }
 
 .proyecto-overlay {
@@ -1456,6 +1654,119 @@ nav.mobile-menu a.active {
 
 .reforma-btn:hover i {
     transform: translateX(5px);
+}
+
+/* ===== FAQ / PREGUNTAS FRECUENTES ===== */
+.faq-section {
+    padding: 5rem 0;
+    background: var(--color-secondary);
+}
+
+.faq-container {
+    max-width: 900px;
+    margin: 3rem auto 0;
+}
+
+.faq-item {
+    background: var(--color-bg);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: rgba(212, 175, 55, 0.3);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.1);
+}
+
+.faq-question {
+    padding: 1.8rem 2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    background: var(--color-bg);
+    transition: background 0.3s ease;
+    user-select: none;
+}
+
+.faq-question:hover {
+    background: rgba(212, 175, 55, 0.05);
+}
+
+.faq-question h3 {
+    color: var(--color-primary);
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+}
+
+.faq-question i {
+    color: var(--color-accent);
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    padding: 0 2rem;
+    background: var(--color-secondary);
+}
+
+.faq-item.active .faq-answer {
+    max-height: 1000px;
+    padding: 0 2rem 2rem;
+}
+
+.faq-answer p {
+    color: var(--color-text);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.faq-answer ul {
+    margin: 1rem 0 1rem 1.5rem;
+    color: var(--color-text);
+}
+
+.faq-answer li {
+    margin-bottom: 0.6rem;
+    line-height: 1.7;
+}
+
+.faq-answer strong {
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+/* FAQ Responsive */
+@media (max-width: 768px) {
+    .faq-question {
+        padding: 1.5rem 1.5rem;
+    }
+
+    .faq-question h3 {
+        font-size: 1rem;
+    }
+
+    .faq-answer {
+        padding: 0 1.5rem;
+    }
+
+    .faq-item.active .faq-answer {
+        padding: 0 1.5rem 1.5rem;
+    }
 }
 
 /* ===== CONTACTO ===== */

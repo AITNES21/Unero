@@ -18,6 +18,7 @@ class UneroWebsite {
         this.initKeyboardNavigation();
         this.initLazyLoading();
         this.initCounterAnimations();
+        this.initFAQ();
     }
 
     // =========================================
@@ -856,6 +857,35 @@ class UneroWebsite {
                     focused.click();
                 }
             }
+        });
+    }
+
+    // =========================================
+    // FAQ Accordion
+    // =========================================
+    initFAQ() {
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        if (faqItems.length === 0) return;
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+
+            if (!question) return;
+
+            question.addEventListener('click', () => {
+                const wasActive = item.classList.contains('active');
+
+                // Cerrar todos los demás FAQs
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+
+                // Toggle el FAQ actual
+                item.classList.toggle('active', !wasActive);
+            });
         });
     }
 

@@ -17,7 +17,9 @@
 
     <!-- Preload para recursos críticos -->
     <link rel="preload" href="inde.css" as="style">
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" as="style">
+    <link rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        as="style">
     <link rel="preload" href="img/fotoportada.webp" as="image">
 
     <!-- CSS crítico inline -->
@@ -75,15 +77,20 @@
     <link rel="stylesheet" href="inde.css" media="print" onload="this.media='all'; this.onload=null;">
 
     <!-- Fuentes con font-display swap -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
 
     <!-- Font Awesome diferido -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        media="print" onload="this.media='all'; this.onload=null;">
 
     <!-- Fallback para navegadores sin JS -->
     <noscript>
         <link rel="stylesheet" href="inde.css">
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+        <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+            rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     </noscript>
 
@@ -582,6 +589,16 @@
                         <li><a href="alquiler.html">ALQUILER</a></li>
                         <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
                         <li><a href="index.html#contacto">CONTACTO</a></li>
+                        <li class="dropdown language-selector">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fas fa-globe"></i> ES
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="trasteros-mostoles.html"><i class="fas fa-flag"></i> Español</a></li>
+                                <li><a href="en/index.html"><i class="fas fa-flag"></i> English</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
 
@@ -617,6 +634,15 @@
             <li><a href="alquiler.html">ALQUILER</a></li>
             <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
             <li><a href="index.html#contacto">CONTACTO</a></li>
+            <li class="mobile-dropdown">
+                <a href="#" class="dropdown-toggle-mobile">
+                    <i class="fas fa-globe"></i> IDIOMA <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="mobile-dropdown-menu">
+                    <li><a href="trasteros-mostoles.html"><i class="fas fa-flag"></i> Español</a></li>
+                    <li><a href="en/index.html"><i class="fas fa-flag"></i> English</a></li>
+                </ul>
+            </li>
         </ul>
     </nav>
 
@@ -698,24 +724,25 @@
                 <div class="carousel-slides" id="carouselSlides">
                     <!-- Slide 1 - Primera imagen sin lazy loading -->
                     <div class="carousel-slide">
-                        <img src="img/trastero.webp" alt="Entrada principal trasteros Móstoles" width="1000" height="500">
+                        <img src="img/trastero.webp" alt="Entrada principal trasteros Móstoles" width="1000"
+                            height="500">
                         <div class="carousel-caption">
                             <h3>Acceso Principal</h3>
                         </div>
                     </div>
 
-                <div class="carousel-controls">
-                    <button class="carousel-btn" id="prevBtn" aria-label="Imagen anterior">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="carousel-btn" id="nextBtn" aria-label="Siguiente imagen">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                    <div class="carousel-controls">
+                        <button class="carousel-btn" id="prevBtn" aria-label="Imagen anterior">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-btn" id="nextBtn" aria-label="Siguiente imagen">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="carousel-indicators" id="indicators"></div>
-        </div>
+                <div class="carousel-indicators" id="indicators"></div>
+            </div>
     </section>
 
     <!-- FAQ -->
@@ -849,7 +876,8 @@
                             <span>Domingos</span>
                             <span>Cerrado</span>
                         </div>
-                        <p style="color: var(--color-accent); margin-top: 1rem; font-weight: 600;">Acceso a trasteros: 24/7</p>
+                        <p style="color: var(--color-accent); margin-top: 1rem; font-weight: 600;">Acceso a trasteros:
+                            24/7</p>
                     </div>
                 </div>
             </div>
@@ -865,12 +893,12 @@
         // ====================================
 
         // Lazy load para imagen hero
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const heroSection = document.querySelector('.trasteros-hero');
             if (heroSection) {
                 // Precargar imagen hero de forma optimizada
                 const heroImg = new Image();
-                heroImg.onload = function() {
+                heroImg.onload = function () {
                     heroSection.classList.add('loaded');
                 };
                 heroImg.src = 'img/fotoportada.webp';

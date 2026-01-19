@@ -499,9 +499,7 @@
     </div>
 
     <!-- Progress Bar -->
-    <div id="progress-bar" class="progress-bar"></div>
-
-    <!-- Header -->
+    <div id="progress-bar" class="progress-bar"></div>    <!-- Header -->
     <header class="header" id="header">
         <div class="container">
             <div class="header-content">
@@ -529,6 +527,16 @@
                         <li><a href="alquiler.html">ALQUILER</a></li>
                         <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
                         <li><a href="index.html#contacto">CONTACTO</a></li>
+                        <li class="dropdown language-selector">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fas fa-globe"></i> ES
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="talamanca.html"><i class="fas fa-flag"></i> Español</a></li>
+                                <li><a href="en/talamanca.html"><i class="fas fa-flag"></i> English</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </nav>
 
@@ -542,6 +550,39 @@
     </header>
 
     <!-- Overlay Mobile Menu -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Menú Mobile -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html#inicio">INICIO</a></li>
+            <li><a href="index.html#servicios">SERVICIOS</a></li>
+            <li class="mobile-dropdown">
+                <a href="construccion.html" class="dropdown-toggle-mobile">
+                    CONSTRUCCIÓN <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="mobile-dropdown-menu">
+                    <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                    <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                </ul>
+            </li>
+            <li><a href="reformasintegrales.html">REFORMAS</a></li>
+            <li><a href="disenodeinteriores.html">DISEÑO</a></li>
+            <li><a href="index.html#proyectos">VENTA</a></li>
+            <li><a href="alquiler.html">ALQUILER</a></li>
+            <li><a href="trasteros-mostoles.html">TRASTEROS</a></li>
+            <li><a href="index.html#contacto">CONTACTO</a></li>
+            <li class="mobile-dropdown">
+                <a href="#" class="dropdown-toggle-mobile">
+                    <i class="fas fa-globe"></i> IDIOMA <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="mobile-dropdown-menu">
+                    <li><a href="talamanca.html"><i class="fas fa-flag"></i> Español</a></li>
+                    <li><a href="en/talamanca.html"><i class="fas fa-flag"></i> English</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav><!-- Overlay Mobile Menu -->
     <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
 
     <!-- Menú Mobile -->
@@ -656,7 +697,7 @@
             <div class="gallery-masonry" id="gallery-masonry">
                 <!-- Imagen destacada grande -->
                 <div class="gallery-item-enhanced large wide" data-category="exterior">
-                    <img src="img/foto9.png" alt="Vista principal de la villa">
+                    <img src="img/foto9.webp" alt="Vista principal de la villa">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Exterior</div>
                         <h3 class="gallery-title">Fachada Principal</h3>
@@ -667,7 +708,7 @@
 
                 <!-- Salón -->
                 <div class="gallery-item-enhanced" data-category="interior">
-                    <img src="Casas/imgtalamanca/foto13.jpeg" alt="Salón principal">
+                    <img src="Casas/imgtalamanca/foto13.webp" alt="Salón principal">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Interior</div>
                         <h3 class="gallery-title">Salón Principal</h3>
@@ -677,7 +718,7 @@
 
                 <!-- Cocina -->
                 <div class="gallery-item-enhanced" data-category="interior">
-                    <img src="Casas/imgtalamanca/foto22.jpeg" alt="Cocina de diseño">
+                    <img src="Casas/imgtalamanca/foto22.webp" alt="Cocina de diseño">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Interior</div>
                         <h3 class="gallery-title">Cocina Gourmet</h3>
@@ -687,7 +728,7 @@
 
                 <!-- Dormitorio principal -->
                 <div class="gallery-item-enhanced large" data-category="interior">
-                    <img src="Casas/imgtalamanca/foto9.jpeg" alt="Dormitorio principal">
+                    <img src="Casas/imgtalamanca/foto9.webp" alt="Dormitorio principal">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Interior</div>
                         <h3 class="gallery-title">Suite Principal</h3>
@@ -698,7 +739,7 @@
 
                 <!-- Baño de lujo -->
                 <div class="gallery-item-enhanced" data-category="Interior">
-                    <img src="Casas/imgtalamanca/foto16.jpeg" alt="Baño de lujo">
+                    <img src="Casas/imgtalamanca/foto16.webp" alt="Baño de lujo">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Interior</div>
                         <h3 class="gallery-title">Baño Principal</h3>
@@ -708,7 +749,7 @@
 
                 <!-- Garaje -->
                 <div class="gallery-item-enhanced" data-category="interior">
-                    <img src="Casas/imgtalamanca/foto11.jpeg" alt="Garaje">
+                    <img src="Casas/imgtalamanca/foto11.webp" alt="Garaje">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Exterior</div>
                         <h3 class="gallery-title">Garaje</h3>
@@ -718,7 +759,7 @@
 
                 <!-- Escaleras -->
                 <div class="gallery-item-enhanced" data-category="interior">
-                    <img src="Casas/imgtalamanca/foto14.jpeg" alt="Escaleras">
+                    <img src="Casas/imgtalamanca/foto14.webp" alt="Escaleras">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Interior</div>
                         <h3 class="gallery-title">Escaleras</h3>
@@ -728,7 +769,7 @@
 
                 <!-- Baño 2 -->
                 <div class="gallery-item-enhanced" data-category="interior">
-                    <img src="Casas/imgtalamanca/foto24.jpeg" alt="Detalles arquitectónicos">
+                    <img src="Casas/imgtalamanca/foto24.webp" alt="Detalles arquitectónicos">
                     <div class="gallery-overlay-enhanced">
                         <div class="gallery-category">Interior</div>
                         <h3 class="gallery-title">Baño invitados</h3>
@@ -1123,9 +1164,9 @@
 
             // Precargar algunas imágenes para mejorar la experiencia
             const preloadImages = [
-                'Casas/imgmarbella/foto2.jpg',
-                'Casas/imgmarbella/foto3.jpg',
-                'Casas/imgmarbella/foto4.jpg'
+                'Casas/imgmarbella/foto2.webp',
+                'Casas/imgmarbella/foto3.webp',
+                'Casas/imgmarbella/foto4.webp'
             ];
 
             preloadImages.forEach(src => {

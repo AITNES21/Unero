@@ -21,10 +21,12 @@
 
     <!-- CSS crítico inline -->
     <style>
+        /* Critical CSS - Above the fold */
         :root {
             --color-primary: #0a1a2f;
             --color-secondary: #ffffff;
             --color-accent: #d4af37;
+            --color-accent-light: #f5e6c8;
             --color-bg: #f8f9fa;
             --color-text: #333333;
         }
@@ -330,31 +332,37 @@
 
         .particle:nth-child(1) {
             left: 10%;
+            top: 20%;
             animation-delay: 0s;
         }
 
         .particle:nth-child(2) {
             left: 20%;
+            top: 60%;
             animation-delay: 1s;
         }
 
         .particle:nth-child(3) {
             left: 35%;
+            top: 40%;
             animation-delay: 2s;
         }
 
         .particle:nth-child(4) {
             left: 50%;
+            top: 70%;
             animation-delay: 3s;
         }
 
         .particle:nth-child(5) {
             left: 70%;
+            top: 30%;
             animation-delay: 4s;
         }
 
         .particle:nth-child(6) {
             left: 85%;
+            top: 50%;
             animation-delay: 5s;
         }
 
@@ -377,9 +385,18 @@
 
         .properties-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(400px, 100%), 1fr));
             gap: 3rem;
             margin-top: 4rem;
+        }
+
+        .section-description {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--color-text);
+            opacity: 0.85;
+            max-width: 700px;
+            margin: -1.5rem auto 0;
         }
 
         .property-premium {
@@ -901,10 +918,6 @@
                                 <span>6 Baños</span>
                             </div>
                             <div class="feature-premium">
-                                <i class="fas fa-ruler-combined"></i>
-                                <span>400 m²</span>
-                            </div>
-                            <div class="feature-premium">
                                 <i class="fas fa-swimming-pool"></i>
                                 <span>Piscina Infinita</span>
                             </div>
@@ -1003,12 +1016,11 @@
             1: {
                 title: 'Villa de Lujo con Vistas al Mar',
                 location: 'Ibiza, Islas Baleares',
-                images: ['Casas/imgcasmut/foto1.webp'],
-                description: 'Espectacular villa de lujo con vistas panorámicas al Mediterráneo. Esta propiedad única cuenta con 4 amplios dormitorios, 3 baños completos, piscina infinita, jardín privado y acabados de primera calidad. El diseño contemporáneo se fusiona perfectamente con el entorno natural, creando un oasis de tranquilidad y sofisticación.',
+                images: ['Casas/imgcasmut/foto1.JPG'],
+                description: 'Espectacular villa de lujo con vistas panorámicas al Mediterráneo. Esta propiedad única cuenta con 5 amplios dormitorios, 6 baños completos, piscina infinita, jardín privado y acabados de primera calidad. El diseño contemporáneo se fusiona perfectamente con el entorno natural, creando un oasis de tranquilidad y sofisticación.',
                 features: [
                     '5 dormitorios con vistas al mar',
                     '6 baños completos de lujo',
-                    '400 m² de superficie',
                     'Piscina infinita ',
                     'Jardín mediterráneo privado',
                     'Aire acondicionado zonal',
@@ -1123,7 +1135,6 @@
                         </div>
                         <div>
                             <h2 style="color: var(--color-primary); margin-bottom: 1rem; font-size: 2rem;">${data.title}</h2>
-                            <div style="font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--color-accent) 0%, #d4af37 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 1rem;">${data.price}</div>
                             <div style="display: flex; align-items: center; gap: 0.8rem; color: var(--color-text); margin-bottom: 2rem; font-size: 1.1rem;">
                                 <i class="fas fa-map-marker-alt" style="color: var(--color-accent);"></i>
                                 <span>${data.location}</span>
@@ -1183,7 +1194,7 @@
         // Agendar visita con WhatsApp
         function scheduleVisit(propertyId) {
             const data = propertyData[propertyId];
-            const message = `Hola, me interesa agendar una visita para la propiedad: ${data.title} (${data.price}) en ${data.location}. ¿Cuándo sería posible?`;
+            const message = `Hola, me interesa agendar una visita para la propiedad: ${data.title} en ${data.location}. ¿Cuándo sería posible?`;
             const whatsappUrl = `https://wa.me/34687885319?text=${encodeURIComponent(message)}`;
             window.open(whatsappUrl, '_blank');
             closeModal();

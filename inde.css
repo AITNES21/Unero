@@ -829,7 +829,7 @@ nav.mobile-menu a.active {
 
 /* ===== SERVICIOS ===== */
 .servicios {
-    padding: 5rem 0;
+    padding: 8rem 0 5rem;
     background: var(--color-bg);
 }
 

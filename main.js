@@ -163,7 +163,7 @@ class UneroWebsite {
         });
 
         // Cerrar menú al hacer clic en enlaces (excepto dropdowns)
-        mobileMenu.querySelectorAll('a:not(.dropdown-toggle):not(.dropdown-toggle-mobile)').forEach(link => {
+        mobileMenu.querySelectorAll('a:not(.dropdown-toggle)').forEach(link => {
             link.addEventListener('click', () => {
                 mobileMenu.classList.remove('active');
                 if (mobileMenuOverlay) {
@@ -240,26 +240,13 @@ class UneroWebsite {
     }
 
     initMobileDropdowns() {
-        // Solo para menÃº mÃ³vil
+        // TriInfinity-style mobile dropdowns
         document.querySelectorAll('.mobile-dropdown > .dropdown-toggle').forEach(toggle => {
             toggle.addEventListener('click', (e) => {
                 e.preventDefault();
-                e.stopPropagation();
-
                 const parent = toggle.parentElement;
-                const wasActive = parent.classList.contains('active');
+                parent.classList.toggle('active');
 
-                // Cerrar todos los demÃ¡s dropdowns
-                document.querySelectorAll('.mobile-dropdown').forEach(dropdown => {
-                    if (dropdown !== parent) {
-                        dropdown.classList.remove('active');
-                    }
-                });
-
-                // Toggle el dropdown actual
-                parent.classList.toggle('active', !wasActive);
-
-                // Rotar el Ã­cono
                 const icon = toggle.querySelector('.dropdown-icon');
                 if (icon) {
                     icon.style.transform = parent.classList.contains('active')

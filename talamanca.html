@@ -332,11 +332,8 @@
             background: var(--color-secondary);
         }
 
-        .project-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
+        .project-stats {
+            margin-top: 0;
         }
 
         .project-features {
@@ -440,11 +437,6 @@
                 grid-column: span 1;
             }
 
-            .project-details {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
             .project-features {
                 grid-template-columns: 1fr;
             }
@@ -456,7 +448,7 @@
             .project-stats {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
-                margin-top: 1.5rem;
+                margin-top: 0;
             }
 
             .timeline::before {
@@ -694,24 +686,7 @@
     <!-- Información del Proyecto -->
     <section class="project-info">
         <div class="container">
-            <div class="project-details">
-                <div class="project-text">
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-                    <br>
-
-                    <div class="project-stats">
+            <div class="project-stats">
                         <div class="stat-box">
                             <span class="stat-number counter" data-target="450">0</span>
                             <span class="stat-label">m² Construidos</span>
@@ -736,9 +711,8 @@
                             <span class="stat-number counter" data-target="2">0</span>
                             <span class="stat-label">Garajes</span>
                         </div>
-                    </div>
-                </div>
             </div>
+        </div>
     </section>
 
     <!-- Galería Mejorada -->

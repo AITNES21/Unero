@@ -585,8 +585,9 @@ nav.mobile-menu a:hover {
 
     /* Ocultar menú desktop */
     .desktop-menu,
-    nav.desktop-menu,
-    
+    nav.desktop-menu {
+        display: none !important;
+    }
 
     /* Mostrar botón hamburguesa */
     .mobile-menu-btn {

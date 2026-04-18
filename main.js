@@ -35,7 +35,7 @@ class UneroWebsite {
 
         window.addEventListener('scroll', this.throttle(() => {
             this.onScroll();
-        }, 16));
+        }, 16), { passive: true });
 
         window.addEventListener('resize', this.debounce(() => {
             this.onResize();

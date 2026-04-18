@@ -78,10 +78,10 @@ h4 {
     position: absolute;
     bottom: -15px;
     left: 50%;
-    transform: translateX(-50%);
     width: 80px;
     height: 3px;
     background: var(--color-accent);
+    transform-origin: center;
     animation: expandWidth 0.8s ease-out 0.5s backwards;
 }
 
@@ -2107,11 +2107,11 @@ textarea.form-input {
 
 @keyframes expandWidth {
     from {
-        width: 0;
+        transform: translateX(-50%) scaleX(0);
     }
 
     to {
-        width: 80px;
+        transform: translateX(-50%) scaleX(1);
     }
 }
 
@@ -2198,5 +2198,60 @@ textarea.form-input {
     .reforma-stats {
         flex-direction: column;
         gap: 1rem;
+    }
+}
+
+/* ===== MOBILE PERFORMANCE ===== */
+
+/* GPU compositing para elementos animados */
+.fade-in-up,
+.servicio-card,
+.proyecto-card,
+.reforma-card,
+.location-card {
+    will-change: transform, opacity;
+}
+
+/* Eliminar will-change una vez la animación ha terminado */
+.fade-in-up.visible,
+.reforma-card.visible {
+    will-change: auto;
+}
+
+/* Eliminar delay táctil de 300ms en iOS/Android */
+a,
+button,
+.mobile-menu-btn,
+.mobile-dropdown > .dropdown-toggle,
+.gallery-item-enhanced,
+.lightbox-nav,
+.lightbox-close {
+    touch-action: manipulation;
+}
+
+/* En móvil: reducir animaciones agresivas para scroll fluido */
+@media (max-width: 768px) {
+    .servicio-card,
+    .proyecto-card,
+    .reforma-card,
+    .location-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+    }
+
+    .fade-in-up {
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    /* Desactivar animaciones para usuarios con preferencia de movimiento reducido */
+    @media (prefers-reduced-motion: reduce) {
+        .fade-in-up,
+        .servicio-card,
+        .proyecto-card,
+        .reforma-card {
+            transition: none !important;
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
     }
 }

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio de Proyectos | Unero Espacio</title>
+    <meta name="description" content="Galería de proyectos exclusivos de Unero Espacio. Villas, casas de lujo, reformas y diseño de interiores en Ibiza y Marbella.">
+    <link rel="canonical" href="https://unero.es/portafolio.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://le-de.cdn-website.com">
+
+    <link rel="preload" href="inde.css" as="style">
+
+    <style>
+        :root {
+            --color-primary: #0a1a2f;
+            --color-secondary: #ffffff;
+            --color-accent: #d4af37;
+            --color-bg: #f8f9fa;
+            --color-text: #333333;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { overflow-x: hidden; }
+        body {
+            font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            overflow-x: hidden;
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
+
+        /* Loading */
+        .loading-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--color-primary);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000; transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; }
+
+        /* Hero mínimo */
+        .portfolio-hero {
+            padding: 7rem 0 3rem;
+            text-align: center;
+            background: linear-gradient(180deg, #050e1c 0%, var(--color-primary) 100%);
+        }
+        .portfolio-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--color-secondary);
+        }
+        .portfolio-hero h1 span { color: var(--color-accent); }
+        .portfolio-hero p {
+            margin-top: 1rem;
+            font-size: 1rem;
+            opacity: 0.6;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .hero-line {
+            width: 60px; height: 2px;
+            background: var(--color-accent);
+            margin: 1.5rem auto 0;
+        }
+
+        /* Secciones de proyecto */
+        .project-section { padding: 3rem 0 1rem; }
+        .project-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding: 0.4rem 1.2rem 0.4rem 0;
+        }
+        .project-label-line {
+            width: 30px; height: 1px;
+            background: var(--color-accent);
+        }
+        .project-label span {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--color-accent);
+        }
+
+        /* Galería CSS masonry con columns */
+        .gallery-masonry {
+            columns: 3;
+            column-gap: 8px;
+        }
+        .gallery-masonry img {
+            width: 100%;
+            display: block;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            break-inside: avoid;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        /* Footer mínimo */
+        .portfolio-footer {
+            padding: 3rem 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 3rem;
+        }
+        .portfolio-footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        .portfolio-footer a:hover { opacity: 0.7; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .gallery-masonry { columns: 2; }
+        }
+        @media (max-width: 480px) {
+            .gallery-masonry { columns: 2; column-gap: 5px; }
+            .gallery-masonry img { margin-bottom: 5px; }
+            .portfolio-hero { padding: 6rem 0 2rem; }
+        }
+    </style>
+
+    <link rel="stylesheet" href="inde.css" media="print" onload="this.media='all'; this.onload=null;">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'; this.onload=null;">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        media="print" onload="this.media='all'; this.onload=null;">
+    <noscript>
+        <link rel="stylesheet" href="inde.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </noscript>
+    <link rel="shortcut icon" href="img/logop.webp" type="image/webp">
+</head>
+
+<body>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png" alt="Unero Espacio Logo">
+            </div>
+            <div class="loading-spinner"></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <img src="https://le-de.cdn-website.com/a3db192356ff40feb27cff586506c041/dms3rep/multi/opt/Logo-Unero-web-156w.png" alt="Unero Espacio Logo">
+                </a>
+                <nav class="desktop-menu">
+                    <ul>
+                        <li><a href="index.html#inicio">INICIO</a></li>
+                        <li class="dropdown">
+                            <a href="construccion.html">CONSTRUCCIÓN</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="promocionesdeviviendas.html">Promociones de viviendas</a></li>
+                                <li><a href="viviendasindividuales.html">Villas con piscina</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="reformasintegrales.html">REFORMAS</a></li>
+                        <li><a href="disenodeinteriores.html">DISEÑO</a></li>
+                        <li><a href="index.html#proyectos">VENTA</a></li>
+                        <li><a href="alquiler.html">ALQUILER</a></li>
+                        <li><a href="index.html#contacto">CONTACTO</a></li>
+                        <li class="dropdown language-selector">
+                            <a href="#" class="dropdown-toggle">
+                                <i class="fas fa-globe"></i> ES
+                                <i class="fas fa-chevron-down dropdown-icon"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="portafolio.html"><i class="fas fa-flag"></i> Español</a></li>
+                                <li><a href="en/index.html"><i class="fas fa-flag"></i> English</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay Mobile -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+
+    <!-- Menú Mobile -->
+    <nav class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="index.html#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+            <li class="mobile-dropdown">
+                <a href="#" class="dropdown-toggle">
+                    <i class="fas fa-concierge-bell"></i> Servicios
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="mobile-dropdown">
+                        <a href="#" class="dropdown-toggle">
+                            <i class="fas fa-hammer"></i> Construcción
+                            <i class="fas fa-chevron-down dropdown-icon"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="promocionesdeviviendas.html"><i class="fas fa-city"></i> Promociones de viviendas</a></li>
+                            <li><a href="viviendasindividuales.html"><i class="fas fa-swimming-pool"></i> Villas con piscina</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="reformasintegrales.html"><i class="fas fa-pencil-ruler"></i> Reformas Integrales</a></li>
+                    <li><a href="disenodeinteriores.html"><i class="fas fa-couch"></i> Diseño de Interiores</a></li>
+                </ul>
+            </li>
+            <li><a href="index.html#proyectos"><i class="fas fa-tags"></i> Venta</a></li>
+            <li><a href="alquiler.html"><i class="fas fa-key"></i> Alquiler</a></li>
+            <li><a href="trasteros-mostoles.html"><i class="fas fa-warehouse"></i> Trasteros</a></li>
+            <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+            <li class="mobile-dropdown">
+                <a href="#" class="dropdown-toggle">
+                    <i class="fas fa-globe"></i> Idioma
+                    <i class="fas fa-chevron-down dropdown-icon"></i>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="portafolio.html"><i class="fas fa-flag"></i> Español</a></li>
+                    <li><a href="en/index.html"><i class="fas fa-flag"></i> English</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="portfolio-hero">
+        <div class="container">
+            <h1>Nuestros <span>Proyectos</span></h1>
+            <p>Diseño · Construcción · Reforma</p>
+            <div class="hero-line"></div>
+        </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <main>
+        <div class="container">
+
+            <!-- Talamanca -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Talamanca · Ibiza</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgtalamanca/foto9.webp" alt="Talamanca" loading="eager">
+                    <img src="Casas/imgtalamanca/foto13.webp" alt="Talamanca" loading="lazy">
+                    <img src="Casas/imgtalamanca/foto22.webp" alt="Talamanca" loading="lazy">
+                    <img src="Casas/imgtalamanca/foto11.webp" alt="Talamanca" loading="lazy">
+                    <img src="Casas/imgtalamanca/foto16.webp" alt="Talamanca" loading="lazy">
+                    <img src="Casas/imgtalamanca/foto14.webp" alt="Talamanca" loading="lazy">
+                    <img src="Casas/imgtalamanca/foto24.webp" alt="Talamanca" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Can Flowers -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Can Flowers · Ibiza</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgcanflowers/foto1.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto2.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto3.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto4.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto5.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto6.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto7.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto8.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto9.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto10.webp" alt="Can Flowers" loading="lazy">
+                    <img src="Casas/imgcanflowers/foto11.webp" alt="Can Flowers" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Can Cana -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Can Cana · Ibiza</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgcancana/foto1.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto2.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto3.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto4.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto5.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto6.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto7.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto8.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto9.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto10.webp" alt="Can Cana" loading="lazy">
+                    <img src="Casas/imgcancana/foto11.webp" alt="Can Cana" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Marbella -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Marbella · Costa del Sol</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgmarbella/foto1.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto2.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto3.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto4.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto5.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto6.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto7.webp" alt="Marbella" loading="lazy">
+                    <img src="Casas/imgmarbella/foto8.webp" alt="Marbella" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Ses Torres 2 -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Ses Torres II · Ibiza</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgsestorres2/foto1.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto2.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto3.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto4.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto5.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto6.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto7.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto8.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto9.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto10.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto11.webp" alt="Ses Torres II" loading="lazy">
+                    <img src="Casas/imgsestorres2/foto12.webp" alt="Ses Torres II" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Alina -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Alina · Ibiza</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgalina/foto1.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto2.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto3.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto4.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto5.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto6.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto7.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto8.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto9.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto10.webp" alt="Alina" loading="lazy">
+                    <img src="Casas/imgalina/foto11.webp" alt="Alina" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Boadilla -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Boadilla · Madrid</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgboadilla/foto1.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto2.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto3.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto4.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto5.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto6.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto7.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto8.webp" alt="Boadilla" loading="lazy">
+                    <img src="Casas/imgboadilla/foto9.webp" alt="Boadilla" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Vista Alegre -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Vista Alegre · Ibiza</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/imgvistalegre/foto1.webp" alt="Vista Alegre" loading="lazy">
+                    <img src="Casas/imgvistalegre/foto2.webp" alt="Vista Alegre" loading="lazy">
+                    <img src="Casas/imgvistalegre/foto3.webp" alt="Vista Alegre" loading="lazy">
+                    <img src="Casas/imgvistalegre/foto4.webp" alt="Vista Alegre" loading="lazy">
+                    <img src="Casas/imgvistalegre/foto5.webp" alt="Vista Alegre" loading="lazy">
+                    <img src="Casas/imgvistalegre/foto6.webp" alt="Vista Alegre" loading="lazy">
+                </div>
+            </div>
+
+            <!-- Diseño de Interiores -->
+            <div class="project-section">
+                <div class="project-label">
+                    <div class="project-label-line"></div>
+                    <span>Diseño de Interiores</span>
+                </div>
+                <div class="gallery-masonry">
+                    <img src="Casas/Diseñointeriores/Salon.webp" alt="Diseño Interiores" loading="lazy">
+                    <img src="Casas/Diseñointeriores/cocina.webp" alt="Diseño Interiores" loading="lazy">
+                    <img src="Casas/Diseñointeriores/suite1.webp" alt="Diseño Interiores" loading="lazy">
+                    <img src="Casas/Diseñointeriores/baño.webp" alt="Diseño Interiores" loading="lazy">
+                    <img src="Casas/Diseñointeriores/espacioext.webp" alt="Diseño Interiores" loading="lazy">
+                    <img src="Casas/Diseñointeriores/gimnasio.webp" alt="Diseño Interiores" loading="lazy">
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="portfolio-footer">
+        <div class="container">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i>
+                Volver al inicio
+            </a>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+    <script src="language-persist.js"></script>
+
+</body>
+</html>

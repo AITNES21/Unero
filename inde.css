@@ -524,9 +524,7 @@ nav.mobile-menu a:hover {
         padding: 0.6rem 1.2rem;
     }
 
-    .cta-nav {
-        padding: 0.7rem 1.8rem !important;
-    }
+    
 }
 
 /* PANTALLAS MEDIANAS (entre 900px y 1500px) */
@@ -552,10 +550,7 @@ nav.mobile-menu a:hover {
         padding: 0.4rem 0.7rem;
     }
 
-    .cta-nav {
-        padding: 0.5rem 1.2rem !important;
-        font-size: 0.9rem;
-    }
+    
 
     .dropdown-menu {
         min-width: 200px;
@@ -578,10 +573,7 @@ nav.mobile-menu a:hover {
         padding: 0.4rem 0.5rem;
     }
 
-    .cta-nav {
-        padding: 0.5rem 1rem !important;
-        font-size: 0.85rem;
-    }
+    
 
     .logo img {
         height: 42px;
@@ -594,9 +586,7 @@ nav.mobile-menu a:hover {
     /* Ocultar menú desktop */
     .desktop-menu,
     nav.desktop-menu,
-    .navbar {
-        display: none !important;
-    }
+    
 
     /* Mostrar botón hamburguesa */
     .mobile-menu-btn {
@@ -1166,16 +1156,9 @@ nav.mobile-menu a:hover {
     transform: scale(1.15);
 }
 
-.proyecto-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.8s ease;
-}
 
-.proyecto-card:hover .proyecto-image {
-    transform: scale(1.15);
-}
+
+.proyecto-card:hover 
 
 .proyecto-overlay {
     position: absolute;
@@ -1204,31 +1187,11 @@ nav.mobile-menu a:hover {
     margin-bottom: 1rem;
 }
 
-.proyecto-tag {
-    display: inline-block;
-    background: rgba(212, 175, 55, 0.2);
-    color: var(--color-accent);
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-}
 
-.proyecto-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem;
-    background: linear-gradient(transparent, rgba(10, 26, 47, 0.95));
-    transform: translateY(100%);
-    transition: transform 0.3s ease;
-}
 
-.proyecto-card:hover .proyecto-info {
-    transform: translateY(0);
-}
+
+
+.proyecto-card:hover 
 
 .proyecto-info h3 {
     color: var(--color-accent);
@@ -1236,17 +1199,7 @@ nav.mobile-menu a:hover {
     font-size: 1.5rem;
 }
 
-.proyecto-info .ver-mas {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--color-secondary);
-    text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
-    margin-top: 0;
-    text-align: left;
-}
+.proyecto-info 
 
 .proyecto-info .ver-mas:hover {
     color: var(--color-accent);
@@ -1463,23 +1416,9 @@ nav.mobile-menu a:hover {
     margin-bottom: 1.5rem;
 }
 
-.proyecto-caracteristicas {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--color-bg);
-    border-radius: 12px;
-}
 
-.caracteristica {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    text-align: center;
-}
+
+
 
 .caracteristica i {
     color: var(--color-accent);
@@ -1563,9 +1502,7 @@ nav.mobile-menu a:hover {
         font-size: 1.6rem;
     }
 
-    .proyecto-caracteristicas {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    
 
     .proyecto-acciones {
         flex-direction: column;
@@ -1581,10 +1518,7 @@ nav.mobile-menu a:hover {
     transform: translateX(5px);
 }
 
-.ver-mas {
-    text-align: center;
-    margin-top: 3rem;
-}
+
 
 .ver-mas .cta-button {
     background: var(--color-primary);

@@ -87,10 +87,10 @@
             }
 
             // Check if this is a language selection link by checking parent or text content
-            const text = link.textContent.toLowerCase();
-            if (text.includes('english') || text.includes('en')) {
+            const text = link.textContent.trim().toLowerCase();
+            if (text === 'english' || text.startsWith('english') || href.includes('/en/')) {
                 newLang = 'en';
-            } else if (text.includes('español') || text.includes('spanish')) {
+            } else if (text === 'español' || text.startsWith('español') || text === 'spanish' || href.includes('../index.html')) {
                 newLang = 'es';
             }
 

@@ -2,15 +2,28 @@
 <html lang="en">
 
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FWEK6NDLK0"></script>
+    <!-- Google tag (gtag.js) + Consent Mode v2 -->
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
+      // Denegado por defecto hasta que el usuario acepte (RGPD/LSSI).
+      // cookies.js lo actualiza segun la decision del visitante.
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'granted',
+        'security_storage': 'granted',
+        'wait_for_update': 500
+      });
+
+      gtag('js', new Date());
       gtag('config', 'G-FWEK6NDLK0');
     </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FWEK6NDLK0"></script>
+    <link rel="stylesheet" href="../cookies.css">
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -375,6 +388,7 @@
     <script src="../language-persist.js"></script>
     <script src="../main.js"></script>
 
+    <script src="../cookies.js" defer></script>
 </body>
 
 </html>

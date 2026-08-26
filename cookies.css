@@ -1,0 +1,121 @@
+/* Banner de consentimiento de cookies - Unero.es
+   Hoja independiente: se carga en las 25 paginas, incluidas las dos
+   que no enlazan inde.css (medem.html, en/medem.html). */
+
+/* ==========================================================================
+   Banner de cookies (RGPD / LSSI)
+   ========================================================================== */
+
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--color-primary);
+    color: var(--color-secondary);
+    border-top: 3px solid var(--color-accent);
+    box-shadow: 0 -6px 30px rgba(10, 26, 47, 0.35);
+    transform: translateY(100%);
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cookie-banner--visible {
+    transform: translateY(0);
+}
+
+.cookie-banner__contenido {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.cookie-banner__texto {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.92;
+}
+
+.cookie-banner__acciones {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.cookie-banner__btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 0.75rem 1.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.cookie-banner__btn--aceptar {
+    background: var(--color-accent);
+    color: var(--color-primary);
+    border: 2px solid var(--color-accent);
+}
+
+.cookie-banner__btn--aceptar:hover {
+    background: var(--color-accent-light);
+    border-color: var(--color-accent-light);
+    transform: translateY(-2px);
+}
+
+.cookie-banner__btn--rechazar {
+    background: transparent;
+    color: var(--color-secondary);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.cookie-banner__btn--rechazar:hover {
+    border-color: var(--color-secondary);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.cookie-banner__btn:focus-visible {
+    outline: 3px solid var(--color-accent-light);
+    outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+    .cookie-banner__contenido {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1.25rem 1.5rem;
+        gap: 1.25rem;
+    }
+
+    .cookie-banner__texto {
+        font-size: 0.85rem;
+    }
+
+    .cookie-banner__acciones {
+        flex-direction: row;
+    }
+
+    .cookie-banner__btn {
+        flex: 1;
+        padding: 0.85rem 1rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cookie-banner {
+        transition: none;
+    }
+
+    .cookie-banner__btn:hover {
+        transform: none;
+    }
+}

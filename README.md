@@ -161,6 +161,28 @@ como carpeta y colisionaría con las rutas reales.
 desde el principio, así que Google indexa el catálogo completo y sin
 JavaScript se ven todos los proyectos.
 
+### Lo que se decidió no hacer
+
+**Transiciones de página (View Transitions).** El `ClientRouter` de Astro
+daría un fundido entre páginas, pero añade JavaScript y, sobre todo, obliga
+a reinicializar en cada navegación los scripts del menú, la galería y el
+formulario. Con `prefetch` en `hover` la navegación ya es prácticamente
+instantánea. La relación entre lo que aporta y lo que puede romper no sale.
+
+**Parallax en el hero.** Es una animación ligada al scroll, y en móvil eso
+significa repintar en cada cuadro justo durante la primera interacción.
+El brief pedía priorizar la velocidad cuando entra en conflicto con el
+efecto, y aquí entra.
+
+**AVIF.** Las fotografías ya vienen en WebP. Generar además AVIF para
+~100 imágenes alargaría el build para ahorrar unos pocos kB por imagen.
+Si el catálogo crece con originales en JPEG, merecerá la pena reconsiderarlo
+(`image.formats` en `astro.config.mjs`).
+
+**Un carrusel en la galería.** El mosaico deja ver varias fotografías a la
+vez y funciona sin JavaScript. Un carrusel muestra una, esconde el resto y
+en táctil compite con el gesto de scroll vertical.
+
 ---
 
 ## Despliegue

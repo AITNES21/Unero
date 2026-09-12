@@ -27,6 +27,9 @@ const TODAS_LAS_VISTAS = [
 
 const argumentos = process.argv.slice(2);
 const soloPliegue = argumentos.includes('--pliegue');
+/* Modo barrido: recorre muchas páginas comprobando desbordes, imágenes
+   roto y errores de consola, sin guardar las capturas. */
+const sinCapturas = argumentos.includes('--sin-capturas');
 const filtroVista = argumentos.find((a) => a.startsWith('--vista='))?.split('=')[1];
 const rutas = argumentos.filter((a) => !a.startsWith('--'));
 if (!rutas.length) rutas.push('/');
@@ -80,7 +83,15 @@ try {
 
       // Recorre la página para que las imágenes diferidas se resuelvan
       // y los bloques con revelado entren en pantalla de verdad.
-      await pagina.evaluate(async () => {
+      // En modo barrido basta con un salto al final: solo interesa que
+      // las imágenes se pidan, no que la animación se vea.
+      await pagina.evaluate(async (rapido) => {
+        if (rapido) {
+          window.scrollTo(0, document.body.scrollHeight);
+          await new Promise((r) => setTimeout(r, 250));
+          window.scrollTo(0, 0);
+          return;
+        }
         const paso = window.innerHeight * 0.8;
         for (let y = 0; y < document.body.scrollHeight; y += paso) {
           window.scrollTo(0, y);
@@ -89,7 +100,7 @@ try {
         window.scrollTo(0, document.body.scrollHeight);
         await new Promise((r) => setTimeout(r, 350));
         window.scrollTo(0, 0);
-      });
+      }, sinCapturas);
 
       await pagina
         .evaluate(async () => {
@@ -104,7 +115,7 @@ try {
         })
         .catch(() => {});
 
-      await pagina.waitForTimeout(300);
+      await pagina.waitForTimeout(sinCapturas ? 120 : 300);
 
       // Aviso de imágenes que no han cargado: distingue un fallo real
       // de un simple diferido no disparado.
@@ -140,6 +151,11 @@ try {
         incidencias.push(
           `[${vista.nombre}] ${ruta} DESBORDE horizontal ${desborde.scrollWidth}>${desborde.clientWidth}: ${desborde.culpables.join(', ')}`
         );
+      }
+
+      if (sinCapturas) {
+        console.log('·', vista.nombre, ruta);
+        continue;
       }
 
       const base = ruta === '/' ? 'home' : ruta.replace(/^\/|\/$/g, '').replace(/\//g, '_');

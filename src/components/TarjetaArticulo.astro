@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import Icono from './Icono.astro';
+import type { ImageMetadata } from 'astro';
+import { rutaArticulo, type Idioma } from '../config/site';
+import { fecha as formatearFecha, useT } from '../i18n/ui';
+
+interface Props {
+  slug: string;
+  titulo: string;
+  descripcion: string;
+  categoria: string;
+  fecha: Date;
+  minutos: number;
+  portada: ImageMetadata;
+  portadaAlt: string;
+  lang: Idioma;
+  /** Formato ancho para el artículo destacado del índice. */
+  destacado?: boolean;
+  prioridad?: boolean;
+  /** Ver la nota de TarjetaProyecto: evita saltos en la jerarquía. */
+  nivelTitulo?: 2 | 3;
+}
+
+const {
+  slug,
+  titulo,
+  descripcion,
+  categoria,
+  fecha,
+  minutos,
+  portada,
+  portadaAlt,
+  lang,
+  destacado = false,
+  prioridad = false,
+  nivelTitulo = 3,
+} = Astro.props;
+
+const t = useT(lang);
+const href = rutaArticulo(slug, lang);
+const Titulo = `h${nivelTitulo}` as 'h2' | 'h3';
+---
+
+<article class:list={['articulo', destacado && 'articulo--destacado']}>
+  <a href={href} class="articulo__enlace">
+    <div class:list={['marco', destacado ? 'marco--16-9' : 'marco--3-2', 'zoom']}>
+      <Image
+        src={portada}
+        alt={portadaAlt}
+        widths={destacado ? [640, 1024, 1440, 1800] : [400, 600, 900]}
+        sizes={
+          destacado
+            ? '(min-width: 60rem) 62vw, 92vw'
+            : '(min-width: 75rem) 30vw, (min-width: 48rem) 45vw, 92vw'
+        }
+        loading={prioridad ? 'eager' : 'lazy'}
+        decoding={prioridad ? 'sync' : 'async'}
+        {...(prioridad ? { fetchpriority: 'high' as const } : {})}
+      />
+    </div>
+
+    <div class="articulo__cuerpo">
+      <p class="articulo__meta">
+        <span class="articulo__categoria">{categoria}</span>
+        <span aria-hidden="true">·</span>
+        <time datetime={fecha.toISOString().slice(0, 10)}>
+          {formatearFecha(fecha, lang)}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{minutos} {t('cua.lectura')}</span>
+      </p>
+
+      <Titulo class:list={[destacado ? 'display-m' : 'display-s', 'articulo__titulo']}>
+        {titulo}
+      </Titulo>
+      <p class="articulo__entradilla">{descripcion}</p>
+      <span class="articulo__accion">
+        {t('cta.leer')}
+        <Icono nombre="flecha-derecha" tamano={14} />
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .articulo__enlace {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .articulo__cuerpo {
+    padding-top: var(--s-4);
+  }
+
+  .articulo__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--t-cejilla);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+    line-height: 1.5;
+  }
+  .articulo__meta span[aria-hidden] {
+    opacity: 0.45;
+  }
+  .articulo__categoria {
+    color: var(--acento);
+    font-weight: 500;
+  }
+
+  .articulo__titulo {
+    margin-top: 0.6rem;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .articulo__enlace:hover .articulo__titulo {
+    color: var(--acento);
+  }
+
+  .articulo__entradilla {
+    margin-top: 0.55rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  .articulo__accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--s-4);
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: var(--track-cejilla);
+    text-transform: uppercase;
+  }
+  .articulo__accion :global(svg) {
+    transition: translate var(--dur-media) var(--ease-salida);
+  }
+  .articulo__enlace:hover .articulo__accion :global(svg) {
+    translate: 0.3rem 0;
+  }
+
+  /* El destacado ocupa dos columnas y coloca el texto al lado de la
+     imagen a partir de tableta. */
+  @media (min-width: 60rem) {
+    .articulo--destacado {
+      grid-column: 1 / -1;
+    }
+    .articulo--destacado .articulo__enlace {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+      gap: var(--s-6);
+      align-items: center;
+    }
+    .articulo--destacado .articulo__cuerpo {
+      padding-top: 0;
+    }
+  }
+</style>

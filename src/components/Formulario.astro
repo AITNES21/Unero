@@ -1,0 +1,577 @@
+---
+import Icono from './Icono.astro';
+import { site, ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+  /** Se envía oculto para saber desde qué página llegó la consulta. */
+  origen?: string;
+}
+
+const { lang, origen = 'contacto' } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const urlGracias = new URL(ruta('gracias', lang), site.dominio).href;
+
+const tipos = [
+  t('form.tipoObraNueva'),
+  t('form.tipoReforma'),
+  t('form.tipoInteriorismo'),
+  t('form.tipoPromocion'),
+  t('form.tipoOtro'),
+];
+
+const fases = [
+  t('form.faseIdea'),
+  t('form.faseParcela'),
+  t('form.faseProyecto'),
+  t('form.faseLicencia'),
+];
+---
+
+{/*
+  Formulario de contacto.
+
+  Pide lo justo para poder responder con criterio. Los tres campos de
+  cualificación —qué necesitas, en qué punto estás y en qué zona— son
+  los que permiten que la primera respuesta sea útil en lugar de un
+  «encantados de saludarte».
+
+  Se envía por fetch para no salir de la página, pero el <form> tiene
+  action y method reales: sin JavaScript funciona igual y redirige a
+  la página de gracias.
+*/}
+<form
+  class="formulario"
+  action={site.formspree}
+  method="POST"
+  novalidate
+  data-formulario
+>
+  <div class="formulario__rejilla">
+    <p class="campo campo--mitad">
+      <label for="f-nombre">{t('form.nombre')}</label>
+      <input
+        type="text"
+        id="f-nombre"
+        name="nombre"
+        autocomplete="name"
+        required
+        aria-describedby="e-nombre"
+      />
+      <span class="campo__error" id="e-nombre" data-error-de="nombre" />
+    </p>
+
+    <p class="campo campo--mitad">
+      <label for="f-email">{t('form.email')}</label>
+      <input
+        type="email"
+        id="f-email"
+        name="email"
+        autocomplete="email"
+        inputmode="email"
+        required
+        aria-describedby="e-email"
+      />
+      <span class="campo__error" id="e-email" data-error-de="email" />
+    </p>
+
+    <p class="campo campo--mitad">
+      <label for="f-telefono">
+        {t('form.telefono')}
+        <span class="campo__nota">({t('form.opcional')})</span>
+      </label>
+      <input
+        type="tel"
+        id="f-telefono"
+        name="telefono"
+        autocomplete="tel"
+        inputmode="tel"
+        aria-describedby="e-telefono"
+      />
+      <span class="campo__error" id="e-telefono" data-error-de="telefono" />
+    </p>
+
+    <p class="campo campo--mitad">
+      <label for="f-tipo">{t('form.tipo')}</label>
+      <span class="campo__selector">
+        <select id="f-tipo" name="tipo_de_proyecto" required aria-describedby="e-tipo">
+          <option value="">{t('form.elige')}</option>
+          {tipos.map((x) => <option value={x}>{x}</option>)}
+        </select>
+        <Icono nombre="chevron-abajo" tamano={14} />
+      </span>
+      <span class="campo__error" id="e-tipo" data-error-de="tipo_de_proyecto" />
+    </p>
+
+    <p class="campo campo--mitad">
+      <label for="f-fase">
+        {t('form.fase')}
+        <span class="campo__nota">({t('form.opcional')})</span>
+      </label>
+      <span class="campo__selector">
+        <select id="f-fase" name="fase">
+          <option value="">{t('form.elige')}</option>
+          {fases.map((x) => <option value={x}>{x}</option>)}
+        </select>
+        <Icono nombre="chevron-abajo" tamano={14} />
+      </span>
+    </p>
+
+    <p class="campo campo--mitad">
+      <label for="f-zona">
+        {t('form.ubicacion')}
+        <span class="campo__nota">({t('form.opcional')})</span>
+      </label>
+      <input
+        type="text"
+        id="f-zona"
+        name="zona"
+        list="zonas-ibiza"
+        aria-describedby="a-zona"
+      />
+      <datalist id="zonas-ibiza">
+        {site.zonas.map((z) => <option value={z} />)}
+      </datalist>
+      <span class="campo__ayuda" id="a-zona">{t('form.ubicacionAyuda')}</span>
+    </p>
+
+    <p class="campo">
+      <label for="f-mensaje">{t('form.mensaje')}</label>
+      <textarea
+        id="f-mensaje"
+        name="mensaje"
+        rows="5"
+        required
+        aria-describedby="e-mensaje a-mensaje"></textarea>
+      <span class="campo__ayuda" id="a-mensaje">{t('form.mensajeAyuda')}</span>
+      <span class="campo__error" id="e-mensaje" data-error-de="mensaje" />
+    </p>
+
+    <p class="campo campo--consentimiento">
+      <label class="consentimiento">
+        <input
+          type="checkbox"
+          name="privacidad"
+          value="aceptada"
+          required
+          aria-describedby="e-privacidad"
+        />
+        <span set:html={t('form.privacidad')} />
+      </label>
+      <span class="campo__error" id="e-privacidad" data-error-de="privacidad" />
+    </p>
+  </div>
+
+  {/* Trampa para robots: un campo que una persona nunca rellena. */}
+  <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="trampa" aria-hidden="true" />
+  <input type="hidden" name="_next" value={urlGracias} />
+  <input type="hidden" name="_language" value={lang} />
+  <input type="hidden" name="_subject" value={`Consulta web (${origen}) — unero.es`} />
+  <input type="hidden" name="pagina_de_origen" value={origen} />
+  <input type="hidden" name="idioma" value={lang} />
+
+  <div class="formulario__pie">
+    <button type="submit" class="boton boton--solido" data-enviar>
+      <span data-texto-envio>{t('form.enviar')}</span>
+      <Icono nombre="flecha-derecha" tamano={15} />
+    </button>
+    <p class="formulario__alternativa">
+      {es ? '¿Prefieres escribirnos directamente?' : 'Prefer to write to us directly?'}
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </p>
+  </div>
+
+  {/* Mensajes de resultado. role=status los anuncia sin robar el foco. */}
+  <p class="formulario__aviso formulario__aviso--error" data-aviso-error role="alert" hidden></p>
+</form>
+
+<div class="formulario__exito" data-exito hidden>
+  <span class="formulario__marca" aria-hidden="true">
+    <Icono nombre="comprobado" tamano={22} grosor={1.25} />
+  </span>
+  <h2 class="display-m">
+    {es ? 'Mensaje enviado' : 'Message sent'}
+  </h2>
+  <p>
+    {
+      es
+        ? 'Gracias. Lo leemos hoy mismo y te respondemos en un día laborable. Si es urgente, llámanos y lo resolvemos antes.'
+        : 'Thank you. We will read it today and reply within one working day. If it is urgent, call us and we will sort it sooner.'
+    }
+  </p>
+  <p class="formulario__telefonos">
+    {
+      site.telefonos.map((tel) => (
+        <a href={`tel:${tel.numero}`} class="enlace-flecha">
+          <Icono nombre="telefono" tamano={14} />
+          {tel.etiqueta}
+        </a>
+      ))
+    }
+  </p>
+</div>
+
+<style>
+  .formulario__rejilla {
+    display: grid;
+    gap: var(--s-5);
+  }
+  @media (min-width: 44rem) {
+    .formulario__rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .campo:not(.campo--mitad) {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .campo {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+  }
+
+  .campo label {
+    font-size: var(--t-menudo);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+
+  .campo__nota {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    /* Sin opacity: reducirla dejaba «(opcional)» en 3,18:1 sobre la cal,
+       por debajo del 4,5:1 que exige WCAG AA para texto pequeño. La
+       jerarquía la marcan ya el peso y la caja baja. */
+  }
+
+  .campo input[type='text'],
+  .campo input[type='email'],
+  .campo input[type='tel'],
+  .campo select,
+  .campo textarea {
+    width: 100%;
+    /* 3.25rem = 52px. Objetivo táctil holgado y, en iOS, un tamaño de
+       fuente de 16px o más evita el zoom automático al enfocar. */
+    min-height: 3.25rem;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    background-color: var(--cal-puro);
+    color: var(--tinta);
+    border: 1px solid var(--piedra-clara);
+    border-radius: 0;
+    appearance: none;
+    transition: border-color var(--dur-rapida) var(--ease-suave);
+  }
+  .campo textarea {
+    min-height: 8rem;
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .campo input:hover,
+  .campo select:hover,
+  .campo textarea:hover {
+    border-color: var(--piedra);
+  }
+  .campo input:focus-visible,
+  .campo select:focus-visible,
+  .campo textarea:focus-visible {
+    outline: 2px solid var(--mar);
+    outline-offset: -1px;
+    border-color: var(--mar);
+  }
+
+  /* Estado de error: color, borde y texto. Nunca solo color. */
+  .campo[data-invalido] input,
+  .campo[data-invalido] select,
+  .campo[data-invalido] textarea {
+    border-color: var(--arcilla);
+  }
+
+  .campo__selector {
+    position: relative;
+    display: block;
+  }
+  .campo__selector :global(svg) {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    translate: 0 -50%;
+    pointer-events: none;
+    color: var(--piedra);
+  }
+  .campo__selector select {
+    padding-right: 2.75rem;
+  }
+
+  .campo__ayuda {
+    font-size: var(--t-menudo);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+  }
+
+  .campo__error {
+    font-size: var(--t-menudo);
+    line-height: 1.5;
+    color: var(--arcilla);
+    font-weight: 500;
+  }
+  .campo__error:empty {
+    display: none;
+  }
+
+  .campo--consentimiento label {
+    text-transform: none;
+    letter-spacing: 0;
+    font-weight: 400;
+    font-size: var(--t-cuerpo-s);
+    color: var(--texto);
+  }
+  .consentimiento {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+    cursor: pointer;
+    line-height: 1.55;
+  }
+  .consentimiento input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.2rem;
+    accent-color: var(--mar);
+  }
+  .consentimiento :global(a) {
+    color: var(--mar);
+    text-underline-offset: 0.2em;
+  }
+
+  .trampa {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px !important;
+    height: 1px !important;
+    opacity: 0 !important;
+  }
+
+  .formulario__pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4) var(--s-6);
+    margin-top: var(--s-6);
+  }
+  .formulario__pie :global(.boton) {
+    flex: 1 1 14rem;
+  }
+  @media (min-width: 30rem) {
+    .formulario__pie :global(.boton) {
+      flex: 0 0 auto;
+      min-width: 12rem;
+    }
+  }
+
+  .formulario__alternativa {
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+  }
+  .formulario__alternativa a {
+    color: var(--texto);
+    text-decoration-color: var(--acento);
+    text-underline-offset: 0.2em;
+    display: inline-block;
+    padding-block: 0.3rem;
+  }
+
+  .formulario__aviso {
+    margin-top: var(--s-4);
+    padding: 0.9rem 1.1rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.55;
+    border-left: 2px solid var(--arcilla);
+    background-color: rgb(164 98 60 / 0.08);
+    color: var(--tinta);
+  }
+  .formulario__aviso[hidden] {
+    display: none;
+  }
+
+  .formulario__exito {
+    display: grid;
+    gap: var(--s-4);
+    justify-items: start;
+  }
+  .formulario__exito[hidden] {
+    display: none;
+  }
+  .formulario__marca {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border: 1px solid var(--mar);
+    color: var(--mar);
+  }
+  .formulario__telefonos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-5);
+  }
+
+  button[data-enviar][aria-disabled='true'] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+</style>
+
+<script>
+  /**
+   * Validación y envío del formulario.
+   *
+   * El marcado ya es funcional sin JavaScript (action + method reales).
+   * Esta capa solo mejora la experiencia: valida en el cliente con
+   * mensajes escritos por nosotros —los nativos del navegador salen en
+   * el idioma del sistema, no en el de la página— y envía sin recargar.
+   */
+  const formulario = document.querySelector<HTMLFormElement>('[data-formulario]');
+
+  if (formulario) {
+    const exito = document.querySelector<HTMLElement>('[data-exito]');
+    const avisoError = formulario.querySelector<HTMLElement>('[data-aviso-error]');
+    const boton = formulario.querySelector<HTMLButtonElement>('[data-enviar]');
+    const textoBoton = formulario.querySelector<HTMLElement>('[data-texto-envio]');
+    const enIngles = document.documentElement.lang.startsWith('en');
+
+    const mensajes = enIngles
+      ? {
+          obligatorio: 'This field is required.',
+          email: 'Please check the email address.',
+          telefono: 'Please check the phone number.',
+          privacidad: 'We need your consent in order to reply.',
+          enviando: 'Sending…',
+          enviar: 'Send',
+          fallo:
+            "We couldn't send your message. Please email us at eva@unero.es and we'll sort it out.",
+        }
+      : {
+          obligatorio: 'Este campo es obligatorio.',
+          email: 'Revisa el email: parece que falta algo.',
+          telefono: 'Revisa el teléfono.',
+          privacidad: 'Necesitamos tu consentimiento para poder responderte.',
+          enviando: 'Enviando…',
+          enviar: 'Enviar',
+          fallo:
+            'No hemos podido enviar el mensaje. Escríbenos a eva@unero.es y lo resolvemos.',
+        };
+
+    function contenedor(campo: Element) {
+      return campo.closest('.campo');
+    }
+
+    function marcar(campo: HTMLElement, texto: string) {
+      const caja = contenedor(campo);
+      const hueco = caja?.querySelector<HTMLElement>('.campo__error');
+      if (hueco) hueco.textContent = texto;
+      if (caja) {
+        if (texto) caja.setAttribute('data-invalido', '');
+        else caja.removeAttribute('data-invalido');
+      }
+      campo.setAttribute('aria-invalid', texto ? 'true' : 'false');
+    }
+
+    function validar(campo: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) {
+      const valor = campo.type === 'checkbox'
+        ? (campo as HTMLInputElement).checked
+          ? 'ok'
+          : ''
+        : campo.value.trim();
+
+      if (campo.required && !valor) {
+        marcar(campo, campo.type === 'checkbox' ? mensajes.privacidad : mensajes.obligatorio);
+        return false;
+      }
+      if (campo.type === 'email' && valor && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(valor)) {
+        marcar(campo, mensajes.email);
+        return false;
+      }
+      // Permisivo a propósito: hay muchos formatos internacionales y
+      // rechazar un teléfono válido cuesta un cliente.
+      if (campo.type === 'tel' && valor && valor.replace(/[^\d]/g, '').length < 6) {
+        marcar(campo, mensajes.telefono);
+        return false;
+      }
+      marcar(campo, '');
+      return true;
+    }
+
+    const campos = Array.from(
+      formulario.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+        'input[name]:not([type=hidden]):not(.trampa), textarea[name], select[name]'
+      )
+    );
+
+    // Solo se valida al salir del campo, no mientras se escribe: avisar
+    // de un email incompleto en la tercera letra es hostil.
+    campos.forEach((campo) => {
+      campo.addEventListener('blur', () => validar(campo));
+      campo.addEventListener('change', () => {
+        if (contenedor(campo)?.hasAttribute('data-invalido')) validar(campo);
+      });
+    });
+
+    formulario.addEventListener('submit', async (e) => {
+      const errores = campos.filter((c) => !validar(c));
+
+      if (errores.length) {
+        e.preventDefault();
+        errores[0].focus();
+        errores[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+        return;
+      }
+
+      // A partir de aquí, envío por fetch. Si algo falla, se informa y
+      // se ofrece el correo como alternativa.
+      e.preventDefault();
+      if (avisoError) avisoError.hidden = true;
+      boton?.setAttribute('aria-disabled', 'true');
+      if (textoBoton) textoBoton.textContent = mensajes.enviando;
+
+      try {
+        const respuesta = await fetch(formulario.action, {
+          method: 'POST',
+          body: new FormData(formulario),
+          headers: { Accept: 'application/json' },
+        });
+
+        if (!respuesta.ok) throw new Error(String(respuesta.status));
+
+        window.gtag?.('event', 'generate_lead', {
+          event_category: 'contacto',
+          event_label: (formulario.querySelector<HTMLInputElement>('[name=pagina_de_origen]')
+            ?.value) ?? 'contacto',
+        });
+
+        formulario.hidden = true;
+        if (exito) {
+          exito.hidden = false;
+          exito.querySelector('h2')?.setAttribute('tabindex', '-1');
+          (exito.querySelector('h2') as HTMLElement | null)?.focus();
+          exito.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        }
+      } catch {
+        if (avisoError) {
+          avisoError.textContent = mensajes.fallo;
+          avisoError.hidden = false;
+        }
+        boton?.removeAttribute('aria-disabled');
+        if (textoBoton) textoBoton.textContent = mensajes.enviar;
+      }
+    });
+  }
+</script>

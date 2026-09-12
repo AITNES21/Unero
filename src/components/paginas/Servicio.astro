@@ -1,0 +1,428 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import Faq from '../Faq.astro';
+import TarjetaProyecto from '../TarjetaProyecto.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import type { Servicio } from '../../config/servicios';
+import { SERVICIOS } from '../../config/servicios';
+import {
+  todosLosProyectos,
+  bi,
+  etiquetaTipo,
+  etiquetaEstado,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  servicio: Servicio;
+  lang: Idioma;
+}
+const { servicio, lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const c = servicio[lang];
+
+const aqui = ruta(servicio.clave, lang);
+const alternativa = ruta(servicio.clave, es ? 'en' : 'es');
+
+/* Proyectos relacionados: enlazado interno con criterio, no aleatorio. */
+const todos = await todosLosProyectos();
+const relacionados = servicio.proyectos
+  .map((slug) => todos.find((p) => p.id === slug))
+  .filter(Boolean)
+  .slice(0, 3) as typeof todos;
+
+/* Los demás servicios, para enlazar en horizontal. */
+const otros = SERVICIOS.filter((s) => s.clave !== servicio.clave);
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: t('nav.servicios'), href: ruta('servicios', lang) },
+    { nombre: c.h1, href: aqui },
+  ]),
+  schema.servicio({
+    nombre: c.h1,
+    descripcion: c.descripcion,
+    urlCanonica: new URL(aqui, 'https://unero.es').href,
+    lang,
+  }),
+  schema.faq(
+    c.faq.map((p) => ({
+      pregunta: p.pregunta,
+      respuesta: p.respuesta.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    }))
+  ),
+]);
+---
+
+<Base
+  titulo={c.titulo}
+  descripcion={c.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+  imagenAlt={servicio.imagenAlt[lang]}
+>
+  <!-- ============================ Portada =========================== -->
+  <header class="serv-hero">
+    <div class="serv-hero__medio">
+      <Image
+        src={servicio.imagen}
+        alt={servicio.imagenAlt[lang]}
+        widths={[640, 960, 1280, 1600]}
+        sizes="100vw"
+        loading="eager"
+        decoding="sync"
+        fetchpriority="high"
+      />
+    </div>
+    <div class="envoltura serv-hero__contenido">
+      <p class="cejilla serv-hero__cejilla">{c.cejilla}</p>
+      <h1 class="display-xl serv-hero__titulo">{c.h1}</h1>
+    </div>
+  </header>
+
+  <div class="envoltura">
+    <div class="serv-migas">
+      <Migas
+        items={[
+          { nombre: t('nav.servicios'), href: ruta('servicios', lang) },
+          { nombre: c.h1 },
+        ]}
+        lang={lang}
+      />
+    </div>
+
+    <!-- ========================= Introducción ======================= -->
+    <section class="serv-intro">
+      <p class="entradilla serv-intro__entradilla display-s">{c.entradilla}</p>
+      <div class="prosa serv-intro__prosa">
+        {c.cuerpo.map((p) => <p>{p}</p>)}
+        <p>
+          <a href={ruta('contacto', lang)} class="enlace-flecha">
+            {t('cta.presupuesto')}
+            <Icono nombre="flecha-derecha" tamano={14} />
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================== Qué incluye ======================= -->
+    <section class="seccion-corta">
+      <h2 class="display-m titulo-filete">{c.incluyeTitulo}</h2>
+      <ul class="bloques">
+        {
+          c.incluye.map((b, i) => (
+            <li class="bloque revelar" style={`--retardo:${i * 60}ms`}>
+              <span class="bloque__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="bloque__titulo">{b.t}</h3>
+              <p class="bloque__texto">{b.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+
+  <!-- ========================== Criterios ========================== -->
+  <section class="seccion tema-oscuro">
+    <div class="envoltura">
+      <div class="criterios">
+        <div class="criterios__texto">
+          <h2 class="display-l">{c.criteriosTitulo}</h2>
+          <ul class="criterios__lista">
+            {
+              c.criterios.map((b) => (
+                <li>
+                  <h3 class="criterios__titulo">{b.t}</h3>
+                  <p class="criterios__desc">{b.d}</p>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div class="criterios__medio marco marco--4-5">
+          <Image
+            src={servicio.imagenSecundaria}
+            alt={servicio.imagenSecundariaAlt[lang]}
+            widths={[420, 640, 900]}
+            sizes="(min-width: 60rem) 36vw, 92vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= Proyectos afines ====================== -->
+  {
+    relacionados.length > 0 && (
+      <section class="seccion">
+        <div class="envoltura">
+          <header class="cabecera-seccion">
+            <div>
+              <p class="cejilla">{t('nav.proyectos')}</p>
+              <h2 class="display-l">
+                {es ? 'Trabajos relacionados' : 'Related work'}
+              </h2>
+            </div>
+            <div class="cabecera-seccion__aparte">
+              <a href={ruta('proyectos', lang)} class="enlace-flecha">
+                {t('cta.verTodos')}
+                <Icono nombre="flecha-derecha" tamano={14} />
+              </a>
+            </div>
+          </header>
+
+          <div class="rejilla-3">
+            {relacionados.map((p, i) => (
+              <div class="revelar" style={`--retardo:${i * 80}ms`}>
+                <TarjetaProyecto
+                  slug={p.id}
+                  titulo={p.data.titulo}
+                  resumen={bi(p.data.resumen, lang) ?? ''}
+                  ubicacion={bi(p.data.ubicacion, lang)}
+                  tipo={etiquetaTipo(p.data.tipo, lang)}
+                  estado={etiquetaEstado(p.data.estado, lang)}
+                  portada={p.data.portada}
+                  portadaAlt={bi(p.data.portadaAlt, lang) ?? p.data.titulo}
+                  lang={lang}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============================= FAQ ============================= -->
+  <section class="seccion tema-hueso">
+    <div class="envoltura">
+      <Faq
+        preguntas={c.faq}
+        lang={lang}
+        titulo={es ? 'Preguntas frecuentes' : 'Frequently asked questions'}
+      />
+    </div>
+  </section>
+
+  <!-- ====================== Otros servicios ======================== -->
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <h2 class="cejilla">{es ? 'Otros servicios' : 'Other services'}</h2>
+      <ul class="otros">
+        {
+          otros.map((s) => (
+            <li>
+              <a href={ruta(s.clave, lang)} class="otros__enlace">
+                <span class="otros__nombre display-s">{s[lang].h1}</span>
+                <Icono nombre="flecha-derecha" tamano={15} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  /* --------------------------- Portada --------------------------- */
+  .serv-hero {
+    position: relative;
+    min-height: min(62svh, 34rem);
+    display: grid;
+    align-items: end;
+    isolation: isolate;
+    background-color: var(--tinta);
+    color: var(--cal);
+    padding-top: var(--alto-cabecera);
+    padding-bottom: clamp(2rem, 5vh, 3.5rem);
+    overflow: hidden;
+  }
+  .serv-hero__medio {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .serv-hero__medio :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .serv-hero__medio::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgb(18 19 21 / 0.88) 0%,
+      rgb(18 19 21 / 0.6) 34%,
+      rgb(18 19 21 / 0.18) 70%,
+      rgb(18 19 21 / 0.3) 100%
+    );
+  }
+  .serv-hero__cejilla {
+    color: var(--cal);
+    text-shadow: 0 1px 12px rgb(18 19 21 / 0.55);
+  }
+  .serv-hero__titulo {
+    margin-top: var(--s-3);
+    max-width: 24ch;
+  }
+
+  .serv-migas {
+    padding-top: var(--s-5);
+  }
+
+  /* -------------------------- Introducción ----------------------- */
+  .serv-intro {
+    display: grid;
+    gap: var(--s-6);
+    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+  }
+  @media (min-width: 62rem) {
+    .serv-intro {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+  .serv-intro__entradilla {
+    max-width: 28ch;
+    line-height: 1.3;
+    color: var(--texto);
+  }
+  .serv-intro__prosa {
+    max-width: 64ch;
+  }
+
+  /* -------------------------- Qué incluye ------------------------ */
+  .titulo-filete {
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+    margin-bottom: var(--s-6);
+  }
+
+  .bloques {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 44rem) {
+    .bloques {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 68rem) {
+    .bloques {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .bloque__num {
+    display: block;
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+  .bloque__titulo {
+    margin-top: var(--s-3);
+    font-size: var(--t-display-s);
+  }
+  .bloque__texto {
+    margin-top: 0.55rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  /* --------------------------- Criterios ------------------------- */
+  .criterios {
+    display: grid;
+    gap: var(--s-7);
+  }
+  @media (min-width: 62rem) {
+    .criterios {
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: var(--s-8);
+      align-items: center;
+    }
+  }
+  .criterios__lista {
+    display: grid;
+    gap: 0;
+    margin-top: var(--s-6);
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--filete);
+  }
+  .criterios__lista li {
+    padding-block: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+  }
+  .criterios__titulo {
+    font-size: var(--t-display-s);
+  }
+  .criterios__desc {
+    margin-top: 0.5rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    max-width: 62ch;
+    text-wrap: pretty;
+  }
+
+  /* ------------------------ Otros servicios ---------------------- */
+  .rejilla-3 {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+  }
+  @media (min-width: 48rem) {
+    .rejilla-3 {
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    }
+  }
+
+  .otros {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s-5);
+    border-top: 1px solid var(--filete);
+  }
+  .otros li {
+    border-bottom: 1px solid var(--filete);
+  }
+  .otros__enlace {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: var(--s-4);
+    text-decoration: none;
+    color: inherit;
+  }
+  .otros__enlace :global(svg) {
+    color: var(--texto-apagado);
+    transition: translate var(--dur-media) var(--ease-salida);
+  }
+  .otros__enlace:hover .otros__nombre {
+    color: var(--acento);
+  }
+  .otros__enlace:hover :global(svg) {
+    translate: 0.3rem 0;
+  }
+</style>

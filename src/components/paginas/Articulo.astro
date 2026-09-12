@@ -1,0 +1,407 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import TarjetaArticulo from '../TarjetaArticulo.astro';
+import TarjetaProyecto from '../TarjetaProyecto.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { site, ruta, rutaArticulo, rutaCategoria, type Idioma } from '../../config/site';
+import { fecha as formatearFecha, useT } from '../../i18n/ui';
+import {
+  articulosRelacionados,
+  categoriaPorId,
+  minutosDeLectura,
+  todosLosProyectos,
+  bi,
+  etiquetaTipo,
+  etiquetaEstado,
+  type Articulo,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  articulo: Articulo;
+  lang: Idioma;
+}
+const { articulo, lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const d = articulo.data;
+
+const { Content, headings } = await render(articulo);
+const categoria = await categoriaPorId(d.categoria);
+const nombreCategoria = bi(categoria?.data.nombre, lang) ?? d.categoria;
+const minutos = minutosDeLectura(articulo.body);
+const relacionados = await articulosRelacionados(articulo, 3);
+
+const todos = await todosLosProyectos();
+const proyectos = d.proyectosRelacionados
+  .map((r) => todos.find((p) => p.id === r.id))
+  .filter(Boolean) as typeof todos;
+
+const aqui = rutaArticulo(articulo.id, lang);
+const urlCanonica = new URL(aqui, site.dominio).href;
+
+/* Solo se declara hreflang si la traducción existe de verdad. */
+const alternativa = d.traduccion
+  ? rutaArticulo(d.traduccion.id, es ? 'en' : 'es')
+  : null;
+
+/* Índice del artículo: solo H2, que es el nivel que estructura la
+   lectura. Con menos de tres apartados no aporta nada y no se muestra. */
+const indice = headings.filter((h) => h.depth === 2);
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: t('nav.cuaderno'), href: ruta('cuaderno', lang) },
+    { nombre: nombreCategoria, href: rutaCategoria(d.categoria, lang) },
+    { nombre: d.titulo, href: aqui },
+  ]),
+  schema.articulo({
+    titulo: d.titulo,
+    descripcion: d.descripcion,
+    urlCanonica,
+    imagen: new URL(d.portada.src, site.dominio).href,
+    publicado: d.fecha,
+    actualizado: d.actualizado,
+    autor: d.autor,
+    seccion: nombreCategoria,
+    lang,
+  }),
+]);
+---
+
+<Base
+  titulo={`${d.tituloSeo ?? d.titulo} | Unero`}
+  descripcion={d.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+  tipoOg="article"
+  imagenAlt={d.portadaAlt}
+>
+  <article class="art">
+    <div class="envoltura-estrecha">
+      <div class="art__migas">
+        <Migas
+          items={[
+            { nombre: t('nav.cuaderno'), href: ruta('cuaderno', lang) },
+            { nombre: nombreCategoria, href: rutaCategoria(d.categoria, lang) },
+            { nombre: d.titulo },
+          ]}
+          lang={lang}
+        />
+      </div>
+
+      <header class="art__cabecera">
+        <p class="art__meta">
+          <a href={rutaCategoria(d.categoria, lang)} class="art__categoria">
+            {nombreCategoria}
+          </a>
+          <span aria-hidden="true">·</span>
+          <time datetime={d.fecha.toISOString().slice(0, 10)}>
+            {formatearFecha(d.fecha, lang)}
+          </time>
+          <span aria-hidden="true">·</span>
+          <span>{minutos} {t('cua.lectura')}</span>
+        </p>
+
+        <h1 class="display-l art__titulo">{d.titulo}</h1>
+        <p class="art__entradilla">{d.descripcion}</p>
+
+        {
+          d.actualizado && (
+            <p class="art__actualizado">
+              {t('cua.actualizado')}{' '}
+              <time datetime={d.actualizado.toISOString().slice(0, 10)}>
+                {formatearFecha(d.actualizado, lang)}
+              </time>
+            </p>
+          )
+        }
+      </header>
+    </div>
+
+    <figure class="art__portada">
+      <Image
+        src={d.portada}
+        alt={d.portadaAlt}
+        widths={[640, 960, 1280, 1600]}
+        sizes="(min-width: 75rem) 70vw, 100vw"
+        loading="eager"
+        decoding="sync"
+        fetchpriority="high"
+      />
+      {d.portadaCredito && <figcaption>{d.portadaCredito}</figcaption>}
+    </figure>
+
+    <div class="envoltura-estrecha">
+      {
+        indice.length >= 3 && (
+          <nav class="indice" aria-labelledby="indice-titulo">
+            <h2 class="cejilla" id="indice-titulo">{t('cua.indice')}</h2>
+            <ol class="indice__lista">
+              {indice.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )
+      }
+
+      <div class="prosa art__cuerpo">
+        <Content />
+      </div>
+
+      {
+        d.etiquetas.length > 0 && (
+          <p class="art__etiquetas">
+            {d.etiquetas.map((e) => (
+              <span class="art__etiqueta">{e}</span>
+            ))}
+          </p>
+        )
+      }
+    </div>
+
+    <!-- Proyectos citados: enlazado interno del blog hacia las páginas
+         que convierten, que es el sentido de tener un blog. -->
+    {
+      proyectos.length > 0 && (
+        <section class="seccion-corta">
+          <div class="envoltura">
+            <h2 class="display-m titulo-filete">
+              {es ? 'Proyectos relacionados' : 'Related projects'}
+            </h2>
+            <div class="rejilla-3">
+              {proyectos.map((p) => (
+                <TarjetaProyecto
+                  slug={p.id}
+                  titulo={p.data.titulo}
+                  resumen={bi(p.data.resumen, lang) ?? ''}
+                  ubicacion={bi(p.data.ubicacion, lang)}
+                  tipo={etiquetaTipo(p.data.tipo, lang)}
+                  estado={etiquetaEstado(p.data.estado, lang)}
+                  portada={p.data.portada}
+                  portadaAlt={bi(p.data.portadaAlt, lang) ?? p.data.titulo}
+                  lang={lang}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      relacionados.length > 0 && (
+        <section class="seccion-corta tema-hueso">
+          <div class="envoltura">
+            <h2 class="display-m titulo-filete">{t('cua.relacionados')}</h2>
+            <div class="rejilla-3">
+              {relacionados.map(async (a) => {
+                const cat = await categoriaPorId(a.data.categoria);
+                return (
+                  <TarjetaArticulo
+                    slug={a.id}
+                    titulo={a.data.titulo}
+                    descripcion={a.data.descripcion}
+                    categoria={bi(cat?.data.nombre, lang) ?? a.data.categoria}
+                    fecha={a.data.fecha}
+                    minutos={minutosDeLectura(a.body)}
+                    portada={a.data.portada}
+                    portadaAlt={a.data.portadaAlt}
+                    lang={lang}
+                  />
+                );
+              })}
+            </div>
+            <p class="art__volver">
+              <a href={ruta('cuaderno', lang)} class="enlace-flecha">
+                {t('cua.todos')}
+                <Icono nombre="flecha-derecha" tamano={14} />
+              </a>
+            </p>
+          </div>
+        </section>
+      )
+    }
+  </article>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  .art__migas {
+    padding-top: calc(var(--alto-cabecera) * 0.4 + var(--s-5));
+  }
+
+  .art__cabecera {
+    padding-top: var(--s-6);
+    padding-bottom: var(--s-6);
+  }
+
+  .art__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: var(--t-cejilla);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .art__meta span[aria-hidden] {
+    opacity: 0.45;
+  }
+  .art__categoria {
+    color: var(--acento);
+    font-weight: 500;
+    text-decoration: none;
+    padding-block: 0.3rem;
+  }
+  .art__categoria:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .art__titulo {
+    margin-top: var(--s-4);
+    max-width: 30ch;
+  }
+
+  .art__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 58ch;
+    text-wrap: pretty;
+  }
+
+  .art__actualizado {
+    margin-top: var(--s-4);
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+  }
+
+  .art__portada {
+    margin: 0 0 clamp(2.5rem, 5vw, 4rem);
+  }
+  .art__portada :global(img) {
+    width: 100%;
+    height: auto;
+    max-height: 70svh;
+    object-fit: cover;
+  }
+  .art__portada figcaption {
+    max-width: var(--ancho-estrecho);
+    margin-inline: auto;
+    padding: 0.75rem var(--gutter) 0;
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+  }
+
+  /* ---------------------------- Índice --------------------------- */
+  .indice {
+    margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
+    padding: var(--s-5);
+    background-color: var(--cal-hueso);
+    max-width: var(--ancho-texto);
+  }
+  .indice__lista {
+    margin: var(--s-3) 0 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.15rem;
+    font-size: var(--t-cuerpo-s);
+  }
+  .indice__lista ::marker {
+    color: var(--piedra);
+    font-variant-numeric: tabular-nums;
+  }
+  .indice__lista a {
+    display: inline-block;
+    padding-block: 0.35rem;
+    color: var(--texto);
+    text-decoration: none;
+    line-height: 1.45;
+  }
+  .indice__lista a:hover {
+    color: var(--acento);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Ancla desplazada para que el título no quede bajo la cabecera fija. */
+  .art__cuerpo :global(h2),
+  .art__cuerpo :global(h3) {
+    scroll-margin-top: calc(var(--alto-cabecera) + 1.5rem);
+  }
+
+  .art__cuerpo :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-cuerpo-s);
+    margin-block: 2em;
+  }
+  .art__cuerpo :global(th),
+  .art__cuerpo :global(td) {
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid var(--filete);
+    vertical-align: top;
+  }
+  .art__cuerpo :global(th) {
+    font-family: var(--fuente-texto);
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+
+  .art__etiquetas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--filete);
+  }
+  .art__etiqueta {
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    border: 1px solid var(--filete);
+    padding: 0.35rem 0.7rem;
+  }
+
+  .titulo-filete {
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+    margin-bottom: var(--s-6);
+  }
+
+  /* auto-fit y no un 3 fijo: cuando un artículo cita dos proyectos en
+     lugar de tres, las tarjetas reparten el ancho en vez de dejar una
+     columna vacía. */
+  .rejilla-3 {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+  }
+  @media (min-width: 48rem) {
+    .rejilla-3 {
+      grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    }
+  }
+
+  .art__volver {
+    margin-top: var(--s-6);
+  }
+</style>

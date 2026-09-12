@@ -1,0 +1,86 @@
+---
+import { ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+export interface Miga {
+  nombre: string;
+  href?: string;
+}
+
+interface Props {
+  /** Sin incluir «Inicio», que se añade siempre. */
+  items: Miga[];
+  lang: Idioma;
+}
+
+const { items, lang } = Astro.props;
+const t = useT(lang);
+
+const completas: Miga[] = [
+  { nombre: t('nav.inicio'), href: ruta('home', lang) },
+  ...items,
+];
+---
+
+<nav class="migas" aria-label={t('gen.migas')}>
+  <ol class="migas__lista">
+    {
+      completas.map((m, i) => (
+        <li class="migas__item">
+          {m.href && i < completas.length - 1 ? (
+            <a href={m.href}>{m.nombre}</a>
+          ) : (
+            <span aria-current="page">{m.nombre}</span>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .migas {
+    /* Las migas orientan pero no compiten: tipografía menuda y tono
+       apagado. En móvil se pueden desplazar lateralmente en lugar de
+       partirse en varias líneas. */
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .migas::-webkit-scrollbar {
+    display: none;
+  }
+
+  .migas__lista {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    white-space: nowrap;
+  }
+
+  .migas__item + .migas__item::before {
+    content: '/';
+    margin-right: 0.5rem;
+    opacity: 0.5;
+  }
+
+  .migas__item a {
+    color: inherit;
+    text-decoration: none;
+    padding-block: 0.35rem;
+  }
+  .migas__item a:hover {
+    color: var(--texto);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .migas__item [aria-current] {
+    color: var(--texto);
+  }
+</style>

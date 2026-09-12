@@ -1,0 +1,540 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import Faq from '../Faq.astro';
+import Formulario from '../Formulario.astro';
+import { site, ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import * as schema from '../../lib/schema';
+
+import imgTrastero from '../../assets/site/trastero.webp';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const alternativa = ruta('trasteros', es ? 'en' : 'es');
+
+/* Esta línea de negocio tiene su propio correo y su propio horario:
+   no comparte los de la constructora. */
+const EMAIL_TRASTEROS = 'trasteros@unero.es';
+
+const copy = es
+  ? {
+      titulo: 'Trasteros en alquiler en Móstoles | Acceso 24 h | Unero',
+      descripcion:
+        'Trasteros en alquiler en Móstoles desde 2 m² hasta 20 m². Acceso 24 h los 365 días, vigilancia con cámaras, control de acceso y sin periodo mínimo de permanencia.',
+      cejilla: 'Trasteros · Móstoles',
+      h1: 'Trasteros en alquiler en Móstoles',
+      entradilla:
+        'Almacenamiento seguro y accesible a cualquier hora, sin compromisos de permanencia. Desde 2 m² hasta 20 m².',
+      aviso:
+        'Esta es una línea de negocio independiente de nuestra actividad de construcción en Ibiza. Se atiende desde Madrid y tiene su propio contacto.',
+      ventajasTitulo: 'Por qué estos trasteros',
+      ventajas: [
+        {
+          t: 'Acceso 24/7',
+          d: 'Código personal y tarjeta magnética. Entras cuando quieras, los 365 días del año, festivos incluidos.',
+        },
+        {
+          t: 'Vigilancia y control de acceso',
+          d: 'Cámaras de seguridad, control de accesos y alarma anti-intrusión en toda la instalación.',
+        },
+        {
+          t: 'Bien situados',
+          d: 'En Móstoles, con acceso fácil desde la M-50 y transporte público cerca.',
+        },
+        {
+          t: 'Varios tamaños',
+          d: 'Desde 2 m² para unas cajas hasta 20 m² para el contenido de una vivienda completa.',
+        },
+        {
+          t: 'Sin permanencia',
+          d: 'Alquila por el tiempo que necesites: un mes o varios años. Sin penalización por marcharte.',
+        },
+        {
+          t: 'Cambio de tamaño',
+          d: 'Si necesitas más o menos espacio, avisando con siete días cambiamos de trastero sin coste, según disponibilidad.',
+        },
+      ],
+      faq: [
+        {
+          pregunta: '¿Cuál es el periodo mínimo de alquiler?',
+          respuesta:
+            '<p>No hay periodo mínimo obligatorio. Puedes alquilar desde un mes hasta varios años. La flexibilidad es una de las principales ventajas.</p>',
+        },
+        {
+          pregunta: '¿Cómo funciona el acceso 24/7?',
+          respuesta:
+            '<p>Al contratar recibes un código de acceso personal y una tarjeta magnética. Con eso puedes entrar a la instalación cualquier día y a cualquier hora, incluidos festivos.</p>',
+        },
+        {
+          pregunta: '¿Puedo cambiar de tamaño de trastero?',
+          respuesta:
+            '<p>Sí. Puedes pasar a uno más grande o más pequeño según tus necesidades. Solo hay que notificarlo con siete días de antelación y, si hay disponibilidad, hacemos el cambio sin coste adicional.</p>',
+        },
+        {
+          pregunta: '¿Está incluido el seguro?',
+          respuesta:
+            '<p>Las instalaciones cuentan con seguro de responsabilidad civil. Recomendamos que cada cliente contrate un seguro de contenido para sus pertenencias.</p>',
+        },
+        {
+          pregunta: '¿Puedo guardar cualquier tipo de objeto?',
+          respuesta:
+            '<p>Puedes almacenar la mayoría de objetos personales y mercancía legal. No se permiten: productos perecederos, materiales inflamables o peligrosos, armas, dinero en efectivo, animales o plantas vivas, ni objetos ilegales.</p>',
+        },
+      ],
+      contactoTitulo: 'Consultar disponibilidad',
+      contactoTexto:
+        'Dinos qué necesitas guardar y durante cuánto tiempo, y te decimos qué tamaño te conviene y qué disponibilidad hay.',
+      horarioOficinaTitulo: 'Horario de oficina',
+      horarioOficina: [
+        { d: 'Lunes a viernes', h: '9:00 – 19:00' },
+        { d: 'Sábados', h: '10:00 – 14:00' },
+        { d: 'Domingos', h: 'Cerrado' },
+      ],
+      accesoNota: 'Acceso a los trasteros: 24 h, todos los días del año.',
+      volverTexto: '¿Buscabas nuestra actividad de construcción en Ibiza?',
+      volverEnlace: 'Ir a la web de la constructora',
+    }
+  : {
+      titulo: 'Self-storage units to rent in Móstoles | 24 h access | Unero',
+      descripcion:
+        'Storage units to rent in Móstoles, from 2 m² to 20 m². 24 h access 365 days a year, CCTV, access control and no minimum contract period.',
+      cejilla: 'Storage · Móstoles',
+      h1: 'Storage units to rent in Móstoles',
+      entradilla:
+        'Secure storage accessible at any hour, with no minimum commitment. From 2 m² up to 20 m².',
+      aviso:
+        'This is a business line separate from our construction work in Ibiza. It is run from Madrid and has its own contact details.',
+      ventajasTitulo: 'Why these units',
+      ventajas: [
+        {
+          t: '24/7 access',
+          d: 'Personal code and swipe card. Come in whenever you like, 365 days a year, public holidays included.',
+        },
+        {
+          t: 'CCTV and access control',
+          d: 'Security cameras, access control and intruder alarm throughout the facility.',
+        },
+        {
+          t: 'Well located',
+          d: 'In Móstoles, with easy access from the M-50 and public transport nearby.',
+        },
+        {
+          t: 'Several sizes',
+          d: 'From 2 m² for a few boxes to 20 m² for the contents of a whole home.',
+        },
+        {
+          t: 'No minimum term',
+          d: 'Rent for as long as you need: one month or several years. No penalty for leaving.',
+        },
+        {
+          t: 'Change of size',
+          d: 'If you need more or less space, with seven days’ notice we move you to another unit at no cost, subject to availability.',
+        },
+      ],
+      faq: [
+        {
+          pregunta: 'What is the minimum rental period?',
+          respuesta:
+            '<p>There is no compulsory minimum period. You can rent from one month up to several years. Flexibility is one of the main advantages.</p>',
+        },
+        {
+          pregunta: 'How does 24/7 access work?',
+          respuesta:
+            '<p>On signing up you receive a personal access code and a swipe card. With those you can enter the facility any day and at any hour, public holidays included.</p>',
+        },
+        {
+          pregunta: 'Can I change unit size?',
+          respuesta:
+            '<p>Yes. You can move to a larger or smaller unit as your needs change. Just give us seven days’ notice and, subject to availability, we make the change at no extra cost.</p>',
+        },
+        {
+          pregunta: 'Is insurance included?',
+          respuesta:
+            '<p>The facility carries public liability insurance. We recommend each customer takes out contents insurance for their own belongings.</p>',
+        },
+        {
+          pregunta: 'Can I store anything?',
+          respuesta:
+            '<p>You can store most personal belongings and legal goods. Not permitted: perishables, flammable or hazardous materials, weapons, cash, live animals or plants, or illegal items.</p>',
+        },
+      ],
+      contactoTitulo: 'Check availability',
+      contactoTexto:
+        'Tell us what you need to store and for how long, and we will tell you which size suits and what is available.',
+      horarioOficinaTitulo: 'Office hours',
+      horarioOficina: [
+        { d: 'Monday to Friday', h: '9:00 – 19:00' },
+        { d: 'Saturdays', h: '10:00 – 14:00' },
+        { d: 'Sundays', h: 'Closed' },
+      ],
+      accesoNota: 'Access to the units: 24 h, every day of the year.',
+      volverTexto: 'Were you looking for our construction work in Ibiza?',
+      volverEnlace: 'Go to the builder’s site',
+    };
+
+/*
+  Schema propio: es un servicio de almacenamiento en Móstoles, no la
+  constructora de Ibiza. Declararlo como la misma entidad confundiría
+  la señal de SEO local de las dos actividades.
+  PENDIENTE: falta la dirección postal real de la instalación.
+*/
+const jsonLd = schema.grafo([
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: copy.cejilla, href: ruta('trasteros', lang) },
+  ]),
+  {
+    '@type': 'SelfStorage',
+    '@id': 'https://unero.es/trasteros-mostoles/#trasteros',
+    name: 'Unero Trasteros Móstoles',
+    description: copy.descripcion,
+    url: new URL(ruta('trasteros', lang), site.dominio).href,
+    email: EMAIL_TRASTEROS,
+    telephone: site.telefonos[0].numero,
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Móstoles',
+      addressRegion: 'Madrid',
+      addressCountry: 'ES',
+    },
+    areaServed: { '@type': 'City', name: 'Móstoles' },
+    parentOrganization: { '@id': 'https://unero.es/#unero' },
+    openingHoursSpecification: [
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        opens: '09:00',
+        closes: '19:00',
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Saturday'],
+        opens: '10:00',
+        closes: '14:00',
+      },
+    ],
+  },
+  schema.faq(
+    copy.faq.map((p) => ({
+      pregunta: p.pregunta,
+      respuesta: p.respuesta.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    }))
+  ),
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas items={[{ nombre: copy.cejilla }]} lang={lang} />
+
+      <div class="tr-intro">
+        <div>
+          <p class="cejilla">{copy.cejilla}</p>
+          <h1 class="display-l tr-intro__titulo">{copy.h1}</h1>
+          <p class="tr-intro__entradilla">{copy.entradilla}</p>
+          <p class="tr-aviso">{copy.aviso}</p>
+          <a href="#consultar" class="boton boton--solido">
+            {copy.contactoTitulo}
+            <Icono nombre="flecha-derecha" tamano={15} />
+          </a>
+        </div>
+        <div class="tr-intro__medio marco marco--3-2">
+          <Image
+            src={imgTrastero}
+            alt={
+              es
+                ? 'Cartel de «Próximamente trasteros en alquiler» en el cerramiento de la instalación de Móstoles.'
+                : 'Sign reading “storage units to rent, coming soon” on the fencing of the Móstoles facility.'
+            }
+            widths={[480, 720, 1024]}
+            sizes="(min-width: 62rem) 46vw, 92vw"
+            loading="eager"
+            decoding="sync"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion tema-hueso">
+    <div class="envoltura">
+      <h2 class="display-m titulo-filete">{copy.ventajasTitulo}</h2>
+      <ul class="ventajas">
+        {
+          copy.ventajas.map((v, i) => (
+            <li class="ventaja revelar" style={`--retardo:${i * 60}ms`}>
+              <span class="ventaja__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="ventaja__titulo">{v.t}</h3>
+              <p class="ventaja__texto">{v.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="envoltura">
+      <Faq
+        preguntas={copy.faq}
+        lang={lang}
+        titulo={es ? 'Preguntas frecuentes' : 'Frequently asked questions'}
+      />
+    </div>
+  </section>
+
+  <!-- ====================== Consultar ======================= -->
+  <section class="seccion tema-hueso" id="consultar">
+    <div class="envoltura">
+      <div class="tr-contacto">
+        <div class="tr-contacto__form">
+          <h2 class="display-m">{copy.contactoTitulo}</h2>
+          <p class="tr-contacto__texto">{copy.contactoTexto}</p>
+          <Formulario lang={lang} origen="trasteros-mostoles" />
+        </div>
+
+        <aside class="tr-contacto__datos">
+          <h2 class="cejilla">{t('pie.contacto')}</h2>
+          <ul class="tr-canales">
+            <li>
+              <a href={`mailto:${EMAIL_TRASTEROS}`}>
+                <Icono nombre="sobre" tamano={16} />
+                {EMAIL_TRASTEROS}
+              </a>
+            </li>
+            {
+              site.telefonos.map((tel) => (
+                <li>
+                  <a href={`tel:${tel.numero}`}>
+                    <Icono nombre="telefono" tamano={15} />
+                    {tel.etiqueta}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <span class="tr-dato">
+                <Icono nombre="ubicacion" tamano={16} />
+                Móstoles, Madrid
+              </span>
+            </li>
+          </ul>
+
+          <h2 class="cejilla tr-suelta">{copy.horarioOficinaTitulo}</h2>
+          <dl class="tr-horario">
+            {
+              copy.horarioOficina.map((h) => (
+                <div>
+                  <dt>{h.d}</dt>
+                  <dd>{h.h}</dd>
+                </div>
+              ))
+            }
+          </dl>
+          <p class="tr-nota">
+            <Icono nombre="reloj" tamano={14} />
+            {copy.accesoNota}
+          </p>
+
+          <p class="tr-volver">
+            {copy.volverTexto}
+            <a href={ruta('home', lang)}>{copy.volverEnlace}</a>
+          </p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tr-intro {
+    display: grid;
+    gap: var(--s-6);
+    margin-top: var(--s-6);
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .tr-intro {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+      gap: var(--s-8);
+    }
+  }
+  .tr-intro__titulo {
+    margin-top: var(--s-4);
+  }
+  .tr-intro__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 46ch;
+    text-wrap: pretty;
+  }
+
+  /* Aviso de contexto: evita que alguien que busca una constructora de
+     lujo en Ibiza crea que ha llegado al sitio equivocado, y viceversa. */
+  .tr-aviso {
+    margin-top: var(--s-5);
+    margin-bottom: var(--s-5);
+    padding: 0.85rem 1.1rem;
+    border-left: 2px solid var(--mar);
+    background-color: rgb(36 68 62 / 0.06);
+    font-size: var(--t-menudo);
+    line-height: 1.55;
+    max-width: 52ch;
+  }
+
+  .titulo-filete {
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+    margin-bottom: var(--s-6);
+  }
+
+  .ventajas {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 44rem) {
+    .ventajas {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 68rem) {
+    .ventajas {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .ventaja__num {
+    display: block;
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+  .ventaja__titulo {
+    margin-top: var(--s-3);
+    font-size: var(--t-display-s);
+  }
+  .ventaja__texto {
+    margin-top: 0.55rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .tr-contacto {
+    display: grid;
+    gap: var(--s-7);
+  }
+  @media (min-width: 62rem) {
+    .tr-contacto {
+      grid-template-columns: minmax(0, 1.5fr) minmax(16rem, 1fr);
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+  .tr-contacto__texto {
+    margin-top: var(--s-4);
+    margin-bottom: var(--s-6);
+    max-width: 52ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .tr-canales {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s-4);
+    display: grid;
+    gap: 0.1rem;
+  }
+  .tr-canales a,
+  .tr-dato {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    font-size: var(--t-cuerpo-s);
+    color: var(--texto);
+    text-decoration: none;
+  }
+  .tr-canales a:hover {
+    color: var(--acento);
+  }
+  .tr-dato {
+    color: var(--texto-apagado);
+  }
+  .tr-canales :global(svg) {
+    flex: none;
+    opacity: 0.55;
+  }
+
+  .tr-suelta {
+    margin-top: var(--s-6);
+  }
+  .tr-horario {
+    margin-top: var(--s-3);
+    font-size: var(--t-menudo);
+  }
+  .tr-horario > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: 0.4rem;
+    border-bottom: 1px solid var(--filete);
+  }
+  .tr-horario dt {
+    color: var(--texto-apagado);
+  }
+  .tr-horario dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tr-nota {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-top: var(--s-4);
+    font-size: var(--t-menudo);
+    color: var(--acento);
+  }
+  .tr-nota :global(svg) {
+    flex: none;
+    translate: 0 0.15rem;
+  }
+
+  .tr-volver {
+    margin-top: var(--s-7);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    line-height: 1.6;
+  }
+  .tr-volver a {
+    display: inline-block;
+    margin-top: 0.3rem;
+    color: var(--texto);
+    text-decoration-color: var(--acento);
+    text-underline-offset: 0.2em;
+  }
+</style>

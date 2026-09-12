@@ -1,0 +1,94 @@
+---
+/**
+ * Marca Unero.
+ *
+ * La marca original es un mapa de bits de 160×98 px alojado en un CDN
+ * ajeno (le-de.cdn-website.com, del antiguo creador de webs). Aquí se
+ * reproduce su geometría exacta en SVG: escala sin pérdida, pesa unos
+ * 300 bytes, no depende de terceros y hereda el color del contexto, de
+ * modo que funciona igual sobre cal o sobre tinta.
+ *
+ * Los dos volúmenes del símbolo se diferencian por opacidad en lugar de
+ * por los dos marrones originales. Así el conjunto queda monocromo y
+ * convive con la paleta sin competir con la fotografía.
+ */
+interface Props {
+  /** Altura del símbolo en rem. */
+  alto?: number;
+  /** Muestra el descriptivo "Espacio · Est. 2011" bajo el logotipo. */
+  completo?: boolean;
+  class?: string;
+}
+
+const { alto = 1.75, completo = false, class: clase } = Astro.props;
+---
+
+<span class:list={['logo', clase]} style={`--alto-marca:${alto}rem`}>
+  <svg
+    class="logo__marca"
+    viewBox="0 0 55 59"
+    role="img"
+    aria-label="Unero"
+    focusable="false"
+  >
+    <path class="logo__volumen" d="M0 17 13 10V46H27V59H0Z" />
+    <path d="M28 0 55 17V59H42V21L28 12Z" />
+  </svg>
+  <span class="logo__texto">
+    <span class="logo__nombre">Unero</span>
+    {
+      completo && (
+        <span class="logo__descriptivo">Espacio&nbsp;· Est.&nbsp;2011</span>
+      )
+    }
+  </span>
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    color: currentColor;
+    text-decoration: none;
+  }
+
+  .logo__marca {
+    height: var(--alto-marca);
+    width: auto;
+    flex: none;
+    fill: currentColor;
+  }
+
+  /* El volumen claro del símbolo original, ahora resuelto por opacidad. */
+  .logo__volumen {
+    opacity: 0.5;
+  }
+
+  .logo__texto {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+  }
+
+  .logo__nombre {
+    font-family: var(--fuente-texto);
+    font-size: calc(var(--alto-marca) * 0.62);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    /* Compensa el espaciado de la última letra para que el bloque
+       quede óptimamente centrado. */
+    margin-right: -0.2em;
+  }
+
+  .logo__descriptivo {
+    font-family: var(--fuente-texto);
+    font-size: calc(var(--alto-marca) * 0.3);
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-top: 0.45em;
+  }
+</style>

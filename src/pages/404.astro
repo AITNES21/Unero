@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import Icono from '../components/Icono.astro';
+import { ruta } from '../config/site';
+import { useT } from '../i18n/ui';
+
+/*
+  Página 404.
+
+  GitHub Pages sirve /404.html automáticamente para cualquier ruta que
+  no exista, así que una sola página cubre todo el dominio. Se escribe
+  en español porque es el idioma por defecto del sitio, pero ofrece los
+  caminos de las dos versiones.
+
+  La web anterior no tenía 404: cualquier URL mal escrita devolvía la
+  página en blanco de GitHub.
+*/
+const t = useT('es');
+
+const caminos = [
+  { texto: 'Proyectos', desc: 'Las casas que hemos construido', href: ruta('proyectos', 'es') },
+  { texto: 'Servicios', desc: 'Construcción, reformas e interiorismo', href: ruta('servicios', 'es') },
+  { texto: 'Cuaderno', desc: 'Costes, materiales y normativa en Ibiza', href: ruta('cuaderno', 'es') },
+  { texto: 'Contacto', desc: 'Cuéntanos tu proyecto', href: ruta('contacto', 'es') },
+];
+---
+
+<Base
+  titulo="Página no encontrada | Unero"
+  descripcion="La página que buscas no existe o se ha movido al renovar la web."
+  lang="es"
+  noIndexar
+>
+  <section class="seccion">
+    <div class="envoltura-estrecha error">
+      <p class="cejilla">Error 404</p>
+      <h1 class="display-l error__titulo">{t('gen.error404')}</h1>
+      <p class="error__texto">{t('gen.error404texto')}</p>
+
+      <ul class="error__caminos">
+        {
+          caminos.map((c) => (
+            <li>
+              <a href={c.href} class="error__enlace">
+                <span>
+                  <strong>{c.texto}</strong>
+                  {c.desc}
+                </span>
+                <Icono nombre="flecha-derecha" tamano={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="error__idioma">
+        <a href="/en/" lang="en" hreflang="en">Looking for the English version?</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .error {
+    padding-top: var(--s-6);
+  }
+  .error__titulo {
+    margin-top: var(--s-4);
+  }
+  .error__texto {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 50ch;
+    text-wrap: pretty;
+  }
+
+  .error__caminos {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s-7);
+    border-top: 1px solid var(--filete);
+  }
+  .error__caminos li {
+    border-bottom: 1px solid var(--filete);
+  }
+  .error__enlace {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: var(--s-4);
+    text-decoration: none;
+    color: inherit;
+  }
+  .error__enlace span {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .error__enlace strong {
+    font-family: var(--fuente-display);
+    font-size: var(--t-display-s);
+    font-weight: 400;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .error__enlace span {
+    font-size: var(--t-cuerpo-s);
+    color: var(--texto-apagado);
+  }
+  .error__enlace :global(svg) {
+    flex: none;
+    color: var(--texto-apagado);
+    transition: translate var(--dur-media) var(--ease-salida);
+  }
+  .error__enlace:hover strong {
+    color: var(--acento);
+  }
+  .error__enlace:hover :global(svg) {
+    translate: 0.3rem 0;
+  }
+
+  .error__idioma {
+    margin-top: var(--s-6);
+    font-size: var(--t-menudo);
+  }
+  .error__idioma a {
+    color: var(--texto-apagado);
+    text-underline-offset: 0.2em;
+  }
+</style>

@@ -1,0 +1,342 @@
+---
+import Base from '../../layouts/Base.astro';
+import Migas from '../Migas.astro';
+import TarjetaProyecto from '../TarjetaProyecto.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import {
+  todosLosProyectos,
+  bi,
+  etiquetaTipo,
+  etiquetaEstado,
+  etiquetaZona,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+
+const proyectos = await todosLosProyectos();
+const alternativa = ruta('proyectos', es ? 'en' : 'es');
+
+/* Filtros: solo se ofrecen los que tienen contenido, para que nunca
+   haya un botón que lleve a una lista vacía. */
+const tiposPresentes = [...new Set(proyectos.map((p) => p.data.tipo))];
+const zonasPresentes = [...new Set(proyectos.map((p) => p.data.zona).filter(Boolean))] as (
+  | 'ibiza'
+  | 'peninsula'
+)[];
+
+const filtros = [
+  { clave: 'todos', etiqueta: t('proy.todos') },
+  ...zonasPresentes.map((z) => ({ clave: `zona-${z}`, etiqueta: etiquetaZona(z, lang)! })),
+  ...tiposPresentes.map((x) => ({ clave: `tipo-${x}`, etiqueta: etiquetaTipo(x, lang) })),
+];
+
+const copy = es
+  ? {
+      titulo: 'Proyectos de construcción y reformas en Ibiza | Unero',
+      descripcion:
+        'Villas de obra nueva, reformas integrales y promociones construidas por Unero en Ibiza. Materiales, detalles constructivos y galería de cada casa.',
+      cejilla: 'Proyectos',
+      h1: 'Lo que hemos construido',
+      entradilla:
+        'Cada ficha cuenta cómo está hecha la casa: los materiales, los encuentros y las decisiones que no se ven en una fotografía. Es la forma más honesta que conocemos de explicar nuestro trabajo.',
+      nota: 'Fotografías de obras propias. Los datos técnicos que no constan se indican como pendientes en lugar de estimarse.',
+    }
+  : {
+      titulo: 'Construction and renovation projects in Ibiza | Unero',
+      descripcion:
+        'New-build villas, full renovations and developments built by Unero in Ibiza. Each project page covers materials, construction details and a complete gallery.',
+      cejilla: 'Projects',
+      h1: 'What we have built',
+      entradilla:
+        'Each page explains how the house is made: the materials, the junctions and the decisions that do not show up in a photograph. It is the most honest way we know of explaining our work.',
+      nota: 'Photographs of our own projects. Technical data that is not on record is marked as pending rather than estimated.',
+    };
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: copy.cejilla, href: ruta('proyectos', lang) },
+  ]),
+  {
+    '@type': 'CollectionPage',
+    name: copy.h1,
+    description: copy.descripcion,
+    hasPart: proyectos.map((p) => ({
+      '@type': 'CreativeWork',
+      name: p.data.titulo,
+      url: new URL(`${ruta('proyectos', lang)}${p.id}/`, 'https://unero.es').href,
+    })),
+  },
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+  imagen="/og/unero-proyectos.jpg"
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas items={[{ nombre: copy.cejilla }]} lang={lang} />
+
+      <header class="portada-indice">
+        <p class="cejilla">{copy.cejilla}</p>
+        <h1 class="display-xl portada-indice__titulo">{copy.h1}</h1>
+        <p class="portada-indice__entradilla">{copy.entradilla}</p>
+      </header>
+
+      <!-- Filtro. Todas las fichas están en el HTML desde el principio:
+           el filtro solo oculta, así que Google indexa el catálogo
+           completo y sin JavaScript se ven todos los proyectos. -->
+      <div class="filtro" data-filtro>
+        <p class="solo-lectores" id="filtro-etiqueta">{t('proy.filtrar')}</p>
+        <div class="filtro__botones" role="group" aria-labelledby="filtro-etiqueta">
+          {
+            filtros.map((f, i) => (
+              <button
+                type="button"
+                class="filtro__boton"
+                data-clave={f.clave}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+              >
+                {f.etiqueta}
+              </button>
+            ))
+          }
+        </div>
+        <p class="filtro__cuenta" data-cuenta aria-live="polite" />
+      </div>
+
+      <div class="catalogo" data-catalogo>
+        {
+          proyectos.map((p, i) => (
+            <div
+              class="catalogo__celda revelar"
+              style={`--retardo:${(i % 3) * 80}ms`}
+              data-tipo={p.data.tipo}
+              data-zona={p.data.zona ?? ''}
+            >
+              <TarjetaProyecto
+                slug={p.id}
+                titulo={p.data.titulo}
+                resumen={bi(p.data.resumen, lang) ?? ''}
+                ubicacion={bi(p.data.ubicacion, lang)}
+                tipo={etiquetaTipo(p.data.tipo, lang)}
+                estado={etiquetaEstado(p.data.estado, lang)}
+                portada={p.data.portada}
+                portadaAlt={bi(p.data.portadaAlt, lang) ?? p.data.titulo}
+                lang={lang}
+                indice={i + 1}
+                prioridad={i < 2}
+                formato={i % 5 === 0 ? '3-2' : '4-5'}
+                nivelTitulo={2}
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="catalogo__vacio" data-vacio hidden>{t('proy.sinResultados')}</p>
+      <p class="nota-indice">{copy.nota}</p>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  .portada-indice {
+    margin-top: var(--s-6);
+    max-width: 52rem;
+  }
+  .portada-indice__titulo {
+    margin-top: var(--s-4);
+  }
+  .portada-indice__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 54ch;
+    text-wrap: pretty;
+  }
+
+  /* ---------------------------- Filtro --------------------------- */
+  .filtro {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--filete);
+  }
+
+  .filtro__botones {
+    display: flex;
+    gap: var(--s-2);
+    /* En móvil se desplaza lateralmente en lugar de apilarse en cuatro
+       filas, que dejaría el catálogo fuera de pantalla. */
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    -webkit-overflow-scrolling: touch;
+  }
+  .filtro__botones::-webkit-scrollbar {
+    display: none;
+  }
+  @media (min-width: 60rem) {
+    .filtro__botones {
+      flex-wrap: wrap;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+  }
+
+  .filtro__boton {
+    flex: none;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    font-size: var(--t-menudo);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--texto-apagado);
+    border: 1px solid var(--filete);
+    transition: color var(--dur-rapida) var(--ease-suave),
+      border-color var(--dur-rapida) var(--ease-suave),
+      background-color var(--dur-rapida) var(--ease-suave);
+  }
+  .filtro__boton:hover {
+    color: var(--texto);
+    border-color: var(--piedra);
+  }
+  .filtro__boton[aria-pressed='true'] {
+    background-color: var(--tinta);
+    border-color: var(--tinta);
+    color: var(--cal);
+  }
+
+  .filtro__cuenta {
+    margin-top: var(--s-3);
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+  }
+  .filtro__cuenta:empty {
+    display: none;
+  }
+
+  /* --------------------------- Catálogo -------------------------- */
+  .catalogo {
+    display: grid;
+    gap: var(--s-7) var(--s-5);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  @media (min-width: 48rem) {
+    .catalogo {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 75rem) {
+    .catalogo {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .catalogo__celda[hidden] {
+    display: none;
+  }
+
+  .catalogo__vacio {
+    margin-top: var(--s-7);
+    color: var(--texto-apagado);
+  }
+  .catalogo__vacio[hidden] {
+    display: none;
+  }
+
+  .nota-indice {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    max-width: 60ch;
+  }
+</style>
+
+<script>
+  /**
+   * Filtro del catálogo.
+   *
+   * Oculta tarjetas ya presentes en el HTML, sin peticiones ni
+   * reordenaciones. La URL refleja la selección (?f=tipo-reforma) para
+   * que un filtro se pueda compartir o recargar.
+   */
+  const zona = document.querySelector<HTMLElement>('[data-filtro]');
+  const catalogo = document.querySelector<HTMLElement>('[data-catalogo]');
+  const vacio = document.querySelector<HTMLElement>('[data-vacio]');
+  const cuenta = document.querySelector<HTMLElement>('[data-cuenta]');
+
+  if (zona && catalogo) {
+    const botones = Array.from(zona.querySelectorAll<HTMLButtonElement>('[data-clave]'));
+    const celdas = Array.from(catalogo.querySelectorAll<HTMLElement>('.catalogo__celda'));
+    const enIngles = document.documentElement.lang.startsWith('en');
+
+    function aplicar(clave: string, actualizarUrl = true) {
+      let visibles = 0;
+
+      for (const celda of celdas) {
+        const coincide =
+          clave === 'todos' ||
+          (clave.startsWith('tipo-') && celda.dataset.tipo === clave.slice(5)) ||
+          (clave.startsWith('zona-') && celda.dataset.zona === clave.slice(5));
+
+        celda.hidden = !coincide;
+        if (coincide) visibles++;
+      }
+
+      botones.forEach((b) =>
+        b.setAttribute('aria-pressed', String(b.dataset.clave === clave))
+      );
+
+      if (vacio) vacio.hidden = visibles > 0;
+      if (cuenta) {
+        cuenta.textContent =
+          clave === 'todos'
+            ? ''
+            : enIngles
+              ? `${visibles} project${visibles === 1 ? '' : 's'}`
+              : `${visibles} proyecto${visibles === 1 ? '' : 's'}`;
+      }
+
+      if (actualizarUrl) {
+        const url = new URL(location.href);
+        if (clave === 'todos') url.searchParams.delete('f');
+        else url.searchParams.set('f', clave);
+        history.replaceState(null, '', url);
+      }
+    }
+
+    botones.forEach((b) =>
+      b.addEventListener('click', () => aplicar(b.dataset.clave ?? 'todos'))
+    );
+
+    // Restaura el filtro al entrar con una URL que lo lleva.
+    const inicial = new URL(location.href).searchParams.get('f');
+    if (inicial && botones.some((b) => b.dataset.clave === inicial)) {
+      aplicar(inicial, false);
+    }
+  }
+</script>

@@ -1,0 +1,3 @@
+Carpeta de destino de las imágenes que se suban desde el CMS.
+Vive en src/assets/ (y no en public/) para que Astro las optimice
+durante el build: ver la nota de .pages.yml

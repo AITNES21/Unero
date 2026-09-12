@@ -1,0 +1,136 @@
+---
+import type { Idioma } from '../config/site';
+
+export interface Pregunta {
+  pregunta: string;
+  /** Admite HTML para poder enlazar dentro de la respuesta. */
+  respuesta: string;
+}
+
+interface Props {
+  preguntas: Pregunta[];
+  lang: Idioma;
+  titulo?: string;
+}
+
+const { preguntas, titulo } = Astro.props;
+---
+
+{/*
+  Acordeón con <details>/<summary> nativos.
+
+  Sin JavaScript: el navegador aporta el comportamiento, el estado
+  accesible y —lo más importante para SEO— el contenido está en el HTML
+  y es indexable aunque esté plegado. La web anterior lo resolvía con
+  JS propio y contenedores de altura cero.
+*/}
+<div class="faq">
+  {titulo && <h2 class="display-m faq__titulo">{titulo}</h2>}
+
+  <div class="faq__lista">
+    {
+      preguntas.map((p) => (
+        <details class="faq__item">
+          <summary class="faq__pregunta">
+            <span>{p.pregunta}</span>
+            <span class="faq__signo" aria-hidden="true" />
+          </summary>
+          <div class="faq__respuesta">
+            <div class="prosa" set:html={p.respuesta} />
+          </div>
+        </details>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .faq__titulo {
+    margin-bottom: var(--s-6);
+  }
+
+  .faq__lista {
+    border-top: 1px solid var(--filete);
+    max-width: var(--ancho-estrecho);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--filete);
+  }
+
+  .faq__pregunta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--s-5);
+    /* Área de pulsación amplia: toda la fila es el objetivo. */
+    padding-block: var(--s-4);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--fuente-display);
+    font-size: var(--t-display-s);
+    line-height: 1.25;
+    color: var(--texto);
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .faq__pregunta::-webkit-details-marker {
+    display: none;
+  }
+  .faq__pregunta:hover {
+    color: var(--acento);
+  }
+  .faq__pregunta:focus-visible {
+    outline: 2px solid var(--acento);
+    outline-offset: 2px;
+  }
+
+  /* Signo «+» que gira a «×» al abrirse. Dibujado con
+     pseudoelementos: ni icono ni petición de red. */
+  .faq__signo {
+    position: relative;
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.45rem;
+  }
+  .faq__signo::before,
+  .faq__signo::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1px;
+    background-color: currentColor;
+    transition: rotate var(--dur-media) var(--ease-salida);
+  }
+  .faq__signo::after {
+    rotate: 90deg;
+  }
+  .faq__item[open] .faq__signo::after {
+    rotate: 180deg;
+  }
+
+  .faq__respuesta {
+    padding-bottom: var(--s-5);
+    padding-right: var(--s-6);
+  }
+  .faq__respuesta :global(.prosa) {
+    max-width: 62ch;
+  }
+  .faq__respuesta :global(.prosa > *:first-child) {
+    margin-top: 0;
+  }
+
+  /* Apertura suave donde el navegador lo soporta; donde no, abre
+     instantáneamente y funciona igual. */
+  @supports (interpolate-size: allow-keywords) {
+    .faq__item::details-content {
+      block-size: 0;
+      overflow: hidden;
+      transition: block-size var(--dur-media) var(--ease-salida),
+        content-visibility var(--dur-media) allow-discrete;
+    }
+    .faq__item[open]::details-content {
+      block-size: auto;
+    }
+  }
+</style>

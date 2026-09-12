@@ -1,0 +1,161 @@
+---
+import { site, idiomas, type Idioma } from '../config/site';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  lang: Idioma;
+  /** Ruta de esta misma página en el otro idioma. `null` si no existe. */
+  alternativa?: string | null;
+  /** Imagen para redes. Ruta absoluta desde la raíz del sitio. */
+  imagen?: string;
+  imagenAlt?: string;
+  /** `article` para las entradas del Cuaderno. */
+  tipoOg?: 'website' | 'article';
+  noIndexar?: boolean;
+  /** JSON-LD ya serializado. */
+  jsonLd?: string;
+}
+
+const {
+  titulo,
+  descripcion,
+  lang,
+  alternativa = null,
+  imagen = '/og/unero-portada.jpg',
+  imagenAlt,
+  tipoOg = 'website',
+  noIndexar = false,
+  jsonLd,
+} = Astro.props;
+
+/* Canonical: una sola fuente de verdad.
+   La web anterior declaraba dos <link rel="canonical"> distintos en la
+   misma página (unero.es y aitnes21.github.io) — señales contradictorias
+   que impedían consolidar la autoridad en el dominio real. */
+const canonica = new URL(Astro.url.pathname, site.dominio).href;
+const urlImagen = new URL(imagen, site.dominio).href;
+
+/* Una página que no se indexa no declara canonical ni hreflang: son
+   señales para buscadores y aquí solo pueden generar contradicciones
+   (por ejemplo, /404.html canonicalizando a una URL que no existe). */
+const rutaEs = noIndexar ? null : lang === 'es' ? Astro.url.pathname : alternativa;
+const rutaEn = noIndexar ? null : lang === 'en' ? Astro.url.pathname : alternativa;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>{titulo}</title>
+<meta name="description" content={descripcion} />
+{!noIndexar && <link rel="canonical" href={canonica} />}
+
+{
+  noIndexar ? (
+    <meta name="robots" content="noindex, nofollow" />
+  ) : (
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+  )
+}
+
+{/* hreflang: solo se declara el par cuando la traducción existe de verdad.
+    Apuntar a una página inexistente es peor que no declarar nada. */}
+{rutaEs && <link rel="alternate" hreflang="es-ES" href={new URL(rutaEs, site.dominio).href} />}
+{rutaEn && <link rel="alternate" hreflang="en-GB" href={new URL(rutaEn, site.dominio).href} />}
+{rutaEs && <link rel="alternate" hreflang="x-default" href={new URL(rutaEs, site.dominio).href} />}
+
+{/* Tipografías propias: se precargan porque entran en el primer pintado. */}
+<link
+  rel="preload"
+  href="/fonts/instrument-serif-latin.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  rel="preload"
+  href="/fonts/inter-var-latin.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<meta name="theme-color" content="#f7f4ee" />
+<meta name="color-scheme" content="light" />
+
+<meta property="og:type" content={tipoOg} />
+<meta property="og:site_name" content={site.nombre} />
+<meta property="og:title" content={titulo} />
+<meta property="og:description" content={descripcion} />
+<meta property="og:url" content={canonica} />
+<meta property="og:image" content={urlImagen} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+{imagenAlt && <meta property="og:image:alt" content={imagenAlt} />}
+<meta property="og:locale" content={idiomas[lang].ogLocale} />
+{
+  alternativa && (
+    <meta
+      property="og:locale:alternate"
+      content={idiomas[lang === 'es' ? 'en' : 'es'].ogLocale}
+    />
+  )
+}
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={titulo} />
+<meta name="twitter:description" content={descripcion} />
+<meta name="twitter:image" content={urlImagen} />
+
+<meta name="author" content={site.nombreLegal} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  title={lang === 'es' ? 'Cuaderno Unero' : 'Unero Journal'}
+  href={lang === 'es' ? '/cuaderno/rss.xml' : '/en/journal/rss.xml'}
+/>
+
+{jsonLd && <script type="application/ld+json" is:inline set:html={jsonLd} />}
+
+{/* Google Analytics 4 con Consent Mode v2.
+    Todo denegado por defecto: la etiqueta no escribe cookies ni envía
+    identificadores hasta que el visitante acepta (RGPD / LSSI). */}
+<script is:inline define:vars={{ idGa: site.analytics.ga4 }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  window.gtag = gtag;
+
+  var guardado = null;
+  try {
+    guardado = JSON.parse(localStorage.getItem('unero_consentimiento') || 'null');
+  } catch (e) {
+    /* almacenamiento bloqueado: seguimos con todo denegado */
+  }
+
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: guardado && guardado.analiticas ? 'granted' : 'denied',
+    functionality_storage: 'granted',
+    security_storage: 'granted',
+    wait_for_update: 500,
+  });
+
+  gtag('js', new Date());
+  gtag('config', idGa, { anonymize_ip: true });
+</script>
+<script
+  is:inline
+  async
+  src={`https://www.googletagmanager.com/gtag/js?id=${site.analytics.ga4}`}></script>

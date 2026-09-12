@@ -1,0 +1,80 @@
+---
+/**
+ * Iconos en SVG en línea.
+ *
+ * Sustituye a Font Awesome, que en la web anterior cargaba una hoja de
+ * estilos completa (~100 KB) y una fuente de iconos desde un CDN de
+ * tercero para usar una docena de glifos. Aquí cada icono pesa lo que
+ * ocupa su trazado y no hay ninguna petición de red.
+ */
+export type NombreIcono =
+  | 'flecha-derecha'
+  | 'flecha-izquierda'
+  | 'flecha-arriba-derecha'
+  | 'cerrar'
+  | 'menu'
+  | 'mas'
+  | 'chevron-abajo'
+  | 'telefono'
+  | 'sobre'
+  | 'whatsapp'
+  | 'instagram'
+  | 'facebook'
+  | 'reproducir'
+  | 'documento'
+  | 'ubicacion'
+  | 'reloj'
+  | 'comprobado';
+
+interface Props {
+  nombre: NombreIcono;
+  tamano?: number;
+  class?: string;
+  /** Trazo más fino o más grueso según el contexto tipográfico. */
+  grosor?: number;
+}
+
+const { nombre, tamano = 16, class: clase, grosor = 1.5 } = Astro.props;
+
+const trazos: Record<NombreIcono, string> = {
+  'flecha-derecha': '<path d="M2 8h12M9.5 3.5 14 8l-4.5 4.5"/>',
+  'flecha-izquierda': '<path d="M14 8H2M6.5 3.5 2 8l4.5 4.5"/>',
+  'flecha-arriba-derecha': '<path d="M4 12 12 4M5.5 4H12v6.5"/>',
+  cerrar: '<path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/>',
+  menu: '<path d="M1.5 4.5h13M1.5 11.5h13"/>',
+  mas: '<path d="M8 2.5v11M2.5 8h11"/>',
+  'chevron-abajo': '<path d="m3.5 6 4.5 4.5L12.5 6"/>',
+  telefono:
+    '<path d="M5.2 2.5H3.1c-.6 0-1.1.5-1.1 1.1 0 5.7 4.6 10.4 10.4 10.4.6 0 1.1-.5 1.1-1.1v-2.1c0-.5-.3-.9-.8-1l-2-.5c-.4-.1-.9.1-1.1.5l-.5.9c-1.6-.8-2.9-2.1-3.7-3.7l.9-.5c.4-.2.6-.7.5-1.1l-.5-2c-.1-.5-.5-.8-1-.8Z"/>',
+  sobre:
+    '<path d="M1.75 4.25h12.5v7.5H1.75zM1.75 4.75 8 9.25l6.25-4.5"/>',
+  whatsapp:
+    '<path d="M8 1.75a6.2 6.2 0 0 0-5.3 9.4l-.9 3.1 3.2-.85A6.2 6.2 0 1 0 8 1.75Z"/><path d="M5.9 5.6c.15-.35.3-.35.5-.35h.35c.15 0 .3 0 .45.35l.5 1.2c.05.15.05.3-.05.4l-.3.35c-.1.1-.15.25-.05.4.35.6.85 1.1 1.45 1.45.15.1.3.05.4-.05l.35-.3c.1-.1.25-.1.4-.05l1.2.5c.35.15.35.3.35.45v.35c0 .2 0 .35-.35.5-.3.15-.85.3-1.35.15-1.2-.35-2.15-.85-3-1.7-.85-.85-1.35-1.8-1.7-3-.15-.5 0-1.05.15-1.35Z" fill="currentColor" stroke="none"/>',
+  instagram:
+    '<rect x="2.25" y="2.25" width="11.5" height="11.5" rx="3.25"/><circle cx="8" cy="8" r="2.85"/><circle cx="11.4" cy="4.6" r=".75" fill="currentColor" stroke="none"/>',
+  facebook:
+    '<path d="M10.2 5.4H9.1c-.55 0-.85.3-.85.85V7.5h1.9l-.25 2.05H8.25v4.2H6.2V9.55H4.9V7.5h1.3V6.05c0-1.6.9-2.55 2.6-2.55h1.4z" fill="currentColor" stroke="none"/>',
+  reproducir: '<path d="M5 3.2 12.5 8 5 12.8z"/>',
+  documento:
+    '<path d="M3.75 1.75h5.5L12.25 4.75v9.5h-8.5zM9.25 1.75v3h3"/>',
+  ubicacion:
+    '<path d="M8 14.25S13 10.4 13 6.75a5 5 0 0 0-10 0c0 3.65 5 7.5 5 7.5Z"/><circle cx="8" cy="6.6" r="1.85"/>',
+  reloj: '<circle cx="8" cy="8" r="6.25"/><path d="M8 4.5V8l2.5 1.75"/>',
+  comprobado: '<path d="m3 8.5 3.25 3.25L13 5"/>',
+};
+---
+
+<svg
+  class={clase}
+  width={tamano}
+  height={tamano}
+  viewBox="0 0 16 16"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={grosor}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+  set:html={trazos[nombre]}
+/>

@@ -1,0 +1,417 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import Formulario from '../Formulario.astro';
+import { site, ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const alternativa = ruta('contacto', es ? 'en' : 'es');
+
+const mensajeWa = encodeURIComponent(
+  es
+    ? 'Hola Unero, me gustaría hablar de un proyecto en Ibiza.'
+    : "Hello Unero, I'd like to talk about a project in Ibiza."
+);
+const urlWa = `https://wa.me/${site.whatsapp.replace(/\D/g, '')}?text=${mensajeWa}`;
+
+const copy = es
+  ? {
+      titulo: 'Contacto | Constructora en Ibiza | Unero',
+      descripcion:
+        'Cuéntanos tu proyecto de construcción o reforma en Ibiza. Vamos a ver la parcela, te damos una horquilla de presupuesto y qué condicionantes vemos. Sin coste.',
+      cejilla: 'Contacto',
+      h1: 'Cuéntanos tu proyecto',
+      entradilla:
+        'Una parcela, una casa que reformar o solo una idea. Vamos a verlo, te decimos con franqueza en qué horquilla se mueve y qué nos encontraríamos. Sin coste y sin compromiso.',
+      esperarTitulo: 'Qué pasa después de escribir',
+      esperar: [
+        {
+          t: 'Respondemos en un día laborable',
+          d: 'Lo lee una persona del equipo, no un formulario automático. Si es urgente, llama y lo resolvemos antes.',
+        },
+        {
+          t: 'Una conversación de veinte minutos',
+          d: 'Por teléfono o videollamada, para entender qué quieres hacer y en qué punto estás.',
+        },
+        {
+          t: 'Visita a la parcela o a la casa',
+          d: 'Vamos a verlo en persona. Es donde de verdad se ve con qué nos vamos a encontrar.',
+        },
+        {
+          t: 'Horquilla y condicionantes, por escrito',
+          d: 'Un rango realista con lo que vemos. Y si el proyecto no encaja con lo que sabemos hacer, también te lo decimos.',
+        },
+      ],
+      directoTitulo: 'Canales directos',
+      directoTexto:
+        'Si prefieres hablar antes de escribir, cualquiera de estos vale. El WhatsApp es el que contestamos más rápido.',
+      zonaTitulo: 'Dónde trabajamos',
+      zonaTexto:
+        'Ibiza y Formentera, en los cinco municipios. También tenemos obra en la península: Marbella, Boadilla del Monte y una línea de trasteros en alquiler en Móstoles.',
+      arqTitulo: '¿Eres arquitecto?',
+      arqTexto:
+        'Si estás proyectando una casa en Ibiza y necesitas un constructor que conozca la normativa insular, los oficios y los plazos de suministro, escríbenos. Podemos hacer una revisión constructiva del proyecto antes de que salga a licencia.',
+    }
+  : {
+      titulo: 'Contact | Construction company in Ibiza | Unero',
+      descripcion:
+        'Tell us about your project in Ibiza. We come and see the plot, give you a budget range and tell you what constraints we see. Free of charge.',
+      cejilla: 'Contact',
+      h1: 'Tell us about your project',
+      entradilla:
+        'A plot, a house to renovate, or just an idea. We will come and look, tell you frankly what range it falls into and what we would be taking on. No cost, no obligation.',
+      esperarTitulo: 'What happens after you write',
+      esperar: [
+        {
+          t: 'We reply within one working day',
+          d: 'A person on the team reads it, not an automated form. If it is urgent, call and we will sort it sooner.',
+        },
+        {
+          t: 'A twenty-minute conversation',
+          d: 'By phone or video call, to understand what you want to do and where you are.',
+        },
+        {
+          t: 'A visit to the plot or the house',
+          d: 'We come and see it in person. That is where you really see what you are dealing with.',
+        },
+        {
+          t: 'Range and constraints, in writing',
+          d: 'A realistic range with what we see. And if the project is not a fit for what we do well, we will say that too.',
+        },
+      ],
+      directoTitulo: 'Direct channels',
+      directoTexto:
+        'If you would rather talk before writing, any of these works. WhatsApp is the one we answer fastest.',
+      zonaTitulo: 'Where we work',
+      zonaTexto:
+        'Ibiza and Formentera, across all five municipalities. We also have work on the mainland: Marbella, Boadilla del Monte and a line of storage units for rent in Móstoles.',
+      arqTitulo: 'Are you an architect?',
+      arqTexto:
+        'If you are designing a house in Ibiza and need a builder who knows the island planning rules, the trades and the lead times, get in touch. We can do a buildability review of the design before it goes for permit.',
+    };
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: copy.cejilla, href: ruta('contacto', lang) },
+  ]),
+  {
+    '@type': 'ContactPage',
+    name: copy.h1,
+    description: copy.descripcion,
+    mainEntity: { '@id': 'https://unero.es/#unero' },
+  },
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas items={[{ nombre: copy.cejilla }]} lang={lang} />
+
+      <div class="cont">
+        <!-- Columna principal: el formulario. Es el objetivo de la
+             página, así que va primero también en el orden del DOM. -->
+        <div class="cont__principal">
+          <header class="cont__cabecera">
+            <p class="cejilla">{copy.cejilla}</p>
+            <h1 class="display-l cont__titulo">{copy.h1}</h1>
+            <p class="cont__entradilla">{copy.entradilla}</p>
+          </header>
+
+          <Formulario lang={lang} origen="contacto" />
+        </div>
+
+        <!-- Columna lateral: canales directos y expectativas. -->
+        <aside class="cont__lateral">
+          <div class="cont__bloque">
+            <h2 class="cejilla">{copy.directoTitulo}</h2>
+            <p class="cont__nota">{copy.directoTexto}</p>
+            <ul class="canales">
+              <li>
+                <a href={urlWa} target="_blank" rel="noopener" class="canal canal--destacado">
+                  <Icono nombre="whatsapp" tamano={18} />
+                  <span>
+                    <strong>WhatsApp</strong>
+                    {site.telefonos[0].etiqueta}
+                  </span>
+                  <Icono nombre="flecha-arriba-derecha" tamano={13} />
+                </a>
+              </li>
+              {
+                site.telefonos.map((tel) => (
+                  <li>
+                    <a href={`tel:${tel.numero}`} class="canal">
+                      <Icono nombre="telefono" tamano={16} />
+                      <span>
+                        <strong>{es ? 'Teléfono' : 'Phone'}</strong>
+                        {tel.etiqueta}
+                      </span>
+                    </a>
+                  </li>
+                ))
+              }
+              <li>
+                <a href={`mailto:${site.email}`} class="canal">
+                  <Icono nombre="sobre" tamano={16} />
+                  <span>
+                    <strong>Email</strong>
+                    {site.email}
+                  </span>
+                </a>
+              </li>
+            </ul>
+
+            <dl class="horario">
+              <div>
+                <dt>{t('pie.lunesViernes')}</dt>
+                <dd>{site.horario.apertura} – {site.horario.cierre}</dd>
+              </div>
+              <div>
+                <dt>{t('pie.sabadoDomingo')}</dt>
+                <dd>{t('pie.cerrado')}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="cont__bloque">
+            <h2 class="cejilla">{copy.zonaTitulo}</h2>
+            <p class="cont__nota">{copy.zonaTexto}</p>
+            <ul class="zonas-lista">
+              {site.zonas.map((z) => <li>{z}</li>)}
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Qué pasa después ===================== -->
+  <section class="seccion tema-hueso">
+    <div class="envoltura">
+      <h2 class="display-m titulo-filete">{copy.esperarTitulo}</h2>
+      <ol class="esperar">
+        {
+          copy.esperar.map((e, i) => (
+            <li class="esperar__item">
+              <span class="esperar__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="esperar__titulo">{e.t}</h3>
+              <p class="esperar__texto">{e.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="seccion-corta">
+    <div class="envoltura-estrecha arq">
+      <h2 class="display-m">{copy.arqTitulo}</h2>
+      <p class="arq__texto">{copy.arqTexto}</p>
+      <a href={`mailto:${site.email}`} class="enlace-flecha">
+        {site.email}
+        <Icono nombre="flecha-derecha" tamano={14} />
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .cont {
+    display: grid;
+    gap: var(--s-7);
+    margin-top: var(--s-6);
+  }
+  @media (min-width: 62rem) {
+    .cont {
+      grid-template-columns: minmax(0, 1.5fr) minmax(17rem, 1fr);
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+
+  .cont__cabecera {
+    margin-bottom: clamp(2rem, 4vw, 3rem);
+  }
+  .cont__titulo {
+    margin-top: var(--s-4);
+  }
+  .cont__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 52ch;
+    text-wrap: pretty;
+  }
+
+  .cont__bloque + .cont__bloque {
+    margin-top: var(--s-7);
+  }
+  .cont__nota {
+    margin-top: var(--s-3);
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .canales {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s-5);
+    display: grid;
+    gap: var(--s-2);
+  }
+
+  .canal {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    /* 3.5rem asegura un objetivo táctil generoso en la columna estrecha. */
+    min-height: 3.5rem;
+    padding: 0.65rem 0.95rem;
+    text-decoration: none;
+    color: var(--texto);
+    border: 1px solid var(--filete);
+    transition: border-color var(--dur-rapida) var(--ease-suave),
+      background-color var(--dur-rapida) var(--ease-suave);
+  }
+  .canal:hover {
+    border-color: var(--piedra);
+    background-color: var(--cal-hueso);
+  }
+  .canal span {
+    display: grid;
+    line-height: 1.35;
+    font-size: var(--t-cuerpo-s);
+  }
+  .canal strong {
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .canal :global(svg) {
+    flex: none;
+    opacity: 0.6;
+  }
+  .canal--destacado {
+    border-color: var(--mar);
+    background-color: rgb(36 68 62 / 0.05);
+  }
+  .canal--destacado :global(svg) {
+    opacity: 1;
+    color: var(--mar);
+  }
+
+  .horario {
+    margin-top: var(--s-5);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+    font-size: var(--t-menudo);
+  }
+  .horario > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: 0.35rem;
+  }
+  .horario dt {
+    color: var(--texto-apagado);
+  }
+  .horario dd {
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .zonas-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: var(--s-4);
+    list-style: none;
+    padding: 0;
+  }
+  .zonas-lista li {
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    border: 1px solid var(--filete);
+    padding: 0.35rem 0.65rem;
+  }
+
+  .titulo-filete {
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+    margin-bottom: var(--s-6);
+  }
+
+  .esperar {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 44rem) {
+    .esperar {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 68rem) {
+    .esperar {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .esperar__item {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+  }
+  .esperar__num {
+    display: block;
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+  .esperar__titulo {
+    margin-top: var(--s-3);
+    font-size: var(--t-display-s);
+  }
+  .esperar__texto {
+    margin-top: 0.55rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .arq {
+    display: grid;
+    gap: var(--s-4);
+    justify-items: start;
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--filete);
+  }
+  .arq__texto {
+    max-width: 60ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+</style>

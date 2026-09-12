@@ -1,0 +1,510 @@
+# ============================================================================
+# Pages CMS — panel de edición para unero.es
+#
+# Qué es: un CMS visual gratuito y alojado (app.pagescms.org) que lee este
+# fichero, muestra formularios para el contenido y guarda los cambios como
+# commits en este repositorio. Al hacer commit, el GitHub Action reconstruye
+# y publica la web sola.
+#
+# Cómo se usa:
+#   1. Entrar en https://app.pagescms.org e iniciar sesión con GitHub.
+#   2. Dar acceso al repositorio AITNES21/unero.
+#   3. Editar. Cada guardado dispara el despliegue (2-3 minutos).
+#
+# No hace falta instalar nada ni tocar código.
+#
+# Nota sobre las imágenes: `output` es una ruta relativa a propósito.
+# Las fotografías viven en src/assets/ para que Astro pueda redimensionarlas
+# y convertirlas en varios tamaños durante el build. Si estuvieran en
+# public/ se servirían tal cual, sin optimizar, y una foto de 4 MB llegaría
+# entera al móvil del visitante.
+# ============================================================================
+
+media:
+  input: src/assets/subidas
+  output: ../../assets/subidas
+  categories: [image]
+  extensions: [webp, jpg, jpeg, png, avif]
+
+settings:
+  content:
+    merge: true
+
+content:
+  # ==========================================================================
+  # PROYECTOS
+  # ==========================================================================
+  - name: proyectos
+    label: Proyectos
+    description: >-
+      Fichas de obra. El campo «orden» decide la posición en el catálogo
+      (número más bajo, más arriba). Deja vacío cualquier dato que no
+      conste: es mejor un hueco que una cifra inventada.
+    type: collection
+    path: src/content/proyectos
+    filename: '{fields.titulo}.md'
+    view:
+      fields: [titulo, tipo, zona, estado, orden, destacado]
+      sort: [orden, titulo]
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Nombre del proyecto
+        type: string
+        required: true
+
+      - name: orden
+        label: Orden en el catálogo
+        type: number
+        default: 50
+        description: Menor número, antes en la lista.
+
+      - name: destacado
+        label: Mostrar en la portada
+        type: boolean
+        default: false
+
+      - name: tipo
+        label: Tipo de proyecto
+        type: select
+        required: true
+        options:
+          values:
+            - { value: obra-nueva, label: Obra nueva }
+            - { value: reforma, label: Reforma integral }
+            - { value: interiorismo, label: Interiorismo }
+            - { value: promocion, label: Promoción }
+
+      - name: zona
+        label: Zona
+        type: select
+        description: Déjalo vacío si la ubicación no está confirmada.
+        options:
+          values:
+            - { value: ibiza, label: Ibiza }
+            - { value: peninsula, label: Península }
+
+      - name: estado
+        label: Estado
+        type: select
+        options:
+          values:
+            - { value: terminado, label: Terminado }
+            - { value: en-obra, label: En obra }
+            - { value: vendido, label: Vendida }
+            - { value: disponible, label: Disponible }
+
+      - name: ubicacion
+        label: Ubicación
+        type: object
+        fields:
+          - { name: es, label: Español, type: string }
+          - { name: en, label: English, type: string }
+
+      - name: ano
+        label: Año
+        type: number
+
+      - name: superficieConstruida
+        label: Superficie construida (m²)
+        type: number
+
+      - name: superficieParcela
+        label: Superficie de parcela (m²)
+        type: number
+
+      - name: arquitectura
+        label: Estudio de arquitectura
+        type: string
+
+      - name: servicios
+        label: Servicios realizados
+        type: select
+        list: true
+        options:
+          multiple: true
+          values:
+            - { value: construccion, label: Construcción }
+            - { value: reforma-integral, label: Reforma integral }
+            - { value: interiorismo, label: Interiorismo }
+            - { value: gestion-licencias, label: Gestión de licencias }
+            - { value: direccion-obra, label: Dirección de obra }
+            - { value: piscina, label: Piscina }
+            - { value: paisajismo, label: Paisajismo }
+            - { value: domotica, label: Domótica }
+            - { value: promocion, label: Promoción }
+
+      - name: resumen
+        label: Resumen (tarjeta y buscadores)
+        type: object
+        required: true
+        description: Una o dos frases. Aparece en Google, así que cuenta.
+        fields:
+          - { name: es, label: Español, type: text, required: true }
+          - { name: en, label: English, type: text }
+
+      - name: entradilla
+        label: Entradilla (párrafo grande de apertura)
+        type: object
+        fields:
+          - { name: es, label: Español, type: text }
+          - { name: en, label: English, type: text }
+
+      - name: relato
+        label: Relato
+        type: object
+        description: Un elemento de la lista por párrafo.
+        fields:
+          - { name: es, label: Español, type: text, list: true }
+          - { name: en, label: English, type: text, list: true }
+
+      - name: detalles
+        label: Detalles constructivos
+        type: object
+        list: true
+        fields:
+          - name: titulo
+            label: Título
+            type: object
+            fields:
+              - { name: es, label: Español, type: string }
+              - { name: en, label: English, type: string }
+          - name: texto
+            label: Texto
+            type: object
+            fields:
+              - { name: es, label: Español, type: text }
+              - { name: en, label: English, type: text }
+
+      - name: portada
+        label: Fotografía de portada
+        type: image
+        required: true
+
+      - name: portadaAlt
+        label: Descripción de la portada
+        type: object
+        required: true
+        description: >-
+          Obligatoria. La leen los lectores de pantalla y Google. Describe
+          lo que se ve, no repitas el nombre del proyecto.
+        fields:
+          - { name: es, label: Español, type: text, required: true }
+          - { name: en, label: English, type: text }
+
+      - name: galeria
+        label: Galería
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Fotografía, type: image, required: true }
+          - name: alt
+            label: Descripción
+            type: object
+            fields:
+              - { name: es, label: Español, type: text, required: true }
+              - { name: en, label: English, type: text }
+          - name: ancha
+            label: A doble ancho
+            type: boolean
+            default: false
+            description: Ocupa las dos columnas del mosaico.
+
+      - name: documentos
+        label: Documentos (PDF)
+        type: object
+        list: true
+        fields:
+          - name: titulo
+            type: object
+            fields:
+              - { name: es, label: Español, type: string }
+              - { name: en, label: English, type: string }
+          - { name: archivo, label: Ruta del archivo, type: string }
+
+  # ==========================================================================
+  # CUADERNO
+  # ==========================================================================
+  - name: cuaderno
+    label: Cuaderno (artículos)
+    description: >-
+      Un fichero por artículo y por idioma. Para publicar la versión
+      inglesa de un artículo, crea otra entrada con idioma «English» y
+      enlaza las dos con el campo «Traducción».
+    type: collection
+    path: src/content/cuaderno
+    filename: '{fields.titulo}.md'
+    view:
+      fields: [titulo, lang, categoria, fecha, destacado, borrador]
+      sort: [fecha, titulo]
+      default:
+        sort: fecha
+        order: desc
+      primary: titulo
+    fields:
+      - name: titulo
+        label: Titular
+        type: string
+        required: true
+
+      - name: tituloSeo
+        label: Titular para Google (si el real es muy largo)
+        type: string
+        description: Máximo 55 caracteres. Se le añade « | Unero».
+
+      - name: descripcion
+        label: Descripción para Google
+        type: text
+        required: true
+        description: Entre 110 y 160 caracteres. Es lo que se lee en el resultado.
+
+      - name: lang
+        label: Idioma
+        type: select
+        required: true
+        default: es
+        options:
+          values:
+            - { value: es, label: Español }
+            - { value: en, label: English }
+
+      - name: traduccion
+        label: Traducción (el mismo artículo en el otro idioma)
+        type: reference
+        options:
+          collection: cuaderno
+          value: '{filename}'
+          label: '{fields.titulo}'
+
+      - name: fecha
+        label: Fecha de publicación
+        type: date
+        required: true
+        options: { format: yyyy-MM-dd }
+
+      - name: actualizado
+        label: Fecha de última actualización
+        type: date
+        options: { format: yyyy-MM-dd }
+
+      - name: categoria
+        label: Tema
+        type: select
+        required: true
+        options:
+          values:
+            - { value: construir-en-ibiza, label: Construir en Ibiza }
+            - { value: arquitectura, label: Arquitectura }
+            - { value: materiales, label: Materiales }
+            - { value: reformas, label: Reformas }
+            - { value: vida-mediterranea, label: Vida mediterránea }
+            - { value: ibiza, label: Ibiza }
+
+      - name: etiquetas
+        label: Etiquetas
+        type: string
+        list: true
+
+      - name: autor
+        label: Autor
+        type: string
+        default: Unero
+
+      - name: destacado
+        label: Destacar en el índice del Cuaderno
+        type: boolean
+        default: false
+
+      - name: borrador
+        label: Borrador (no se publica)
+        type: boolean
+        default: false
+
+      - name: portada
+        label: Fotografía de portada
+        type: image
+        required: true
+
+      - name: portadaAlt
+        label: Descripción de la portada
+        type: text
+        required: true
+
+      - name: portadaCredito
+        label: Pie de foto
+        type: string
+
+      - name: proyectosRelacionados
+        label: Proyectos que ilustran el artículo
+        type: reference
+        list: true
+        options:
+          collection: proyectos
+          value: '{filename}'
+          label: '{fields.titulo}'
+
+      - name: body
+        label: Artículo
+        type: rich-text
+        required: true
+
+  # ==========================================================================
+  # PROPIEDADES
+  # ==========================================================================
+  - name: propiedades
+    label: Propiedades (venta y alquiler)
+    type: collection
+    path: src/content/propiedades
+    filename: '{fields.titulo.es}.md'
+    view:
+      fields: [titulo, operacion, estado, orden]
+      primary: titulo.es
+    fields:
+      - name: titulo
+        label: Nombre
+        type: object
+        required: true
+        fields:
+          - { name: es, label: Español, type: string, required: true }
+          - { name: en, label: English, type: string }
+
+      - name: operacion
+        label: Operación
+        type: select
+        required: true
+        options:
+          values:
+            - { value: venta, label: Venta }
+            - { value: alquiler, label: Alquiler }
+
+      - name: estado
+        label: Estado
+        type: select
+        required: true
+        options:
+          values:
+            - { value: disponible, label: Disponible }
+            - { value: vendido, label: Vendida }
+            - { value: reservado, label: Reservada }
+            - { value: alquilado, label: Alquilada }
+
+      - name: orden
+        label: Orden
+        type: number
+        default: 50
+
+      - name: ubicacion
+        label: Ubicación
+        type: object
+        required: true
+        fields:
+          - { name: es, label: Español, type: string, required: true }
+          - { name: en, label: English, type: string }
+
+      - { name: dormitorios, label: Dormitorios, type: number }
+      - { name: banos, label: Baños, type: number }
+      - { name: superficie, label: Superficie (m²), type: number }
+      - { name: parcela, label: Parcela (m²), type: number }
+
+      - name: precio
+        label: Precio (texto libre)
+        type: object
+        description: 'Por ejemplo: «Consultar según temporada».'
+        fields:
+          - { name: es, label: Español, type: string }
+          - { name: en, label: English, type: string }
+
+      - name: resumen
+        label: Resumen
+        type: object
+        required: true
+        fields:
+          - { name: es, label: Español, type: text, required: true }
+          - { name: en, label: English, type: text }
+
+      - name: relato
+        label: Descripción (un elemento por párrafo)
+        type: object
+        fields:
+          - { name: es, label: Español, type: text, list: true }
+          - { name: en, label: English, type: text, list: true }
+
+      - name: caracteristicas
+        label: Características
+        type: object
+        fields:
+          - { name: es, label: Español, type: string, list: true }
+          - { name: en, label: English, type: string, list: true }
+
+      - name: servicios
+        label: Servicios incluidos
+        type: object
+        fields:
+          - { name: es, label: Español, type: string, list: true }
+          - { name: en, label: English, type: string, list: true }
+
+      - name: enlaceExterno
+        label: Enlace externo (Idealista u otro portal)
+        type: string
+
+      - name: portada
+        label: Fotografía de portada
+        type: image
+        required: true
+
+      - name: portadaAlt
+        label: Descripción de la portada
+        type: object
+        required: true
+        fields:
+          - { name: es, label: Español, type: text, required: true }
+          - { name: en, label: English, type: text }
+
+      - name: galeria
+        label: Galería
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Fotografía, type: image, required: true }
+          - name: alt
+            label: Descripción
+            type: object
+            fields:
+              - { name: es, label: Español, type: text, required: true }
+              - { name: en, label: English, type: text }
+
+  # ==========================================================================
+  # TEMAS DEL CUADERNO
+  # ==========================================================================
+  - name: categorias
+    label: Temas del Cuaderno
+    description: >-
+      Cada tema tiene su propia página. Si añades uno nuevo aquí, hay que
+      añadirlo también a la lista de opciones del campo «Tema» de los
+      artículos (eso sí requiere tocar este fichero).
+    type: collection
+    path: src/content/categorias
+    filename: '{fields.nombre.es}.md'
+    view:
+      fields: [nombre, orden]
+      primary: nombre.es
+    fields:
+      - name: nombre
+        label: Nombre
+        type: object
+        required: true
+        fields:
+          - { name: es, label: Español, type: string, required: true }
+          - { name: en, label: English, type: string }
+      - name: descripcion
+        label: Descripción
+        type: object
+        required: true
+        description: Se publica en la página del tema y en Google.
+        fields:
+          - { name: es, label: Español, type: text, required: true }
+          - { name: en, label: English, type: text }
+      - name: orden
+        label: Orden
+        type: number
+        default: 50

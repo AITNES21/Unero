@@ -1,0 +1,452 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import Faq from '../Faq.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const alternativa = ruta('proceso', es ? 'en' : 'es');
+
+const copy = es
+  ? {
+      titulo: 'Cómo trabajamos | Proceso de obra paso a paso | Unero Ibiza',
+      descripcion:
+        'Las seis fases de una obra en Ibiza contadas sin adornos: qué se decide en cada una, cuánto dura de verdad y en qué momento entra cada profesional.',
+      cejilla: 'Cómo trabajamos',
+      h1: 'De la primera visita a las llaves',
+      entradilla:
+        'Casi nadie construye dos casas en su vida. Así que explicamos el proceso completo, con sus tiempos muertos y con las decisiones que hay que tomar en cada punto.',
+      totalTitulo: 'Cuánto dura todo',
+      totalTexto:
+        'Sumando, de dos a tres años desde la primera conversación hasta poder dormir en la casa. La mayor parte de ese tiempo no es obra: es proyecto y tramitación. Si alguien te promete un año, pregúntale por la licencia.',
+      errorTitulo: 'El error más común',
+      errorTexto:
+        'Empezar por el final. Elegir el porcelánico y la grifería antes de saber cuántos metros se pueden construir, cuánto cuesta la contención del desnivel o cuándo va a haber licencia. Las decisiones que determinan si una casa es buena se toman todas al principio, y casi ninguna es visible en una fotografía.',
+      fases: [
+        {
+          t: 'Antes de que exista un plano',
+          dur: 'Unas semanas · sin coste',
+          d: 'Solo hay dos cosas que hacer: confirmar qué se puede construir en la parcela y acordar un orden de magnitud de presupuesto.',
+          puntos: [
+            'Informe técnico de viabilidad urbanística',
+            'Visita a la parcela o a la casa',
+            'Horquilla de presupuesto con sus condicionantes',
+            'Si la horquilla y las expectativas no se acercan, mejor saberlo ahora',
+          ],
+        },
+        {
+          t: 'Proyecto de arquitectura',
+          dur: '3 a 6 meses',
+          d: 'El estudio desarrolla el anteproyecto y luego el proyecto de ejecución. Aquí se define todo lo que importa: implantación, orientación, volumen, estructura, instalaciones y materiales.',
+          puntos: [
+            'Trabajamos con el arquitecto que elijas',
+            'Pedimos entrar a colaborar en esta fase, no después',
+            'Revisión constructiva antes de salir a licencia',
+            'Avisamos de plazos de suministro y de soluciones caras de ejecutar aquí',
+          ],
+        },
+        {
+          t: 'Licencia',
+          dur: '6 a 12 meses · la fase que nadie controla',
+          d: 'Se presenta el proyecto, se pagan tasas y se espera. Es tiempo administrativo: no se acorta con más honorarios ni con más prisa.',
+          puntos: [
+            'Presentar un proyecto completo para no acumular requerimientos',
+            'Según el municipio, pueden pedirse informes a otros organismos',
+            'Es el momento de cerrar el presupuesto por partidas medidas',
+            'Y de firmar el contrato, para arrancar al día siguiente de la concesión',
+          ],
+        },
+        {
+          t: 'Obra',
+          dur: '12 a 18 meses',
+          d: 'La secuencia es siempre la misma, y cada fase cierra decisiones que la siguiente ya no puede cambiar sin romper.',
+          puntos: [
+            'Movimiento de tierras y cimentación: la fase de las sorpresas',
+            'Estructura: la casa aparece de golpe y se ve a tamaño real',
+            'Cerramientos y cubierta: aquí se decide el comportamiento térmico',
+            'Instalaciones: todo antes de cerrar techos y tabiques',
+            'Acabados: la fase más larga y la que más decisiones exige',
+            'Exteriores: piscina, pavimentos, jardín e iluminación',
+          ],
+        },
+        {
+          t: 'Interiorismo',
+          dur: '2 a 4 meses · solapable',
+          d: 'Mobiliario, textiles, iluminación decorativa y vegetación. Si se planifica a la vez que los acabados, la casa se entrega terminada.',
+          puntos: [
+            'Selección de materiales con muestras físicas',
+            'Carpintería a medida medida sobre el hueco real',
+            'Si se deja para después, hay que volver a entrar con operarios',
+          ],
+        },
+        {
+          t: 'Entrega',
+          dur: 'Y después, la garantía',
+          d: 'Recorrido conjunto, repaso de remates y documentación final. Y a partir de ahí, las garantías legales.',
+          puntos: [
+            'Repaso conjunto de remates',
+            'Documentación as-built, manuales y certificados',
+            'Un año en acabados, tres en elementos constructivos, diez en estructura',
+            'Atención de incidencias durante todo el periodo de garantía',
+          ],
+        },
+      ],
+      faq: [
+        {
+          pregunta: '¿Cuándo hay que empezar a pagar?',
+          respuesta:
+            '<p>El plan de pagos va ligado a obra ejecutada y certificada mensualmente, no a fechas del calendario. Pagar por avance real es tu principal protección. La visita inicial y la horquilla de presupuesto no tienen coste.</p>',
+        },
+        {
+          pregunta: '¿Quién dirige la obra?',
+          respuesta:
+            '<p>Hay dirección facultativa —arquitecto y aparejador— que representa al cliente, y nuestra jefatura de obra, que ejecuta. Nuestro jefe de obra está en la parcela y es la misma persona que te atendió el primer día. Es la pregunta que mejor predice cómo va a acabar un trabajo, y casi nadie la hace.</p>',
+        },
+        {
+          pregunta: '¿Qué pasa si quiero cambiar algo a mitad de obra?',
+          respuesta:
+            '<p>Se puede, con dos condiciones: que se valore por escrito antes de ejecutarse, con su repercusión en precio y en plazo, y que llegue a tiempo. Un cambio de distribución en fase de estructura es viable; el mismo cambio con los acabados puestos es una obra nueva.</p>',
+        },
+        {
+          pregunta: '¿Puedo vivir en la casa durante una reforma?',
+          respuesta:
+            '<p>En una reforma integral, no. Por fases a veces sí, pero sale más caro y más lento: hay que proteger, limpiar y volver a montar medios en cada fase.</p>',
+        },
+      ],
+    }
+  : {
+      titulo: 'How we work | The build process step by step | Unero Ibiza',
+      descripcion:
+        'The six stages of a build in Ibiza told plainly: what is decided in each one, how long it really takes, and when each professional comes in.',
+      cejilla: 'How we work',
+      h1: 'From the first visit to the keys',
+      entradilla:
+        'Almost nobody builds two houses in their life. So here is the whole process, with its waiting time and the decisions that have to be taken at each point.',
+      totalTitulo: 'How long it all takes',
+      totalTexto:
+        'Added up, two to three years from the first conversation to sleeping in the house. Most of that time is not construction: it is design and paperwork. If someone promises you a year, ask them about the permit.',
+      errorTitulo: 'The most common mistake',
+      errorTexto:
+        'Starting at the end. Choosing the tiles and the taps before knowing how many square metres can be built, what the retaining structure costs, or when the permit will arrive. The decisions that determine whether a house is good are all taken at the beginning, and almost none of them is visible in a photograph.',
+      fases: [
+        {
+          t: 'Before a drawing exists',
+          dur: 'A few weeks · no cost',
+          d: 'There are only two things to do: confirm what can be built on the plot and agree an order of magnitude for the budget.',
+          puntos: [
+            'Technical planning feasibility report',
+            'Visit to the plot or the house',
+            'Budget range with its constraints',
+            'If the range and the expectations are far apart, better to know now',
+          ],
+        },
+        {
+          t: 'Architectural design',
+          dur: '3 to 6 months',
+          d: 'The studio develops the concept and then the construction design. Everything that matters is defined here: siting, orientation, volume, structure, services and materials.',
+          puntos: [
+            'We work with whichever architect you choose',
+            'We ask to collaborate at this stage, not later',
+            'Buildability review before the permit application',
+            'We flag lead times and details that are expensive to execute here',
+          ],
+        },
+        {
+          t: 'Permit',
+          dur: '6 to 12 months · the stage nobody controls',
+          d: 'The design is submitted, fees are paid and you wait. It is administrative time: it does not shorten with higher fees or more urgency.',
+          puntos: [
+            'Submit a complete application to avoid accumulating queries',
+            'Depending on the municipality, other bodies may be consulted',
+            'This is the moment to finalise the quote by measured items',
+            'And to sign the contract, so work starts the day after approval',
+          ],
+        },
+        {
+          t: 'Construction',
+          dur: '12 to 18 months',
+          d: 'The sequence is always the same, and each stage closes decisions the next one can no longer change without breaking things.',
+          puntos: [
+            'Earthworks and foundations: the stage of surprises',
+            'Structure: the house appears at once and is seen at full size',
+            'Envelope and roof: thermal performance is decided here',
+            'Services: everything before ceilings and partitions are closed',
+            'Finishes: the longest stage and the one demanding most decisions',
+            'Outdoor areas: pool, paving, garden and lighting',
+          ],
+        },
+        {
+          t: 'Interior design',
+          dur: '2 to 4 months · overlapping',
+          d: 'Furniture, textiles, decorative lighting and planting. Planned alongside the finishes, the house is handed over complete.',
+          puntos: [
+            'Material selection with physical samples',
+            'Bespoke joinery measured against the real opening',
+            'Left until later, trades have to come back in',
+          ],
+        },
+        {
+          t: 'Handover',
+          dur: 'And then, the guarantee',
+          d: 'Joint walk-through, review of finishing and final documentation. And from there, the statutory guarantees.',
+          puntos: [
+            'Joint review of the finishing',
+            'As-built documentation, manuals and certificates',
+            'One year on finishes, three on building elements, ten on structure',
+            'Defect handling throughout the guarantee period',
+          ],
+        },
+      ],
+      faq: [
+        {
+          pregunta: 'When do payments start?',
+          respuesta:
+            '<p>The payment schedule follows work executed and certified monthly, not calendar dates. Paying against real progress is your main protection. The initial visit and the budget range are free of charge.</p>',
+        },
+        {
+          pregunta: 'Who manages the build?',
+          respuesta:
+            '<p>There is a professional site supervision team — architect and quantity surveyor — representing the client, and our own site management, which executes. Our site manager is on the plot and is the same person who dealt with you on day one. It is the question that best predicts how a job will end, and almost nobody asks it.</p>',
+        },
+        {
+          pregunta: 'What if I want to change something mid-build?',
+          respuesta:
+            '<p>You can, on two conditions: that it is priced in writing before being carried out, with its effect on cost and programme, and that it arrives in time. A layout change during the structural stage is feasible; the same change with the finishes in place is a new build.</p>',
+        },
+        {
+          pregunta: 'Can I live in the house during a renovation?',
+          respuesta:
+            '<p>In a full renovation, no. In phases sometimes yes, but it works out more expensive and slower: you have to protect, clean and set up again for each phase.</p>',
+        },
+      ],
+    };
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: copy.cejilla, href: ruta('proceso', lang) },
+  ]),
+  {
+    '@type': 'HowTo',
+    name: copy.h1,
+    description: copy.descripcion,
+    step: copy.fases.map((f, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: f.t,
+      text: f.d,
+    })),
+  },
+  schema.faq(
+    copy.faq.map((p) => ({
+      pregunta: p.pregunta,
+      respuesta: p.respuesta.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    }))
+  ),
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas items={[{ nombre: copy.cejilla }]} lang={lang} />
+
+      <header class="proc-cabecera">
+        <p class="cejilla">{copy.cejilla}</p>
+        <h1 class="display-xl proc-cabecera__titulo">{copy.h1}</h1>
+        <p class="proc-cabecera__entradilla">{copy.entradilla}</p>
+      </header>
+
+      <!-- Las fases como una línea de tiempo vertical: el número y el
+           filete marcan el avance sin necesidad de ilustraciones. -->
+      <ol class="fases">
+        {
+          copy.fases.map((f, i) => (
+            <li class="fase revelar">
+              <div class="fase__marca">
+                <span class="fase__num">{String(i + 1).padStart(2, '0')}</span>
+              </div>
+              <div class="fase__cuerpo">
+                <p class="fase__dur">{f.dur}</p>
+                <h2 class="display-m fase__titulo">{f.t}</h2>
+                <p class="fase__desc">{f.d}</p>
+                <ul class="fase__puntos">
+                  {f.puntos.map((p) => (
+                    <li>
+                      <Icono nombre="comprobado" tamano={14} />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="seccion tema-oscuro">
+    <div class="envoltura">
+      <div class="proc-doble">
+        <div>
+          <h2 class="display-m">{copy.totalTitulo}</h2>
+          <p class="proc-doble__texto">{copy.totalTexto}</p>
+        </div>
+        <div>
+          <h2 class="display-m">{copy.errorTitulo}</h2>
+          <p class="proc-doble__texto">{copy.errorTexto}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="envoltura">
+      <Faq
+        preguntas={copy.faq}
+        lang={lang}
+        titulo={es ? 'Preguntas frecuentes' : 'Frequently asked questions'}
+      />
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  .proc-cabecera {
+    margin-top: var(--s-6);
+    max-width: 52rem;
+  }
+  .proc-cabecera__titulo {
+    margin-top: var(--s-4);
+  }
+  .proc-cabecera__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 56ch;
+    text-wrap: pretty;
+  }
+
+  .fases {
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .fase {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--s-4);
+    padding-bottom: clamp(2.5rem, 5vw, 4rem);
+  }
+  @media (min-width: 48rem) {
+    .fase {
+      gap: var(--s-6);
+    }
+  }
+
+  /* Columna de la marca: número y línea continua que une las fases. */
+  .fase__marca {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-items: center;
+    gap: var(--s-3);
+  }
+  .fase__num {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: var(--t-menudo);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    color: var(--acento);
+    border: 1px solid var(--acento);
+  }
+  .fase:not(:last-child) .fase__marca::after {
+    content: '';
+    width: 1px;
+    height: 100%;
+    background-color: var(--filete);
+  }
+
+  .fase__dur {
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .fase__titulo {
+    margin-top: 0.5rem;
+  }
+  .fase__desc {
+    margin-top: var(--s-4);
+    max-width: 58ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .fase__puntos {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 56rem) {
+    .fase__puntos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.45rem var(--s-5);
+    }
+  }
+  .fase__puntos li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.5;
+  }
+  .fase__puntos :global(svg) {
+    flex: none;
+    color: var(--acento);
+    translate: 0 0.15rem;
+  }
+
+  .proc-doble {
+    display: grid;
+    gap: var(--s-7);
+  }
+  @media (min-width: 56rem) {
+    .proc-doble {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-8);
+    }
+  }
+  .proc-doble__texto {
+    margin-top: var(--s-4);
+    max-width: 56ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+</style>

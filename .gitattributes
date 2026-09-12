@@ -1,0 +1,15 @@
+# Normaliza los finales de línea: el repositorio guarda LF y cada sistema
+# operativo trabaja con lo que le corresponda. Evita diferencias falsas
+# cuando se edita desde Windows y desde el CMS.
+* text=auto eol=lf
+
+# Binarios: no tocar nunca.
+*.webp binary
+*.avif binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.woff2 binary
+*.mp4 binary
+*.pdf binary
+*.ico binary

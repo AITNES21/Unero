@@ -30,6 +30,12 @@ const soloPliegue = argumentos.includes('--pliegue');
 /* Modo barrido: recorre muchas páginas comprobando desbordes, imágenes
    roto y errores de consola, sin guardar las capturas. */
 const sinCapturas = argumentos.includes('--sin-capturas');
+/* Solo desborde: no recorre la página ni espera imágenes. El
+   desbordamiento horizontal lo determina el CSS —las cajas reservan su
+   sitio con aspect-ratio— así que no hace falta cargar las fotografías.
+   Además evita que Chromium se quede sin memoria en anchos pequeños,
+   donde las páginas miden quince mil píxeles de alto. */
+const soloDesborde = argumentos.includes('--solo-desborde');
 const filtroVista = argumentos.find((a) => a.startsWith('--vista='))?.split('=')[1];
 const rutas = argumentos.filter((a) => !a.startsWith('--'));
 if (!rutas.length) rutas.push('/');
@@ -83,19 +89,16 @@ try {
 
       // Recorre la página para que las imágenes diferidas se resuelvan
       // y los bloques con revelado entren en pantalla de verdad.
-      // En modo barrido basta con un salto al final: solo interesa que
-      // las imágenes se pidan, no que la animación se vea.
+      // El recorrido va por pasos y no de un salto al final: saltar
+      // dispara de golpe todas las imágenes diferidas de una página
+      // larga y Chromium se queda sin memoria (probado: se cae).
+      if (!soloDesborde) {
       await pagina.evaluate(async (rapido) => {
-        if (rapido) {
-          window.scrollTo(0, document.body.scrollHeight);
-          await new Promise((r) => setTimeout(r, 250));
-          window.scrollTo(0, 0);
-          return;
-        }
+        const espera = rapido ? 45 : 90;
         const paso = window.innerHeight * 0.8;
         for (let y = 0; y < document.body.scrollHeight; y += paso) {
           window.scrollTo(0, y);
-          await new Promise((r) => setTimeout(r, 90));
+          await new Promise((r) => setTimeout(r, espera));
         }
         window.scrollTo(0, document.body.scrollHeight);
         await new Promise((r) => setTimeout(r, 350));
@@ -114,12 +117,13 @@ try {
           );
         })
         .catch(() => {});
+      }
 
       await pagina.waitForTimeout(sinCapturas ? 120 : 300);
 
       // Aviso de imágenes que no han cargado: distingue un fallo real
       // de un simple diferido no disparado.
-      const roturas = await pagina.evaluate(() =>
+      const roturas = soloDesborde ? [] : await pagina.evaluate(() =>
         Array.from(document.images)
           // La imagen del lightbox no tiene src hasta que se abre.
           .filter((i) => !i.hasAttribute('data-imagen'))
@@ -153,7 +157,7 @@ try {
         );
       }
 
-      if (sinCapturas) {
+      if (sinCapturas || soloDesborde) {
         console.log('·', vista.nombre, ruta);
         continue;
       }

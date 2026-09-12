@@ -72,6 +72,19 @@ for (const fichero of htmls) {
   const url = aUrl(fichero);
   const bytes = (await stat(fichero)).size;
 
+  /*
+    Ficheros de verificación de propiedad (Google Search Console, Bing).
+    No son páginas: son una línea de texto con extensión .html que el
+    buscador comprueba tal cual. No deben llevar title, canonical ni h1,
+    así que se saltan las comprobaciones o bloquearían el despliegue.
+  */
+  if (/^\/(google[0-9a-f]{16}\.html|BingSiteAuth\.xml|yandex_[0-9a-f]+\.html)$/.test(url)) {
+    if (html.length > 500) {
+      problema(`${url}: fichero de verificación inesperadamente grande`);
+    }
+    continue;
+  }
+
   // Las páginas puente de la web v1 solo necesitan su redirección.
   const esPuente = /http-equiv="refresh"/.test(html);
   if (esPuente) {

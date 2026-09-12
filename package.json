@@ -16,7 +16,9 @@
     "capturas": "node scripts/capturas.mjs",
     "iconos": "python scripts/generar-iconos-og.py",
     "frontmatter": "python scripts/normalizar-frontmatter.py",
-    "revisar": "npm run build && npm run auditar && npm run accesibilidad && npm run medir"
+    "revisar": "npm run build && npm run auditar && npm run accesibilidad && npm run medir && npm run sin-js",
+    "nitidez": "node scripts/nitidez.mjs",
+    "sin-js": "node scripts/sin-js.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.19",

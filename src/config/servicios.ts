@@ -3,14 +3,17 @@ import type { ClaveRuta } from './site';
 
 import imgConstruccion from '../assets/site/foto8.webp';
 import imgVillas from '../assets/proyectos/ses-torres-ii/foto10.webp';
-import imgReformas from '../assets/proyectos/talamanca/foto13.webp';
-import imgInteriorismo from '../assets/proyectos/interiorismo/salon.webp';
+// can-flowers/foto1 mide 1600x1066; talamanca/foto13 solo 640x427.
+import imgReformas from '../assets/proyectos/can-flowers/foto1.webp';
+// La cocina de Ses Torres II mide 1920x1358; salon.webp solo 865x648
+// y este hero se pinta a sangre.
+import imgInteriorismo from '../assets/proyectos/ses-torres-ii/foto1.webp';
 import imgPromociones from '../assets/site/foto7.webp';
 
 import imgConstruccionSec from '../assets/proyectos/ses-torres-ii/foto12.webp';
 import imgVillasSec from '../assets/proyectos/can-cana/foto1.webp';
-import imgReformasSec from '../assets/proyectos/can-flowers/foto1.webp';
-import imgInteriorismoSec from '../assets/proyectos/interiorismo/cocina.webp';
+import imgReformasSec from '../assets/proyectos/talamanca/foto13.webp';
+import imgInteriorismoSec from '../assets/proyectos/interiorismo/salon.webp';
 import imgPromocionesSec from '../assets/site/foto1.webp';
 
 interface Bloque {
@@ -426,12 +429,12 @@ export const SERVICIOS: Servicio[] = [
     imagen: imgReformas,
     imagenSecundaria: imgReformasSec,
     imagenAlt: {
-      es: 'Interior diáfano recién entregado, vacío, con carpintería corrida abierta a la terraza.',
-      en: 'Newly handed-over open-plan interior, empty, with continuous joinery opening onto the terrace.',
-    },
-    imagenSecundariaAlt: {
       es: 'Casa ibicenca de volúmenes encalados al anochecer, con lámina de agua y ciprés iluminado.',
       en: 'Whitewashed Ibizan house at nightfall, with a sheet of water and a floodlit cypress.',
+    },
+    imagenSecundariaAlt: {
+      es: 'Interior diáfano recién entregado, vacío, con carpintería corrida abierta a la terraza.',
+      en: 'Newly handed-over open-plan interior, empty, with continuous joinery opening onto the terrace.',
     },
     es: {
       titulo: 'Reformas integrales en Ibiza | Reforma de villas | Unero',
@@ -606,12 +609,12 @@ export const SERVICIOS: Servicio[] = [
     imagen: imgInteriorismo,
     imagenSecundaria: imgInteriorismoSec,
     imagenAlt: {
-      es: 'Salón con sofás blancos y terraza abierta al paisaje, con luz natural lateral.',
-      en: 'Living room with white sofas and a terrace open to the landscape, with lateral daylight.',
+      es: 'Isla de cocina en piedra oscura de gran formato con frentes de roble y el salón al fondo.',
+      en: 'Kitchen island in large-format dark stone with oak fronts and the living room beyond.',
     },
     imagenSecundariaAlt: {
-      es: 'Cocina blanca con isla, frentes de madera y ventanal hacia el exterior.',
-      en: 'White kitchen with an island, timber fronts and a window to the outside.',
+      es: 'Salón con sofás blancos y terraza abierta al paisaje, con luz natural lateral.',
+      en: 'Living room with white sofas and a terrace open to the landscape, with lateral daylight.',
     },
     es: {
       titulo: 'Interiorismo y diseño de interiores en Ibiza | Unero',

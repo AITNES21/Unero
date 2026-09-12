@@ -20,13 +20,25 @@ interface Props {
 
 const { fotos, lang, titulo } = Astro.props;
 const t = useT(lang);
+
+/*
+  «Ancha» se ignora si la fotografía no tiene píxeles para ocupar dos
+  columnas. Vale más una foto nítida a media caja que una borrosa a
+  caja completa, y así un descuido al marcar la casilla en el CMS no
+  puede empeorar la página.
+*/
+const UMBRAL_ANCHA = 1200;
+const celdas = fotos.map((f) => ({
+  ...f,
+  ancha: f.ancha === true && f.src.width >= UMBRAL_ANCHA,
+}));
 ---
 
 {
   fotos.length > 0 && (
     <div class="galeria" data-galeria>
       <ul class="galeria__mosaico">
-        {fotos.map((foto, i) => (
+        {celdas.map((foto, i) => (
           <li class:list={['galeria__celda', foto.ancha && 'galeria__celda--ancha']}>
             <button
               type="button"

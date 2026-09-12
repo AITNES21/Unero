@@ -28,6 +28,14 @@ interface Props {
    * de pantalla.
    */
   nivelTitulo?: 2 | 3;
+  /**
+   * Ancho real del hueco donde se pinta la tarjeta. Determina el
+   * atributo `sizes`, que es lo que usa el navegador para elegir de qué
+   * tamaño se descarga la fotografía. Si aquí se miente, el navegador
+   * se queda corto y amplía: la imagen se ve borrosa aunque el fichero
+   * grande esté generado y disponible.
+   */
+  hueco?: 'completo' | 'mitad' | 'tercio';
 }
 
 const {
@@ -44,11 +52,30 @@ const {
   prioridad = false,
   formato = '4-5',
   nivelTitulo = 3,
+  hueco = 'tercio',
 } = Astro.props;
 
 const t = useT(lang);
 const href = rutaProyecto(slug, lang);
 const Titulo = `h${nivelTitulo}` as 'h2' | 'h3';
+
+/* El contenedor tiene un máximo de 96rem con gutters, así que en
+   pantallas anchas el ancho útil se estabiliza en torno a 88rem. */
+const MEDIDAS: Record<'completo' | 'mitad' | 'tercio', { sizes: string; widths: number[] }> = {
+  completo: {
+    sizes: '(min-width: 100rem) 88rem, (min-width: 48rem) 90vw, 92vw',
+    widths: [640, 960, 1280, 1600, 1920],
+  },
+  mitad: {
+    sizes: '(min-width: 100rem) 44rem, (min-width: 48rem) 46vw, 92vw',
+    widths: [480, 720, 960, 1280],
+  },
+  tercio: {
+    sizes: '(min-width: 75rem) 30vw, (min-width: 48rem) 46vw, 92vw',
+    widths: [420, 640, 900, 1200],
+  },
+};
+const medida = MEDIDAS[hueco];
 ---
 
 <article class="tarjeta">
@@ -57,8 +84,8 @@ const Titulo = `h${nivelTitulo}` as 'h2' | 'h3';
       <Image
         src={portada}
         alt={portadaAlt}
-        widths={[420, 640, 900, 1200]}
-        sizes="(min-width: 75rem) 32vw, (min-width: 48rem) 46vw, 92vw"
+        widths={medida.widths}
+        sizes={medida.sizes}
         loading={prioridad ? 'eager' : 'lazy'}
         decoding={prioridad ? 'sync' : 'async'}
         {...(prioridad ? { fetchpriority: 'high' as const } : {})}

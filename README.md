@@ -28,6 +28,8 @@ npm run preview  # sirve dist/
 | `npm run accesibilidad` | axe-core (WCAG 2.1 AA) + pruebas de teclado del menú, la galería y el formulario |
 | `npm run medir` | Core Web Vitals y peso por página con red y CPU limitadas |
 | `npm run capturas` | Capturas en móvil, tableta y escritorio en `.capturas/` |
+| `npm run nitidez` | Detecta fotografías que el navegador tiene que ampliar |
+| `npm run sin-js` | Verifica que el contenido siga accesible sin JavaScript |
 | `npm run revisar` | Los cuatro anteriores, en orden |
 | `npm run frontmatter` | Entrecomilla los valores de YAML que rompen el build (ver más abajo) |
 | `npm run iconos` | Regenera favicons e imágenes Open Graph |
@@ -160,6 +162,24 @@ como carpeta y colisionaría con las rutas reales.
 **El filtro del catálogo solo oculta.** Todas las fichas están en el HTML
 desde el principio, así que Google indexa el catálogo completo y sin
 JavaScript se ven todos los proyectos.
+
+**Ninguna fotografía se muestra por encima de su tamaño real.** Es la
+regla que más afecta a cómo se ve la web, y se aplica en tres sitios:
+
+- Una ficha de proyecto usa portada **a sangre solo si el original mide
+  1400 px o más**. Por debajo, la fotografía se presenta como lámina
+  centrada limitada a su ancho real, con la entradilla al lado
+  (`heroASangre` en `Proyecto.astro`). Ocupa menos, pero se ve nítida.
+- En la galería, `ancha` se ignora si el original no llega a 1200 px:
+  vale más una foto nítida a media caja que una borrosa a caja completa.
+- El atributo `sizes` de las tarjetas declara el hueco **real** en el que
+  se pintan (`hueco` en `TarjetaProyecto.astro`). Es el error más
+  silencioso que existe con imágenes responsive: si `sizes` miente, el
+  navegador descarga un fichero pequeño y lo amplía, aunque el grande
+  esté generado y disponible.
+
+`npm run nitidez` mide esto y lista lo que se está ampliando. Los tres
+umbrales dejan de aplicar solos en cuanto lleguen fotografías mayores.
 
 ### Lo que se decidió no hacer
 

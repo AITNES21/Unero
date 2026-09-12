@@ -99,6 +99,21 @@ Esta es la carencia más seria, y ninguna decisión de diseño la compensa.
 Hay **95 fotografías** en el archivo, pero solo dos conjuntos tienen
 resolución para ocupar una pantalla completa.
 
+> **Medido, no estimado.** `npm run nitidez` compara, para cada
+> fotografía de cada página, los píxeles que trae el fichero con los que
+> necesita el hueco donde se pinta. Con las fotografías actuales quedan
+> **3 casos** de ampliación y ninguno pasa de 1,41×, que es
+> imperceptible. Se ha llegado ahí limitando el tamaño al que se muestran
+> las fotos pequeñas, no mejorándolas: **una imagen de 640 px no se puede
+> convertir en una de 1920 px.** Ampliarla por software solo inventa
+> píxeles, y en fotografía de obra eso significa inventar acabados.
+>
+> El precio de esa limitación es visible: Talamanca, Can Cana y Vista
+> Alegre **no pueden llevar portada a pantalla completa**. Se presentan
+> como lámina centrada, que se ve bien pero ocupa menos y tiene menos
+> fuerza. En cuanto llegue el reportaje nuevo, esas fichas pasan solas a
+> portada a sangre sin tocar código.
+
 ### Estado del archivo
 
 | Conjunto | Fotos | Resolución | Sirve para |
@@ -108,10 +123,10 @@ resolución para ocupar una pantalla completa.
 | Marbella | 8 | 1600×1066 | Ficha y galería |
 | Can Flowers | 11 | 1600×1066 a 1080×700 | Ficha y galería |
 | Boadilla | 9 | 1600×1200 | Ficha y galería |
-| Can Cana | 11 | 865×648 | Solo tarjetas pequeñas |
-| Vista Alegre | 6 | 865×648 | Solo tarjetas pequeñas |
-| Alina | 11 | 768×1024 (una a 507×322) | Solo tarjetas pequeñas |
-| **Talamanca** | 7 | **640×427** | Apenas llega a miniatura |
+| Can Cana | 11 | 865×648 | Ficha en lámina, no a sangre |
+| Vista Alegre | 6 | 865×648 | Ficha en lámina, no a sangre |
+| Alina | 11 | 768×1024 (una a 507×322) | Ficha en lámina, no a sangre |
+| **Talamanca** | 7 | **640×427** | Lámina pequeña. El más limitado. |
 
 Can Cana es, por composición, uno de los proyectos más atractivos que
 tenéis —el patio del olivo con el óculo es una imagen excelente— y está

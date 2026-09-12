@@ -38,10 +38,13 @@ detalles:
     texto:
       es: Cornisas y huecos previstos en la fase de tabiquería, no añadidos al final. Permite techos sin plafones y luz indirecta en todas las estancias.
       en: Coves and recesses planned during the partitioning stage rather than added at the end. It allows ceilings with no fittings and indirect light in every room.
-portada: ../../assets/proyectos/alina/foto1.webp
+# La portada era foto1 (507x322), el fichero más pequeño del archivo:
+# a pantalla completa el navegador lo ampliaba casi tres veces. Se usa
+# foto7 (1024x768) y la fachada se conserva en la galería.
+portada: ../../assets/proyectos/alina/foto7.webp
 portadaAlt:
-  es: Fachada de la vivienda Alina en Ibiza, con cuerpo de piedra de despiece horizontal y voladizos blancos que dan sombra a los huecos.
-  en: Façade of the Alina house in Ibiza, with a horizontally coursed stone volume and white overhangs shading the openings.
+  es: Salón de la vivienda Alina con sofá modular claro, cornisa perimetral iluminada en el techo y frente acristalado al jardín.
+  en: Living room of the Alina house with a pale modular sofa, an illuminated perimeter cove and a glazed frontage onto the garden.
 galeria:
   - src: ../../assets/proyectos/alina/foto5.webp
     alt:
@@ -51,10 +54,10 @@ galeria:
     alt:
       es: Pasillo con cornisa de luz oculta que lava el techo y ventanal al fondo abierto a la terraza.
       en: Corridor with a concealed cove washing the ceiling and a window at the far end opening onto the terrace.
-  - src: ../../assets/proyectos/alina/foto7.webp
+  - src: ../../assets/proyectos/alina/foto1.webp
     alt:
-      es: Salón con sofá modular claro, techo con cornisa perimetral iluminada y frente acristalado al jardín.
-      en: Living room with a pale modular sofa, an illuminated perimeter cove and a glazed frontage onto the garden.
+      es: Fachada de la vivienda Alina, con cuerpo de piedra de despiece horizontal y voladizos blancos que dan sombra a los huecos.
+      en: Façade of the Alina house, with a horizontally coursed stone volume and white overhangs shading the openings.
     ancha: true
   - src: ../../assets/proyectos/alina/foto6.webp
     alt:

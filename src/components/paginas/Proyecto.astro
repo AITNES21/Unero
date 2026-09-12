@@ -29,6 +29,20 @@ const d = proyecto.data;
 
 const { anterior, siguiente } = await vecinosDeProyecto(proyecto.id);
 
+/*
+  Portada a sangre solo si la fotografía tiene píxeles para sostenerla.
+  Por debajo de 1400 px de ancho, un hero a pantalla completa obliga al
+  navegador a ampliar y se ve borroso. En esos casos la imagen se
+  presenta como lámina centrada, limitada a su tamaño real: ocupa menos
+  pero se ve nítida, que es lo que interesa cuando lo que se vende es
+  el cuidado en el acabado.
+
+  El umbral desaparece solo en cuanto llegue el reportaje nuevo: cada
+  ficha pasa a hero a sangre sin tocar una línea de código.
+*/
+const portadaAncho = d.portada.width;
+const heroASangre = portadaAncho >= 1400;
+
 const titulo = d.titulo;
 const resumen = bi(d.resumen, lang) ?? '';
 const entradilla = bi(d.entradilla, lang);
@@ -101,27 +115,61 @@ const jsonLd = schema.grafo([
 >
   <!-- ===================== Portada del proyecto ==================== -->
   <article>
-    <header class="ficha-hero">
-      <div class="ficha-hero__medio">
-        <Image
-          src={d.portada}
-          alt={portadaAlt}
-          widths={[640, 960, 1280, 1600, 1920]}
-          sizes="100vw"
-          loading="eager"
-          decoding="sync"
-          fetchpriority="high"
-        />
-      </div>
-      <div class="envoltura ficha-hero__contenido">
-        <p class="cejilla ficha-hero__cejilla">
-          {etiquetaTipo(d.tipo, lang)}
-          {ubicacion && <> · {ubicacion}</>}
-          {d.estado && <> · {etiquetaEstado(d.estado, lang)}</>}
-        </p>
-        <h1 class="display-xl ficha-hero__titulo">{titulo}</h1>
-      </div>
-    </header>
+    {
+      heroASangre ? (
+        <header class="ficha-hero">
+          <div class="ficha-hero__medio">
+            <Image
+              src={d.portada}
+              alt={portadaAlt}
+              widths={[640, 960, 1280, 1600, 1920]}
+              sizes="100vw"
+              loading="eager"
+              decoding="sync"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="envoltura ficha-hero__contenido">
+            <p class="cejilla ficha-hero__cejilla">
+              {etiquetaTipo(d.tipo, lang)}
+              {ubicacion && <> · {ubicacion}</>}
+              {d.estado && <> · {etiquetaEstado(d.estado, lang)}</>}
+            </p>
+            <h1 class="display-xl ficha-hero__titulo">{titulo}</h1>
+          </div>
+        </header>
+      ) : (
+        <header class="ficha-lamina">
+          <div class="envoltura">
+            <p class="cejilla">
+              {etiquetaTipo(d.tipo, lang)}
+              {ubicacion && <> · {ubicacion}</>}
+              {d.estado && <> · {etiquetaEstado(d.estado, lang)}</>}
+            </p>
+            <h1 class="display-xl ficha-lamina__titulo">{titulo}</h1>
+            <div class="ficha-lamina__fila">
+              <div
+                class="ficha-lamina__medio"
+                style={`--ancho-real:${portadaAncho}px`}
+              >
+                <Image
+                  src={d.portada}
+                  alt={portadaAlt}
+                  widths={[480, 720, portadaAncho]}
+                  sizes={`(min-width: ${portadaAncho}px) ${portadaAncho}px, 100vw`}
+                  loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
+                />
+              </div>
+              {entradilla && (
+                <p class="ficha-lamina__entradilla display-s">{entradilla}</p>
+              )}
+            </div>
+          </div>
+        </header>
+      )
+    }
 
     <div class="envoltura">
       <div class="ficha-migas">
@@ -134,7 +182,9 @@ const jsonLd = schema.grafo([
       <!-- ====================== Relato + ficha ===================== -->
       <div class="ficha-cuerpo">
         <div class="ficha-relato">
-          {entradilla && <p class="ficha-entradilla display-s">{entradilla}</p>}
+          {entradilla && heroASangre && (
+            <p class="ficha-entradilla display-s">{entradilla}</p>
+          )}
           <div class="prosa ficha-prosa">
             {relato.map((p) => <p>{p}</p>)}
           </div>
@@ -315,6 +365,43 @@ const jsonLd = schema.grafo([
     margin-top: var(--s-3);
   }
 
+  /* ---- Portada como lámina (fotografías de origen pequeño) ---- */
+  .ficha-lamina {
+    padding-top: calc(var(--alto-cabecera) + var(--s-7));
+    padding-bottom: var(--s-5);
+  }
+  .ficha-lamina__titulo {
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-6);
+  }
+  /* La lámina no llena el ancho de la página, así que el hueco de al
+     lado se ocupa con la entradilla en lugar de dejarlo vacío. */
+  .ficha-lamina__fila {
+    display: grid;
+    gap: var(--s-6);
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .ficha-lamina__fila {
+      grid-template-columns: minmax(0, auto) minmax(16rem, 1fr);
+      gap: var(--s-8);
+    }
+  }
+  .ficha-lamina__medio {
+    /* Nunca por encima de su tamaño real: es lo que evita el ampliado. */
+    max-width: min(100%, var(--ancho-real));
+    background-color: var(--piedra-tenue);
+  }
+  .ficha-lamina__medio :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  .ficha-lamina__entradilla {
+    max-width: 34ch;
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+
   .ficha-migas {
     padding-top: var(--s-5);
   }
@@ -323,7 +410,7 @@ const jsonLd = schema.grafo([
   .ficha-cuerpo {
     display: grid;
     gap: var(--s-7);
-    padding-top: clamp(2.5rem, 5vw, 4.5rem);
+    padding-top: clamp(2rem, 4vw, 3.5rem);
   }
   @media (min-width: 62rem) {
     .ficha-cuerpo {

@@ -3,7 +3,9 @@ import { Image } from 'astro:assets';
 import Icono from './Icono.astro';
 import { site, ruta, type Idioma } from '../config/site';
 import { useT } from '../i18n/ui';
-import fondoPorDefecto from '../assets/proyectos/can-flowers/foto3.webp';
+// 1920x1080. La anterior (can-flowers/foto3) medía 1080 y se
+// ampliaba en pantallas anchas.
+import fondoPorDefecto from '../assets/proyectos/cas-mut/foto1.webp';
 
 interface Props {
   lang: Idioma;
@@ -40,7 +42,7 @@ const urlWa = `https://wa.me/${site.whatsapp.replace(/\D/g, '')}?text=${mensajeW
         <Image
           src={fondoPorDefecto}
           alt=""
-          widths={[768, 1280, 1600]}
+          widths={[768, 1280, 1600, 1920]}
           sizes="100vw"
           loading="lazy"
           decoding="async"

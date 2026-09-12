@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Cuaderno from '../../../../components/paginas/Cuaderno.astro';
+import { categoriasConContenido } from '../../../../lib/contenido';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const temas = await categoriasConContenido('en');
+  return temas.map((tema) => ({ params: { tema: tema.id } }));
+};
+
+const { tema } = Astro.params;
+---
+
+<Cuaderno lang="en" categoria={tema} />

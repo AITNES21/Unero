@@ -1,0 +1,784 @@
+---
+import Logo from './Logo.astro';
+import Icono from './Icono.astro';
+import { ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+  /** Ruta de esta página en el otro idioma. */
+  alternativa?: string | null;
+  /**
+   * La cabecera arranca superpuesta sobre una imagen a sangre y se vuelve
+   * opaca al desplazarse. Solo en páginas con hero fotográfico.
+   */
+  sobreHero?: boolean;
+}
+
+const { lang, alternativa = null, sobreHero = false } = Astro.props;
+const t = useT(lang);
+const aqui = Astro.url.pathname;
+const otroIdioma: Idioma = lang === 'es' ? 'en' : 'es';
+
+interface Enlace {
+  texto: string;
+  href: string;
+  hijos?: { texto: string; href: string; nota?: string }[];
+}
+
+const navegacion: Enlace[] = [
+  { texto: t('nav.proyectos'), href: ruta('proyectos', lang) },
+  {
+    texto: t('nav.servicios'),
+    href: ruta('servicios', lang),
+    hijos: [
+      {
+        texto: lang === 'es' ? 'Construcción de casas' : 'House construction',
+        href: ruta('construccion', lang),
+        nota:
+          lang === 'es'
+            ? 'Obra nueva sobre tu parcela'
+            : 'New build on your plot',
+      },
+      {
+        texto: lang === 'es' ? 'Villas llave en mano' : 'Turnkey villas',
+        href: ruta('villas', lang),
+        nota:
+          lang === 'es'
+            ? 'Del proyecto a las llaves'
+            : 'From design to handover',
+      },
+      {
+        texto: lang === 'es' ? 'Reformas integrales' : 'Full renovations',
+        href: ruta('reformas', lang),
+        nota:
+          lang === 'es' ? 'Rehabilitar y ampliar' : 'Refurbish and extend',
+      },
+      {
+        texto: lang === 'es' ? 'Interiorismo' : 'Interior design',
+        href: ruta('interiorismo', lang),
+        nota: lang === 'es' ? 'Amueblar y vestir' : 'Furnish and style',
+      },
+      {
+        texto: lang === 'es' ? 'Promociones' : 'Developments',
+        href: ruta('promociones', lang),
+        nota: lang === 'es' ? 'Para inversores' : 'For investors',
+      },
+    ],
+  },
+  {
+    texto: t('nav.propiedades'),
+    href: ruta('propiedades', lang),
+    hijos: [
+      {
+        texto: lang === 'es' ? 'En venta' : 'For sale',
+        href: ruta('venta', lang),
+      },
+      {
+        texto: lang === 'es' ? 'En alquiler' : 'To rent',
+        href: ruta('alquiler', lang),
+      },
+      {
+        texto: lang === 'es' ? 'Trasteros en Móstoles' : 'Storage in Móstoles',
+        href: ruta('trasteros', lang),
+      },
+    ],
+  },
+  { texto: t('nav.estudio'), href: ruta('estudio', lang) },
+  { texto: t('nav.cuaderno'), href: ruta('cuaderno', lang) },
+];
+
+/** Marca la sección activa, incluida la navegación por páginas hijas. */
+function activo(href: string) {
+  if (href === '/' || href === '/en/') return aqui === href;
+  return aqui.startsWith(href);
+}
+function activoRama(e: Enlace) {
+  return activo(e.href) || (e.hijos ?? []).some((h) => activo(h.href));
+}
+---
+
+<header
+  class="cabecera"
+  id="cabecera"
+  data-sobre-hero={sobreHero ? 'si' : undefined}
+>
+  <div class="cabecera__barra">
+    <a
+      href={ruta('home', lang)}
+      class="cabecera__logo"
+      aria-label={lang === 'es' ? 'Unero — Inicio' : 'Unero — Home'}
+    >
+      <Logo alto={1.6} />
+    </a>
+
+    <!-- Navegación de escritorio -->
+    <nav class="nav-esc" aria-label={lang === 'es' ? 'Principal' : 'Main'}>
+      <ul class="nav-esc__lista">
+        {
+          navegacion.map((e) =>
+            e.hijos ? (
+              <li class="nav-esc__item nav-esc__item--desplegable">
+                <a
+                  href={e.href}
+                  class="nav-esc__enlace"
+                  aria-current={activoRama(e) ? 'true' : undefined}
+                  aria-expanded="false"
+                  data-disparador
+                >
+                  {e.texto}
+                  <Icono nombre="chevron-abajo" tamano={11} grosor={1.75} />
+                </a>
+                <div class="submenu" data-panel>
+                  <ul class="submenu__lista">
+                    {e.hijos.map((h) => (
+                      <li>
+                        <a
+                          href={h.href}
+                          class="submenu__enlace"
+                          aria-current={activo(h.href) ? 'page' : undefined}
+                        >
+                          <span class="submenu__titulo">{h.texto}</span>
+                          {h.nota && <span class="submenu__nota">{h.nota}</span>}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ) : (
+              <li class="nav-esc__item">
+                <a
+                  href={e.href}
+                  class="nav-esc__enlace"
+                  aria-current={activo(e.href) ? 'page' : undefined}
+                >
+                  {e.texto}
+                </a>
+              </li>
+            )
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="cabecera__acciones">
+      {
+        alternativa ? (
+          <a
+            href={alternativa}
+            class="cambio-idioma"
+            lang={otroIdioma}
+            hreflang={otroIdioma}
+            title={t('nav.cambiarIdioma')}
+          >
+            {otroIdioma.toUpperCase()}
+          </a>
+        ) : (
+          <a
+            href={ruta('home', otroIdioma)}
+            class="cambio-idioma"
+            lang={otroIdioma}
+            hreflang={otroIdioma}
+            title={t('nav.cambiarIdioma')}
+          >
+            {otroIdioma.toUpperCase()}
+          </a>
+        )
+      }
+
+      <a href={ruta('contacto', lang)} class="boton boton--solido cabecera__cta">
+        {t('nav.contacto')}
+      </a>
+
+      <button
+        type="button"
+        class="boton-menu"
+        id="boton-menu"
+        aria-controls="menu-movil"
+        aria-expanded="false"
+      >
+        <span class="solo-lectores" data-etiqueta-menu>{t('nav.abrirMenu')}</span>
+        <span class="boton-menu__trazos" aria-hidden="true">
+          <span></span><span></span>
+        </span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Menú móvil: capa completa. Tipografía grande y objetivos amplios
+     para usarse con una sola mano. -->
+<div class="menu-movil" id="menu-movil" hidden>
+  <nav
+    class="menu-movil__cuerpo"
+    aria-label={lang === 'es' ? 'Principal' : 'Main'}
+  >
+    <ul class="menu-movil__lista">
+      {
+        navegacion.map((e) => (
+          <li class="menu-movil__item">
+            <a
+              href={e.href}
+              class="menu-movil__enlace"
+              aria-current={activo(e.href) ? 'page' : undefined}
+            >
+              {e.texto}
+            </a>
+            {e.hijos && (
+              <ul class="menu-movil__sub">
+                {e.hijos.map((h) => (
+                  <li>
+                    <a
+                      href={h.href}
+                      class="menu-movil__subenlace"
+                      aria-current={activo(h.href) ? 'page' : undefined}
+                    >
+                      {h.texto}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="menu-movil__pie">
+      <a href={ruta('contacto', lang)} class="boton boton--solido">
+        {t('cta.proyecto')}
+        <Icono nombre="flecha-derecha" tamano={15} />
+      </a>
+      <a
+        href={alternativa ?? ruta('home', otroIdioma)}
+        class="menu-movil__idioma"
+        lang={otroIdioma}
+        hreflang={otroIdioma}
+      >
+        {t('nav.idioma')}: {otroIdioma.toUpperCase()}
+      </a>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .cabecera {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-cabecera);
+    background-color: var(--cal);
+    border-bottom: 1px solid var(--piedra-clara);
+    transition: background-color var(--dur-media) var(--ease-suave),
+      border-color var(--dur-media) var(--ease-suave);
+  }
+
+  /* Superpuesta sobre el hero: sin fondo ni filete hasta que se hace scroll. */
+  .cabecera[data-sobre-hero='si'] {
+    position: fixed;
+    inset-inline: 0;
+    background-color: transparent;
+    border-bottom-color: transparent;
+    color: var(--cal);
+  }
+  .cabecera[data-sobre-hero='si']:not(.cabecera--fija) :global(.boton--solido) {
+    background-color: var(--cal);
+    color: var(--tinta);
+  }
+  .cabecera[data-sobre-hero='si'].cabecera--fija {
+    background-color: var(--cal);
+    border-bottom-color: var(--piedra-clara);
+    color: var(--tinta);
+  }
+
+  /* Con el menú abierto, la cabecera se superpone a una capa de color
+     cal. Sobre el hero el texto es cal, así que sin esto el botón de
+     cerrar sería blanco sobre blanco: invisible. */
+  .cabecera[data-menu-abierto] {
+    color: var(--tinta);
+    background-color: transparent;
+    border-bottom-color: transparent;
+  }
+  .cabecera[data-menu-abierto] :global(.boton--solido) {
+    background-color: var(--tinta);
+    color: var(--cal);
+  }
+
+  .cabecera__barra {
+    max-width: var(--ancho-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    height: var(--alto-cabecera);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+  }
+
+  .cabecera__logo {
+    color: inherit;
+    text-decoration: none;
+    flex: none;
+  }
+
+  .cabecera__acciones {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    flex: none;
+  }
+
+  .cambio-idioma {
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.65;
+    padding: 0.75rem 0.25rem;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity var(--dur-rapida) var(--ease-suave);
+  }
+  .cambio-idioma:hover {
+    opacity: 1;
+  }
+
+  /* ---------- Navegación de escritorio ---------- */
+  .nav-esc {
+    display: none;
+  }
+
+  .nav-esc__lista {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.5rem, 1.6vw, 1.6rem);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-esc__item {
+    position: relative;
+  }
+
+  .nav-esc__enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    height: var(--alto-cabecera);
+    padding-inline: 0.35rem;
+    font-size: var(--t-menudo);
+    font-weight: 450;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    position: relative;
+  }
+
+  /* Subrayado de sección activa: un filete de 1px, sin más adornos. */
+  .nav-esc__enlace::after {
+    content: '';
+    position: absolute;
+    left: 0.35rem;
+    right: 0.35rem;
+    bottom: calc(50% - 0.95em);
+    height: 1px;
+    background-color: currentColor;
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale var(--dur-media) var(--ease-salida);
+  }
+  .nav-esc__enlace:hover::after,
+  .nav-esc__enlace[aria-current]::after {
+    scale: 1 1;
+  }
+
+  .nav-esc__enlace :global(svg) {
+    opacity: 0.5;
+    transition: rotate var(--dur-rapida) var(--ease-suave);
+  }
+  .nav-esc__enlace[aria-expanded='true'] :global(svg) {
+    rotate: 180deg;
+  }
+
+  /* ---------- Submenú ---------- */
+  .submenu {
+    position: absolute;
+    top: 100%;
+    left: -1rem;
+    min-width: 20rem;
+    background-color: var(--cal-puro);
+    border: 1px solid var(--piedra-clara);
+    color: var(--tinta);
+    padding: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 -0.4rem;
+    transition: opacity var(--dur-rapida) var(--ease-suave),
+      translate var(--dur-rapida) var(--ease-suave),
+      visibility var(--dur-rapida);
+  }
+  .nav-esc__item--desplegable:hover .submenu,
+  .nav-esc__item--desplegable:focus-within .submenu,
+  .submenu[data-abierto] {
+    opacity: 1;
+    visibility: visible;
+    translate: 0 0;
+  }
+
+  .submenu__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .submenu__enlace {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.7rem 0.9rem;
+    text-decoration: none;
+    color: var(--tinta);
+    transition: background-color var(--dur-rapida) var(--ease-suave);
+  }
+  .submenu__enlace:hover {
+    background-color: var(--cal-hueso);
+  }
+  .submenu__enlace[aria-current] .submenu__titulo {
+    color: var(--mar);
+  }
+
+  .submenu__titulo {
+    font-size: var(--t-cuerpo-s);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .submenu__nota {
+    font-size: var(--t-menudo);
+    color: var(--piedra);
+    line-height: 1.3;
+  }
+
+  /* ---------- Botón de menú ---------- */
+  .boton-menu {
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.6rem;
+    display: grid;
+    place-items: center;
+    color: inherit;
+  }
+
+  .boton-menu__trazos {
+    display: grid;
+    gap: 0.32rem;
+    width: 1.35rem;
+  }
+  .boton-menu__trazos span {
+    display: block;
+    height: 1px;
+    background-color: currentColor;
+    transition: translate var(--dur-rapida) var(--ease-suave),
+      rotate var(--dur-rapida) var(--ease-suave);
+  }
+  .boton-menu[aria-expanded='true'] .boton-menu__trazos span:first-child {
+    translate: 0 0.165rem;
+    rotate: 45deg;
+  }
+  .boton-menu[aria-expanded='true'] .boton-menu__trazos span:last-child {
+    translate: 0 -0.165rem;
+    rotate: -45deg;
+  }
+
+  /* ---------- Menú móvil ---------- */
+  .menu-movil {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-menu);
+    background-color: var(--cal);
+    padding-top: var(--alto-cabecera);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    transition: opacity var(--dur-rapida) var(--ease-suave);
+  }
+  .menu-movil[data-abierto] {
+    opacity: 1;
+  }
+  .menu-movil[hidden] {
+    display: none;
+  }
+
+  .menu-movil__cuerpo {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: var(--s-6) var(--gutter) var(--s-7);
+    gap: var(--s-7);
+  }
+
+  .menu-movil__lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+  }
+
+  .menu-movil__item {
+    border-bottom: 1px solid var(--piedra-tenue);
+    padding-block: 0.5rem;
+  }
+
+  .menu-movil__enlace {
+    display: block;
+    font-family: var(--fuente-display);
+    font-size: clamp(1.85rem, 8vw, 2.5rem);
+    line-height: 1.2;
+    letter-spacing: var(--track-display);
+    color: var(--tinta);
+    text-decoration: none;
+    padding-block: 0.5rem;
+  }
+  .menu-movil__enlace[aria-current] {
+    color: var(--mar);
+  }
+
+  .menu-movil__sub {
+    list-style: none;
+    margin: 0 0 0.6rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 var(--s-4);
+  }
+  .menu-movil__subenlace {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    font-size: var(--t-cuerpo-s);
+    color: var(--piedra);
+    text-decoration: none;
+  }
+  .menu-movil__subenlace[aria-current] {
+    color: var(--mar);
+  }
+
+  .menu-movil__pie {
+    display: grid;
+    gap: var(--s-5);
+    justify-items: start;
+  }
+  .menu-movil__pie :global(.boton) {
+    width: 100%;
+  }
+  .menu-movil__idioma {
+    font-size: var(--t-menudo);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--piedra);
+    text-decoration: none;
+    min-height: 2.75rem;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* ---------- Punto de ruptura de escritorio ---------- */
+  @media (min-width: 68rem) {
+    .nav-esc {
+      display: block;
+    }
+    .boton-menu {
+      display: none;
+    }
+    .menu-movil {
+      display: none !important;
+    }
+  }
+
+  @media (max-width: 32rem) {
+    .cabecera__cta {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Comportamiento de la cabecera.
+   *
+   * Sin dependencias. Tres responsabilidades:
+   *  1. Marcar la cabecera como "fija" al separarse del borde superior.
+   *  2. Abrir y cerrar el menú móvil con bloqueo de scroll y foco atrapado.
+   *  3. Permitir abrir los submenús de escritorio con el teclado.
+   */
+  const cabecera = document.getElementById('cabecera');
+  const boton = document.getElementById('boton-menu');
+  const menu = document.getElementById('menu-movil');
+
+  // --- 1. Estado de desplazamiento -------------------------------------
+  if (cabecera) {
+    // Un centinela de 1px evita escuchar el evento scroll en cada cuadro.
+    const centinela = document.createElement('div');
+    centinela.setAttribute('aria-hidden', 'true');
+    centinela.style.cssText =
+      'position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none';
+    document.body.prepend(centinela);
+
+    new IntersectionObserver(
+      ([entrada]) => {
+        cabecera.classList.toggle('cabecera--fija', !entrada.isIntersecting);
+      },
+      { threshold: 0 }
+    ).observe(centinela);
+  }
+
+  // --- 2. Menú móvil ----------------------------------------------------
+  if (boton && menu) {
+    // Se reasignan a constantes locales porque TypeScript no propaga el
+    // estrechamiento de tipos del `if` al interior de una declaración
+    // `function`, y todo el comportamiento del menú vive en funciones.
+    const capa = menu;
+    const disparador = boton;
+    const etiqueta = disparador.querySelector('[data-etiqueta-menu]');
+    const textos = {
+      abrir: etiqueta?.textContent ?? 'Abrir menú',
+      cerrar: document.documentElement.lang.startsWith('en')
+        ? 'Close the navigation menu'
+        : 'Cerrar el menú de navegación',
+    };
+    let devolverFoco: HTMLElement | null = null;
+
+    /* El botón de cerrar vive en la cabecera, fuera de la capa, así que
+       se añade a mano al final del recorrido: si no, el tabulador nunca
+       llegaría a él y solo se podría cerrar con Escape. Va el último
+       para que al abrir el menú lo primero sea navegar, y el cerrar
+       quede a un Shift+Tab, que es donde se busca. */
+    const enfocables = () => [
+      ...Array.from(
+        capa.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
+      ).filter((el) => el.offsetParent !== null),
+      disparador,
+    ];
+
+    function abrir() {
+      devolverFoco = document.activeElement as HTMLElement;
+      capa.hidden = false;
+      // Fuerza un reflow para que la transición de opacidad se aplique.
+      void capa.offsetHeight;
+      capa.dataset.abierto = '';
+      disparador.setAttribute('aria-expanded', 'true');
+      cabecera?.setAttribute('data-menu-abierto', '');
+      if (etiqueta) etiqueta.textContent = textos.cerrar;
+      // Bloquea el scroll del fondo sin provocar salto de maquetación.
+      const ancho = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      if (ancho > 0) document.body.style.paddingRight = `${ancho}px`;
+      /* El foco entra en el primer enlace del menú, no en el botón de
+         cerrar: quien abre el menú quiere navegar. El botón de cerrar
+         queda a un Shift+Tab, que es donde se espera encontrarlo. */
+      capa.querySelector<HTMLElement>('a[href]')?.focus();
+    }
+
+    function cerrar({ devolver = true } = {}) {
+      delete capa.dataset.abierto;
+      disparador.setAttribute('aria-expanded', 'false');
+      cabecera?.removeAttribute('data-menu-abierto');
+      if (etiqueta) etiqueta.textContent = textos.abrir;
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      const ocultar = () => {
+        if (!capa.dataset.abierto) capa.hidden = true;
+      };
+      // Espera a que termine el fundido antes de retirarlo del árbol.
+      capa.addEventListener('transitionend', ocultar, { once: true });
+      setTimeout(ocultar, 400);
+      if (devolver) devolverFoco?.focus();
+    }
+
+    disparador.addEventListener('click', () => {
+      capa.dataset.abierto === '' ? cerrar() : abrir();
+    });
+
+    // Navegar cierra el menú (las transiciones de página lo dejarían abierto).
+    capa.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a[href]')) cerrar({ devolver: false });
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (capa.dataset.abierto !== '') return;
+      if (e.key === 'Escape') {
+        cerrar();
+        return;
+      }
+      // Foco atrapado: Tab circula solo dentro de la capa abierta.
+      if (e.key === 'Tab') {
+        const items = enfocables();
+        if (!items.length) return;
+        const primero = items[0];
+        const ultimo = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === primero) {
+          e.preventDefault();
+          ultimo.focus();
+        } else if (!e.shiftKey && document.activeElement === ultimo) {
+          e.preventDefault();
+          primero.focus();
+        }
+      }
+    });
+
+    // Si se pasa a escritorio con el menú abierto, se restaura el scroll.
+    window
+      .matchMedia('(min-width: 68rem)')
+      .addEventListener('change', (e) => {
+        if (e.matches && capa.dataset.abierto === '') cerrar({ devolver: false });
+      });
+  }
+
+  // --- 3. Submenús de escritorio con teclado ----------------------------
+  document.querySelectorAll<HTMLElement>('[data-disparador]').forEach((disp) => {
+    const panel = disp.parentElement?.querySelector<HTMLElement>('[data-panel]');
+    if (!panel) return;
+
+    const contenedor = disp.parentElement!;
+
+    // El puntero ya lo gestiona :hover en CSS. Aquí solo el teclado:
+    // Enter/Espacio abre el panel en lugar de navegar, para poder
+    // recorrer los hijos; un segundo Enter sigue el enlace.
+    disp.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || (e.key === 'Enter' && !panel.dataset.abierto)) {
+        e.preventDefault();
+        panel.dataset.abierto = '';
+        disp.setAttribute('aria-expanded', 'true');
+        panel.querySelector<HTMLElement>('a')?.focus();
+      }
+    });
+
+    contenedor.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && panel.dataset.abierto !== undefined) {
+        delete panel.dataset.abierto;
+        disp.setAttribute('aria-expanded', 'false');
+        disp.focus();
+      }
+    });
+
+    contenedor.addEventListener('focusout', () => {
+      // Cierra al salir de la rama completa.
+      requestAnimationFrame(() => {
+        if (!contenedor.contains(document.activeElement)) {
+          delete panel.dataset.abierto;
+          disp.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+
+    contenedor.addEventListener('mouseenter', () =>
+      disp.setAttribute('aria-expanded', 'true')
+    );
+    contenedor.addEventListener('mouseleave', () =>
+      disp.setAttribute('aria-expanded', 'false')
+    );
+  });
+</script>

@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import Articulo from '../../components/paginas/Articulo.astro';
+import { articulos } from '../../lib/contenido';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const lista = await articulos('es');
+  return lista.map((articulo) => ({
+    params: { slug: articulo.id },
+    props: { articulo },
+  }));
+};
+
+interface Props {
+  articulo: CollectionEntry<'cuaderno'>;
+}
+
+const { articulo } = Astro.props as Props;
+---
+
+<Articulo articulo={articulo} lang="es" />

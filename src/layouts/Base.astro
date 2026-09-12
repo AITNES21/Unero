@@ -1,0 +1,122 @@
+---
+import '../styles/global.css';
+import Cabeza from '../components/Cabeza.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Pie from '../components/Pie.astro';
+import BarraMovil from '../components/BarraMovil.astro';
+import Cookies from '../components/Cookies.astro';
+import { type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  titulo: string;
+  descripcion: string;
+  lang?: Idioma;
+  alternativa?: string | null;
+  imagen?: string;
+  imagenAlt?: string;
+  tipoOg?: 'website' | 'article';
+  noIndexar?: boolean;
+  jsonLd?: string;
+  /** La cabecera se superpone a un hero fotográfico a sangre. */
+  sobreHero?: boolean;
+}
+
+const {
+  titulo,
+  descripcion,
+  lang = 'es',
+  alternativa = null,
+  imagen,
+  imagenAlt,
+  tipoOg,
+  noIndexar,
+  jsonLd,
+  sobreHero = false,
+} = Astro.props;
+
+const t = useT(lang);
+---
+
+<!doctype html>
+<html lang={lang === 'es' ? 'es-ES' : 'en-GB'}>
+  <head>
+    <Cabeza
+      titulo={titulo}
+      descripcion={descripcion}
+      lang={lang}
+      alternativa={alternativa}
+      imagen={imagen}
+      imagenAlt={imagenAlt}
+      tipoOg={tipoOg}
+      noIndexar={noIndexar}
+      jsonLd={jsonLd}
+    />
+    <noscript>
+      <style>
+        /* Sin JavaScript el contenido animado debe verse igual. */
+        .revelar {
+          opacity: 1 !important;
+          translate: none !important;
+        }
+      </style>
+    </noscript>
+  </head>
+
+  <body>
+    <a class="salta-al-contenido" href="#contenido">{t('nav.saltar')}</a>
+
+    <Cabecera lang={lang} alternativa={alternativa} sobreHero={sobreHero} />
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <Pie lang={lang} />
+    <BarraMovil lang={lang} />
+    <Cookies lang={lang} />
+
+    <style is:global>
+      /* Deja sitio a la barra de acción móvil cuando está visible. */
+      body.con-barra-movil {
+        padding-bottom: 3.5rem;
+      }
+      @media (min-width: 68rem) {
+        body.con-barra-movil {
+          padding-bottom: 0;
+        }
+      }
+    </style>
+
+    <script>
+      /**
+       * Revelado al entrar en pantalla.
+       *
+       * Un único observador para toda la página. Cada elemento se
+       * desobserva en cuanto aparece: el coste total es proporcional al
+       * número de bloques, no al scroll.
+       *
+       * Si el visitante ha pedido reducir el movimiento, el CSS ya
+       * neutraliza la transición, así que aquí solo marcamos visible.
+       */
+      const objetivos = document.querySelectorAll<HTMLElement>('.revelar');
+
+      if (objetivos.length) {
+        const observador = new IntersectionObserver(
+          (entradas) => {
+            for (const entrada of entradas) {
+              if (!entrada.isIntersecting) continue;
+              entrada.target.classList.add('es-visible');
+              observador.unobserve(entrada.target);
+            }
+          },
+          // Se adelanta un poco al borde inferior para que el bloque
+          // esté ya compuesto cuando el usuario llega a él.
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.01 }
+        );
+
+        objetivos.forEach((el) => observador.observe(el));
+      }
+    </script>
+  </body>
+</html>

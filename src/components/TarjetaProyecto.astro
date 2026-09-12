@@ -1,0 +1,202 @@
+---
+import { Image } from 'astro:assets';
+import Icono from './Icono.astro';
+import type { ImageMetadata } from 'astro';
+import { rutaProyecto, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  slug: string;
+  titulo: string;
+  resumen: string;
+  ubicacion?: string;
+  tipo: string;
+  estado?: string;
+  portada: ImageMetadata;
+  portadaAlt: string;
+  lang: Idioma;
+  /** Número de orden que se muestra como índice editorial (01, 02…). */
+  indice?: number;
+  /** La primera tarjeta de la portada carga con prioridad. */
+  prioridad?: boolean;
+  /** Proporción del recorte. Alterna en el índice para dar ritmo. */
+  formato?: '4-5' | '3-2';
+  /**
+   * Nivel del encabezado. En un índice, la tarjeta cuelga directamente
+   * del h1 y debe ser h2; dentro de una sección con su propio h2, h3.
+   * Saltarse un nivel rompe la navegación por encabezados de un lector
+   * de pantalla.
+   */
+  nivelTitulo?: 2 | 3;
+  /**
+   * Ancho real del hueco donde se pinta la tarjeta. Determina el
+   * atributo `sizes`, que es lo que usa el navegador para elegir de qué
+   * tamaño se descarga la fotografía. Si aquí se miente, el navegador
+   * se queda corto y amplía: la imagen se ve borrosa aunque el fichero
+   * grande esté generado y disponible.
+   */
+  hueco?: 'completo' | 'mitad' | 'tercio';
+}
+
+const {
+  slug,
+  titulo,
+  resumen,
+  ubicacion,
+  tipo,
+  estado,
+  portada,
+  portadaAlt,
+  lang,
+  indice,
+  prioridad = false,
+  formato = '4-5',
+  nivelTitulo = 3,
+  hueco = 'tercio',
+} = Astro.props;
+
+const t = useT(lang);
+const href = rutaProyecto(slug, lang);
+const Titulo = `h${nivelTitulo}` as 'h2' | 'h3';
+
+/* El contenedor tiene un máximo de 96rem con gutters, así que en
+   pantallas anchas el ancho útil se estabiliza en torno a 88rem. */
+const MEDIDAS: Record<'completo' | 'mitad' | 'tercio', { sizes: string; widths: number[] }> = {
+  completo: {
+    sizes: '(min-width: 100rem) 88rem, (min-width: 48rem) 90vw, 92vw',
+    widths: [640, 960, 1280, 1600, 1920],
+  },
+  mitad: {
+    sizes: '(min-width: 100rem) 44rem, (min-width: 48rem) 46vw, 92vw',
+    widths: [480, 720, 960, 1280],
+  },
+  tercio: {
+    sizes: '(min-width: 75rem) 30vw, (min-width: 48rem) 46vw, 92vw',
+    widths: [420, 640, 900, 1200],
+  },
+};
+const medida = MEDIDAS[hueco];
+---
+
+<article class="tarjeta">
+  <a href={href} class="tarjeta__enlace">
+    <div class:list={['marco', `marco--${formato}`, 'zoom', 'tarjeta__marco']}>
+      <Image
+        src={portada}
+        alt={portadaAlt}
+        widths={medida.widths}
+        sizes={medida.sizes}
+        loading={prioridad ? 'eager' : 'lazy'}
+        decoding={prioridad ? 'sync' : 'async'}
+        {...(prioridad ? { fetchpriority: 'high' as const } : {})}
+      />
+      {estado && <span class="tarjeta__estado">{estado}</span>}
+    </div>
+
+    <div class="tarjeta__cuerpo">
+      <p class="tarjeta__meta">
+        {indice !== undefined && (
+          <span class="tarjeta__indice">{String(indice).padStart(2, '0')}</span>
+        )}
+        <span>{tipo}</span>
+        {ubicacion && <span class="tarjeta__punto">·</span>}
+        {ubicacion && <span>{ubicacion}</span>}
+      </p>
+      <Titulo class="tarjeta__titulo display-s">{titulo}</Titulo>
+      <p class="tarjeta__resumen">{resumen}</p>
+      <span class="tarjeta__accion">
+        {t('cta.verFicha')}
+        <Icono nombre="flecha-derecha" tamano={14} />
+      </span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .tarjeta__enlace {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .tarjeta__marco {
+    /* El filete inferior sustituye a la sombra de caja: geometría
+       precisa en lugar de tarjeta flotante. */
+    border-bottom: 1px solid var(--filete);
+  }
+
+  .tarjeta__estado {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--tinta);
+    color: var(--cal);
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: var(--track-cejilla);
+    text-transform: uppercase;
+    padding: 0.5rem 0.85rem;
+  }
+
+  .tarjeta__cuerpo {
+    padding-top: var(--s-4);
+  }
+
+  .tarjeta__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem;
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+    line-height: 1.4;
+  }
+
+  .tarjeta__indice {
+    font-variant-numeric: tabular-nums;
+    color: var(--acento);
+    margin-right: 0.3rem;
+  }
+
+  .tarjeta__punto {
+    opacity: 0.5;
+  }
+
+  .tarjeta__titulo {
+    margin-top: 0.5rem;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .tarjeta__enlace:hover .tarjeta__titulo {
+    color: var(--acento);
+  }
+
+  .tarjeta__resumen {
+    margin-top: 0.5rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    max-width: 42ch;
+    text-wrap: pretty;
+  }
+
+  .tarjeta__accion {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: var(--s-4);
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: var(--track-cejilla);
+    text-transform: uppercase;
+    color: var(--texto);
+  }
+  .tarjeta__accion :global(svg) {
+    transition: translate var(--dur-media) var(--ease-salida);
+  }
+  .tarjeta__enlace:hover .tarjeta__accion :global(svg) {
+    translate: 0.3rem 0;
+  }
+</style>

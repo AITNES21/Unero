@@ -1,0 +1,122 @@
+/* ==========================================================================
+   UNERO — Sistema de diseño
+   Dirección artística: "Cal, piedra y sombra"
+
+   La paleta nace de los materiales con los que se construye en Ibiza:
+   la cal de las paredes encaladas, la piedra seca de los márgenes,
+   la sabina y el teca, el hormigón visto y el verde oscuro de las
+   contraventanas payesas contra el mar.
+
+   Deliberadamente NO usamos el binomio azul marino + dorado: es el
+   atajo visual de toda constructora "de lujo" y resta credibilidad.
+   ========================================================================== */
+
+:root {
+  /* ---- Color ---- */
+  --cal: #f7f4ee;          /* fondo dominante: cal cálida */
+  --cal-hueso: #efeae1;    /* superficie alterna */
+  --cal-puro: #fdfcfa;     /* superficie elevada */
+  --tinta: #17181a;        /* texto principal y secciones oscuras */
+  --tinta-suave: #2a2c2e;
+  /* Texto secundario. Este tono se eligió por carácter (un gris cálido
+     de piedra) pero medía 3,42:1 sobre la cal y WCAG AA exige 4,5:1 para
+     texto normal. Oscurecido hasta 5,3:1 conservando la temperatura:
+     mucho del texto de apoyo del sitio usa este color. */
+  --piedra: #6e6458;
+  --piedra-clara: #d8d1c5; /* filetes y bordes */
+  --piedra-tenue: #e5e0d6;
+  --mar: #24443e;          /* acento único: verde pino / mar profundo */
+  --mar-claro: #3d6459;
+  --arcilla: #a4623c;      /* acento cálido, uso mínimo (alertas, "vendido") */
+
+  /* Roles semánticos */
+  --fondo: var(--cal);
+  --texto: var(--tinta);
+  --texto-apagado: var(--piedra);
+  --filete: var(--piedra-clara);
+  --acento: var(--mar);
+
+  /* ---- Tipografía ---- */
+  --fuente-display: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype',
+    'URW Palladio L', P052, serif;
+  --fuente-texto: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  /* Escala fluida. Los mínimos están calculados para móvil de 360px
+     y los máximos para un viewport de 1600px. */
+  --t-display-xl: clamp(2.9rem, 1.6rem + 6.4vw, 6.75rem);
+  --t-display-l: clamp(2.2rem, 1.3rem + 4.2vw, 4.25rem);
+  --t-display-m: clamp(1.75rem, 1.25rem + 2.2vw, 2.75rem);
+  --t-display-s: clamp(1.35rem, 1.1rem + 1.1vw, 1.85rem);
+  --t-cuerpo-l: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --t-cuerpo: clamp(1.0625rem, 1.02rem + 0.2vw, 1.1875rem);
+  --t-cuerpo-s: 0.9375rem;
+  --t-menudo: 0.8125rem;
+  --t-cejilla: 0.75rem; /* eyebrow / label */
+
+  --alto-display: 1.04;
+  --alto-titulo: 1.15;
+  --alto-cuerpo: 1.65;
+  --track-cejilla: 0.18em;
+  --track-display: -0.015em;
+
+  /* ---- Ritmo y espacio ---- */
+  --gutter: clamp(1.25rem, 4.5vw, 4rem);
+  --ancho-max: 96rem;      /* 1536px: contenedor amplio, editorial */
+  --ancho-texto: 40rem;    /* ~72 caracteres: medida óptima de lectura */
+  --ancho-estrecho: 62rem;
+
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+  --s-9: 6rem;
+  --seccion: clamp(4.5rem, 9vw, 9rem);
+  --seccion-corta: clamp(3rem, 6vw, 5.5rem);
+
+  /* ---- Movimiento ----
+     Curvas lentas y largas: la sensación premium viene de la calma,
+     no de la velocidad. */
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-suave: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-rapida: 200ms;
+  --dur-media: 450ms;
+  --dur-lenta: 900ms;
+
+  /* ---- Otros ---- */
+  --radio: 0px; /* geometría precisa: sin esquinas redondeadas */
+  --alto-cabecera: 4.5rem;
+  /* La cabecera va por ENCIMA de la capa del menú: el botón de
+     hamburguesa es también el de cerrar, y si la capa lo tapa el menú
+     se queda abierto sin salida. */
+  --z-menu: 70;
+  --z-cabecera: 80;
+  --z-lightbox: 90;
+  --z-cookies: 95;
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --alto-cabecera: 5.5rem;
+  }
+}
+
+/* Secciones oscuras: invierten los roles sin tocar el resto del CSS */
+.tema-oscuro {
+  --fondo: var(--tinta);
+  --texto: var(--cal);
+  --texto-apagado: #a9a29a;
+  --filete: rgba(247, 244, 238, 0.18);
+  --acento: #8fb5a8;
+  background-color: var(--fondo);
+  color: var(--texto);
+}
+
+.tema-hueso {
+  --fondo: var(--cal-hueso);
+  background-color: var(--fondo);
+}

@@ -1,0 +1,15 @@
+# robots.txt — unero.es
+# La web anterior no tenía este fichero, de modo que los rastreadores
+# no encontraban el sitemap y perdían tiempo en rutas sin interés.
+
+User-agent: *
+Allow: /
+
+# Páginas de resultado: no son destinos de búsqueda.
+Disallow: /gracias/
+Disallow: /en/thank-you/
+
+# Parámetro del filtro del catálogo: el contenido es el mismo.
+Disallow: /*?f=
+
+Sitemap: https://unero.es/sitemap-index.xml

@@ -1,0 +1,182 @@
+---
+import { Image } from 'astro:assets';
+import Icono from './Icono.astro';
+import { site, ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+// 1920x1080. La anterior (can-flowers/foto3) medía 1080 y se
+// ampliaba en pantallas anchas.
+import fondoPorDefecto from '../assets/proyectos/cas-mut/foto1.webp';
+
+interface Props {
+  lang: Idioma;
+  titulo?: string;
+  texto?: string;
+  /** Variante sin fotografía, para páginas que ya llevan mucha imagen. */
+  sobrio?: boolean;
+}
+
+const { lang, titulo, texto, sobrio = false } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+
+const encabezado =
+  titulo ?? (es ? 'Hablemos de tu proyecto' : "Let's talk about your project");
+const cuerpo =
+  texto ??
+  (es
+    ? 'Cuéntanos qué tienes en mente: una parcela, una casa que reformar o solo una idea. Vamos a verlo, te decimos con franqueza en qué horquilla se mueve y qué condicionantes encontramos. Sin coste y sin compromiso.'
+    : 'Tell us what you have in mind: a plot, a house to renovate or just an idea. We will come and look at it, tell you frankly what range it falls into and what constraints we see. No cost, no obligation.');
+
+const mensajeWa = encodeURIComponent(
+  es
+    ? 'Hola Unero, me gustaría hablar de un proyecto en Ibiza.'
+    : "Hello Unero, I'd like to talk about a project in Ibiza."
+);
+const urlWa = `https://wa.me/${site.whatsapp.replace(/\D/g, '')}?text=${mensajeWa}`;
+---
+
+<section class:list={['cta', sobrio ? 'tema-hueso' : 'cta--foto tema-oscuro']}>
+  {
+    !sobrio && (
+      <div class="cta__fondo" aria-hidden="true">
+        <Image
+          src={fondoPorDefecto}
+          alt=""
+          widths={[768, 1280, 1600, 1920]}
+          sizes="100vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    )
+  }
+
+  <div class="envoltura cta__contenido">
+    <div class="cta__texto">
+      <h2 class="display-l">{encabezado}</h2>
+      <p class="cta__parrafo">{cuerpo}</p>
+    </div>
+
+    <div class="cta__acciones">
+      <a href={ruta('contacto', lang)} class="boton boton--solido">
+        {t('cta.proyecto')}
+        <Icono nombre="flecha-derecha" tamano={15} />
+      </a>
+
+      <ul class="cta__directos">
+        <li>
+          <a href={urlWa} target="_blank" rel="noopener">
+            <Icono nombre="whatsapp" tamano={17} />
+            WhatsApp
+          </a>
+        </li>
+        {
+          site.telefonos.map((tel) => (
+            <li>
+              <a href={`tel:${tel.numero}`}>
+                <Icono nombre="telefono" tamano={15} />
+                {tel.etiqueta}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={`mailto:${site.email}`}>
+            <Icono nombre="sobre" tamano={15} />
+            {site.email}
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    padding-block: var(--seccion);
+    overflow: hidden;
+  }
+
+  .cta__fondo {
+    position: absolute;
+    inset: 0;
+  }
+  .cta__fondo :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* Velo sobre la fotografía: garantiza el contraste del texto en
+     cualquier imagen, sin depender de que la foto sea oscura. */
+  .cta--foto .cta__fondo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      rgb(23 24 26 / 0.9) 0%,
+      rgb(23 24 26 / 0.78) 55%,
+      rgb(23 24 26 / 0.55) 100%
+    );
+  }
+
+  .cta__contenido {
+    position: relative;
+    display: grid;
+    gap: var(--s-7);
+  }
+  @media (min-width: 60rem) {
+    .cta__contenido {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: var(--s-8);
+      align-items: end;
+    }
+  }
+
+  .cta__parrafo {
+    margin-top: var(--s-5);
+    max-width: 48ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .cta__acciones {
+    display: grid;
+    gap: var(--s-5);
+    justify-items: start;
+  }
+  .cta__acciones :global(.boton) {
+    width: 100%;
+  }
+  @media (min-width: 30rem) {
+    .cta__acciones :global(.boton) {
+      width: auto;
+    }
+  }
+
+  .cta__directos {
+    display: grid;
+    gap: 0.1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .cta__directos a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 2.75rem;
+    font-size: var(--t-cuerpo-s);
+    color: var(--texto);
+    text-decoration: none;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .cta__directos a:hover {
+    color: var(--acento);
+  }
+  .cta__directos :global(svg) {
+    opacity: 0.6;
+    flex: none;
+  }
+</style>

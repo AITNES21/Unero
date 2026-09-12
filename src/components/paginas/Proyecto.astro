@@ -1,0 +1,597 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import Galeria from '../Galeria.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, rutaProyecto, type Idioma } from '../../config/site';
+import { numero, useT } from '../../i18n/ui';
+import {
+  bi,
+  biLista,
+  etiquetaTipo,
+  etiquetaEstado,
+  etiquetaServicio,
+  vecinosDeProyecto,
+  type Proyecto,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  proyecto: Proyecto;
+  lang: Idioma;
+}
+const { proyecto, lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const d = proyecto.data;
+
+const { anterior, siguiente } = await vecinosDeProyecto(proyecto.id);
+
+/*
+  Portada a sangre solo si la fotografía tiene píxeles para sostenerla.
+  Por debajo de 1400 px de ancho, un hero a pantalla completa obliga al
+  navegador a ampliar y se ve borroso. En esos casos la imagen se
+  presenta como lámina centrada, limitada a su tamaño real: ocupa menos
+  pero se ve nítida, que es lo que interesa cuando lo que se vende es
+  el cuidado en el acabado.
+
+  El umbral desaparece solo en cuanto llegue el reportaje nuevo: cada
+  ficha pasa a hero a sangre sin tocar una línea de código.
+*/
+const portadaAncho = d.portada.width;
+const heroASangre = portadaAncho >= 1400;
+
+const titulo = d.titulo;
+const resumen = bi(d.resumen, lang) ?? '';
+const entradilla = bi(d.entradilla, lang);
+const relato = biLista(d.relato, lang);
+const portadaAlt = bi(d.portadaAlt, lang) ?? titulo;
+const ubicacion = bi(d.ubicacion, lang);
+
+const fotos = d.galeria.map((g) => ({
+  src: g.src,
+  alt: bi(g.alt, lang) ?? titulo,
+  ancha: g.ancha,
+}));
+
+/* Ficha técnica: solo se listan los campos que existen. Un proyecto sin
+   año no muestra un hueco vacío ni un dato inventado. */
+const ficha = [
+  ubicacion && { etiqueta: t('proy.ubicacion'), valor: ubicacion },
+  { etiqueta: t('proy.tipo'), valor: etiquetaTipo(d.tipo, lang) },
+  d.ano && { etiqueta: t('proy.ano'), valor: String(d.ano) },
+  d.superficieConstruida && {
+    etiqueta: t('proy.superficie'),
+    valor: `${numero(d.superficieConstruida, lang)} m²`,
+  },
+  d.superficieParcela && {
+    etiqueta: t('proy.parcela'),
+    valor: `${numero(d.superficieParcela, lang)} m²`,
+  },
+  d.estado && { etiqueta: t('proy.estado'), valor: etiquetaEstado(d.estado, lang)! },
+  d.arquitectura && { etiqueta: t('proy.arquitectura'), valor: d.arquitectura },
+  d.servicios.length > 0 && {
+    etiqueta: t('proy.servicios'),
+    valor: d.servicios.map((s) => etiquetaServicio(s, lang)).join(' · '),
+  },
+].filter(Boolean) as { etiqueta: string; valor: string }[];
+
+const tituloSeo = es
+  ? `${titulo} — ${etiquetaTipo(d.tipo, lang)}${ubicacion ? ` en ${ubicacion.split(',')[0]}` : ''} | Unero`
+  : `${titulo} — ${etiquetaTipo(d.tipo, lang)}${ubicacion ? ` in ${ubicacion.split(',')[0]}` : ''} | Unero`;
+
+const alternativa = rutaProyecto(proyecto.id, es ? 'en' : 'es');
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: t('nav.proyectos'), href: ruta('proyectos', lang) },
+    { nombre: titulo, href: rutaProyecto(proyecto.id, lang) },
+  ]),
+  schema.proyecto({
+    titulo,
+    descripcion: resumen,
+    urlCanonica: new URL(rutaProyecto(proyecto.id, lang), 'https://unero.es').href,
+    imagenes: [d.portada.src, ...d.galeria.slice(0, 5).map((g) => g.src.src)].map(
+      (s) => new URL(s, 'https://unero.es').href
+    ),
+    ubicacion,
+    ano: d.ano,
+    lang,
+  }),
+]);
+---
+
+<Base
+  titulo={tituloSeo}
+  descripcion={resumen}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+  imagenAlt={portadaAlt}
+>
+  <!-- ===================== Portada del proyecto ==================== -->
+  <article>
+    {
+      heroASangre ? (
+        <header class="ficha-hero">
+          <div class="ficha-hero__medio">
+            <Image
+              src={d.portada}
+              alt={portadaAlt}
+              widths={[640, 960, 1280, 1600, 1920]}
+              sizes="100vw"
+              loading="eager"
+              decoding="sync"
+              fetchpriority="high"
+            />
+          </div>
+          <div class="envoltura ficha-hero__contenido">
+            <p class="cejilla ficha-hero__cejilla">
+              {etiquetaTipo(d.tipo, lang)}
+              {ubicacion && <> · {ubicacion}</>}
+              {d.estado && <> · {etiquetaEstado(d.estado, lang)}</>}
+            </p>
+            <h1 class="display-xl ficha-hero__titulo">{titulo}</h1>
+          </div>
+        </header>
+      ) : (
+        <header class="ficha-lamina">
+          <div class="envoltura">
+            <p class="cejilla">
+              {etiquetaTipo(d.tipo, lang)}
+              {ubicacion && <> · {ubicacion}</>}
+              {d.estado && <> · {etiquetaEstado(d.estado, lang)}</>}
+            </p>
+            <h1 class="display-xl ficha-lamina__titulo">{titulo}</h1>
+            <div class="ficha-lamina__fila">
+              <div
+                class="ficha-lamina__medio"
+                style={`--ancho-real:${portadaAncho}px`}
+              >
+                <Image
+                  src={d.portada}
+                  alt={portadaAlt}
+                  widths={[480, 720, portadaAncho]}
+                  sizes={`(min-width: ${portadaAncho}px) ${portadaAncho}px, 100vw`}
+                  loading="eager"
+                  decoding="sync"
+                  fetchpriority="high"
+                />
+              </div>
+              {entradilla && (
+                <p class="ficha-lamina__entradilla display-s">{entradilla}</p>
+              )}
+            </div>
+          </div>
+        </header>
+      )
+    }
+
+    <div class="envoltura">
+      <div class="ficha-migas">
+        <Migas
+          items={[{ nombre: t('nav.proyectos'), href: ruta('proyectos', lang) }, { nombre: titulo }]}
+          lang={lang}
+        />
+      </div>
+
+      <!-- ====================== Relato + ficha ===================== -->
+      <div class="ficha-cuerpo">
+        <div class="ficha-relato">
+          {entradilla && heroASangre && (
+            <p class="ficha-entradilla display-s">{entradilla}</p>
+          )}
+          <div class="prosa ficha-prosa">
+            {relato.map((p) => <p>{p}</p>)}
+          </div>
+        </div>
+
+        <aside class="ficha-datos">
+          <h2 class="cejilla">{t('proy.ficha')}</h2>
+          <dl class="datos-lista">
+            {
+              ficha.map((f) => (
+                <div class="datos-lista__par">
+                  <dt>{f.etiqueta}</dt>
+                  <dd>{f.valor}</dd>
+                </div>
+              ))
+            }
+          </dl>
+
+          {
+            d.documentos.length > 0 && (
+              <div class="ficha-docs">
+                <h2 class="cejilla">{t('proy.docs')}</h2>
+                <ul>
+                  {d.documentos.map((doc) => (
+                    <li>
+                      <a href={doc.archivo} target="_blank" rel="noopener">
+                        <Icono nombre="documento" tamano={15} />
+                        {bi(doc.titulo, lang)}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )
+          }
+
+          <a href={ruta('contacto', lang)} class="boton boton--linea ficha-datos__cta">
+            {t('cta.proyecto')}
+          </a>
+        </aside>
+      </div>
+
+      <!-- ==================== Detalles constructivos ================ -->
+      {
+        d.detalles.length > 0 && (
+          <section class="ficha-detalles">
+            <h2 class="display-m ficha-detalles__titulo">{t('proy.detalles')}</h2>
+            <ul class="detalles">
+              {d.detalles.map((det, i) => (
+                <li class="detalle revelar" style={`--retardo:${i * 80}ms`}>
+                  <span class="detalle__num">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 class="detalle__titulo">{bi(det.titulo, lang)}</h3>
+                  <p class="detalle__texto">{bi(det.texto, lang)}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+
+      <!-- ========================== Vídeo =========================== -->
+      {
+        d.video && (
+          <section class="ficha-video">
+            <h2 class="display-m ficha-detalles__titulo">{t('proy.obra')}</h2>
+            {/*
+              El vídeo no se precarga: `preload="none"` y el póster como
+              imagen. Pesa varios megas y solo lo pide quien lo quiere
+              ver, así que no penaliza la velocidad de la página.
+            */}
+            <video
+              controls
+              preload="none"
+              playsinline
+              class="ficha-video__medio"
+              poster={d.video.poster?.src}
+              aria-label={t('proy.verObra')}
+            >
+              <source src={d.video.src} type="video/mp4" />
+            </video>
+          </section>
+        )
+      }
+
+      <!-- ========================= Galería ========================== -->
+      {
+        fotos.length > 0 && (
+          <section class="ficha-galeria">
+            <h2 class="display-m ficha-detalles__titulo">{t('proy.galeria')}</h2>
+            <Galeria fotos={fotos} lang={lang} titulo={`${t('proy.galeria')} — ${titulo}`} />
+          </section>
+        )
+      }
+    </div>
+
+    <!-- ================== Navegación entre proyectos ================ -->
+    {
+      (anterior || siguiente) && (
+        <nav class="entre-proyectos" aria-label={t('nav.proyectos')}>
+          <div class="envoltura entre-proyectos__rejilla">
+            {anterior && (
+              <a href={rutaProyecto(anterior.id, lang)} class="entre-proyectos__enlace">
+                <span class="entre-proyectos__cejilla">
+                  <Icono nombre="flecha-izquierda" tamano={13} />
+                  {t('proy.anterior')}
+                </span>
+                <span class="entre-proyectos__nombre display-s">{anterior.data.titulo}</span>
+              </a>
+            )}
+            {siguiente && (
+              <a
+                href={rutaProyecto(siguiente.id, lang)}
+                class="entre-proyectos__enlace entre-proyectos__enlace--der"
+              >
+                <span class="entre-proyectos__cejilla">
+                  {t('proy.siguiente')}
+                  <Icono nombre="flecha-derecha" tamano={13} />
+                </span>
+                <span class="entre-proyectos__nombre display-s">{siguiente.data.titulo}</span>
+              </a>
+            )}
+          </div>
+          <div class="envoltura entre-proyectos__todos">
+            <a href={ruta('proyectos', lang)} class="enlace-flecha">
+              {t('cta.verTodos')}
+              <Icono nombre="flecha-derecha" tamano={14} />
+            </a>
+          </div>
+        </nav>
+      )
+    }
+  </article>
+
+  <BloqueCta lang={lang} sobrio />
+</Base>
+
+<style>
+  /* --------------------------- Portada --------------------------- */
+  .ficha-hero {
+    position: relative;
+    min-height: min(78svh, 44rem);
+    display: grid;
+    align-items: end;
+    isolation: isolate;
+    background-color: var(--tinta);
+    color: var(--cal);
+    padding-top: var(--alto-cabecera);
+    padding-bottom: clamp(2.5rem, 6vh, 4.5rem);
+    overflow: hidden;
+  }
+  .ficha-hero__medio {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .ficha-hero__medio :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ficha-hero__medio::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgb(18 19 21 / 0.85) 0%,
+      rgb(18 19 21 / 0.55) 30%,
+      rgb(18 19 21 / 0.12) 62%,
+      rgb(18 19 21 / 0.28) 100%
+    );
+  }
+  .ficha-hero__cejilla {
+    color: var(--cal);
+    text-shadow: 0 1px 12px rgb(18 19 21 / 0.55);
+  }
+  .ficha-hero__titulo {
+    margin-top: var(--s-3);
+  }
+
+  /* ---- Portada como lámina (fotografías de origen pequeño) ---- */
+  .ficha-lamina {
+    padding-top: calc(var(--alto-cabecera) + var(--s-7));
+    padding-bottom: var(--s-5);
+  }
+  .ficha-lamina__titulo {
+    margin-top: var(--s-3);
+    margin-bottom: var(--s-6);
+  }
+  /* La lámina no llena el ancho de la página, así que el hueco de al
+     lado se ocupa con la entradilla en lugar de dejarlo vacío. */
+  .ficha-lamina__fila {
+    display: grid;
+    gap: var(--s-6);
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .ficha-lamina__fila {
+      grid-template-columns: minmax(0, auto) minmax(16rem, 1fr);
+      gap: var(--s-8);
+    }
+  }
+  .ficha-lamina__medio {
+    /* Nunca por encima de su tamaño real: es lo que evita el ampliado. */
+    max-width: min(100%, var(--ancho-real));
+    background-color: var(--piedra-tenue);
+  }
+  .ficha-lamina__medio :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  .ficha-lamina__entradilla {
+    max-width: 34ch;
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+
+  .ficha-migas {
+    padding-top: var(--s-5);
+  }
+
+  /* ----------------------- Relato y ficha ------------------------ */
+  .ficha-cuerpo {
+    display: grid;
+    gap: var(--s-7);
+    padding-top: clamp(2rem, 4vw, 3.5rem);
+  }
+  @media (min-width: 62rem) {
+    .ficha-cuerpo {
+      grid-template-columns: minmax(0, 1.6fr) minmax(16rem, 1fr);
+      gap: var(--s-8);
+      align-items: start;
+    }
+  }
+
+  .ficha-entradilla {
+    max-width: 40ch;
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+  .ficha-prosa {
+    margin-top: var(--s-6);
+  }
+
+  /* La ficha acompaña al relato sin quedarse pegada arriba en pantallas
+     cortas: sticky solo cuando hay altura de sobra. */
+  @media (min-width: 62rem) and (min-height: 46rem) {
+    .ficha-datos {
+      position: sticky;
+      top: calc(var(--alto-cabecera) + 2rem);
+    }
+  }
+
+  .datos-lista {
+    margin: var(--s-4) 0 0;
+    border-top: 1px solid var(--filete);
+  }
+  .datos-lista__par {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: var(--s-4);
+    border-bottom: 1px solid var(--filete);
+  }
+  .datos-lista dt {
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .datos-lista dd {
+    margin: 0;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.5;
+  }
+
+  .ficha-docs {
+    margin-top: var(--s-6);
+  }
+  .ficha-docs ul {
+    list-style: none;
+    margin: var(--s-3) 0 0;
+    padding: 0;
+  }
+  .ficha-docs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    font-size: var(--t-cuerpo-s);
+    color: var(--texto);
+    text-decoration-color: var(--acento);
+    text-underline-offset: 0.2em;
+  }
+
+  .ficha-datos__cta {
+    width: 100%;
+    margin-top: var(--s-6);
+  }
+
+  /* --------------------- Detalles constructivos ------------------ */
+  .ficha-detalles,
+  .ficha-video,
+  .ficha-galeria {
+    padding-top: clamp(3.5rem, 7vw, 6rem);
+  }
+  .ficha-detalles__titulo {
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+    margin-bottom: var(--s-6);
+  }
+
+  .detalles {
+    display: grid;
+    gap: var(--s-6);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 48rem) {
+    .detalles {
+      grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+      gap: var(--s-6) var(--s-5);
+    }
+  }
+  .detalle__num {
+    display: block;
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+  .detalle__titulo {
+    margin-top: var(--s-3);
+    font-size: var(--t-display-s);
+  }
+  .detalle__texto {
+    margin-top: 0.6rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .ficha-video__medio {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    background-color: var(--tinta);
+    object-fit: cover;
+  }
+
+  /* ------------------ Navegación entre proyectos ----------------- */
+  .entre-proyectos {
+    margin-top: clamp(4rem, 8vw, 7rem);
+    border-top: 1px solid var(--filete);
+  }
+  .entre-proyectos__rejilla {
+    display: grid;
+    gap: 0;
+  }
+  @media (min-width: 44rem) {
+    .entre-proyectos__rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-5);
+    }
+  }
+  .entre-proyectos__enlace {
+    display: grid;
+    gap: 0.4rem;
+    padding-block: var(--s-5);
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid var(--filete);
+  }
+  @media (min-width: 44rem) {
+    .entre-proyectos__enlace {
+      border-bottom: 0;
+    }
+    .entre-proyectos__enlace--der {
+      text-align: right;
+      justify-items: end;
+    }
+  }
+  .entre-proyectos__cejilla {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: var(--track-cejilla);
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .entre-proyectos__enlace :global(svg) {
+    transition: translate var(--dur-media) var(--ease-salida);
+  }
+  .entre-proyectos__enlace:hover .entre-proyectos__nombre {
+    color: var(--acento);
+  }
+  .entre-proyectos__enlace:hover :global(svg) {
+    translate: 0.25rem 0;
+  }
+  .entre-proyectos__enlace--der:hover :global(svg) {
+    translate: 0.25rem 0;
+  }
+
+  .entre-proyectos__todos {
+    padding-bottom: var(--s-6);
+  }
+</style>

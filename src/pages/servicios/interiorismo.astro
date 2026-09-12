@@ -1,0 +1,8 @@
+---
+import Servicio from '../../components/paginas/Servicio.astro';
+import { servicioPorClave } from '../../config/servicios';
+
+const servicio = servicioPorClave('interiorismo')!;
+---
+
+<Servicio servicio={servicio} lang="es" />

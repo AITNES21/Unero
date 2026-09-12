@@ -1,0 +1,8 @@
+---
+import Legal from '../components/paginas/Legal.astro';
+import { documentoPorClave } from '../config/legal';
+
+const documento = documentoPorClave('privacidad')!;
+---
+
+<Legal documento={documento} lang="es" />

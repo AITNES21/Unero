@@ -1,0 +1,288 @@
+---
+import Logo from './Logo.astro';
+import Icono from './Icono.astro';
+import { site, ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const ano = new Date().getFullYear();
+
+const columnas = [
+  {
+    titulo: t('pie.servicios'),
+    enlaces: [
+      { texto: es ? 'Construcción de casas' : 'House construction', href: ruta('construccion', lang) },
+      { texto: es ? 'Villas llave en mano' : 'Turnkey villas', href: ruta('villas', lang) },
+      { texto: es ? 'Reformas integrales' : 'Full renovations', href: ruta('reformas', lang) },
+      { texto: es ? 'Interiorismo' : 'Interior design', href: ruta('interiorismo', lang) },
+      { texto: es ? 'Promociones de viviendas' : 'Residential developments', href: ruta('promociones', lang) },
+    ],
+  },
+  {
+    titulo: t('pie.navegar'),
+    enlaces: [
+      { texto: t('nav.proyectos'), href: ruta('proyectos', lang) },
+      { texto: t('nav.proceso'), href: ruta('proceso', lang) },
+      { texto: t('nav.estudio'), href: ruta('estudio', lang) },
+      { texto: t('nav.cuaderno'), href: ruta('cuaderno', lang) },
+      { texto: es ? 'Propiedades en venta' : 'Properties for sale', href: ruta('venta', lang) },
+      { texto: es ? 'Propiedades en alquiler' : 'Properties to rent', href: ruta('alquiler', lang) },
+      { texto: es ? 'Trasteros en Móstoles' : 'Storage units in Móstoles', href: ruta('trasteros', lang) },
+    ],
+  },
+];
+---
+
+<footer class="pie tema-oscuro">
+  <div class="envoltura">
+    <div class="pie__superior">
+      <div class="pie__marca">
+        <a href={ruta('home', lang)} class="pie__logo" aria-label="Unero">
+          <Logo alto={2.4} completo />
+        </a>
+        <p class="pie__lema">
+          {
+            es
+              ? 'Construimos casas para vivir Ibiza: obra nueva, reformas e interiorismo con dirección propia de obra.'
+              : 'We build houses made for living in Ibiza: new builds, renovations and interiors, with our own site management.'
+          }
+        </p>
+        <ul class="pie__redes">
+          <li>
+            <a href={site.redes.instagram} rel="me noopener" target="_blank" aria-label="Instagram">
+              <Icono nombre="instagram" tamano={18} />
+            </a>
+          </li>
+          <li>
+            <a href={site.redes.facebook} rel="me noopener" target="_blank" aria-label="Facebook">
+              <Icono nombre="facebook" tamano={18} />
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="pie__columnas">
+        {
+          columnas.map((c) => (
+            <nav class="pie__columna" aria-label={c.titulo}>
+              <h2 class="cejilla">{c.titulo}</h2>
+              <ul>
+                {c.enlaces.map((e) => (
+                  <li>
+                    <a href={e.href}>{e.texto}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))
+        }
+
+        <div class="pie__columna">
+          <h2 class="cejilla">{t('pie.contacto')}</h2>
+          <ul>
+            <li>
+              <a href={`mailto:${site.email}`}>{site.email}</a>
+            </li>
+            {
+              site.telefonos.map((tel) => (
+                <li>
+                  <a href={`tel:${tel.numero}`}>{tel.etiqueta}</a>
+                </li>
+              ))
+            }
+            <li class="pie__dato">
+              {site.direccion.localidad}, {site.direccion.provincia}
+            </li>
+          </ul>
+
+          <h2 class="cejilla pie__cejilla-suelta">{t('pie.horario')}</h2>
+          <ul>
+            <li class="pie__dato">
+              {t('pie.lunesViernes')} · {site.horario.apertura}–{site.horario.cierre}
+            </li>
+            <li class="pie__dato">
+              {t('pie.sabadoDomingo')} · {t('pie.cerrado')}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zonas de trabajo: SEO local sin páginas artificiales.
+         Es información real y útil, no una lista de palabras clave. -->
+    <div class="pie__zonas">
+      <h2 class="cejilla">{t('pie.zonas')}</h2>
+      <p>{site.zonas.join(' · ')}</p>
+    </div>
+
+    <div class="pie__inferior">
+      <p class="pie__copy">
+        © {ano} {site.nombreLegal}. {t('pie.derechos')}
+      </p>
+      <nav class="pie__legal" aria-label={t('pie.legal')}>
+        <a href={ruta('aviso', lang)}>{es ? 'Aviso legal' : 'Legal notice'}</a>
+        <a href={ruta('privacidad', lang)}>{es ? 'Privacidad' : 'Privacy'}</a>
+        <a href={ruta('cookies', lang)}>{es ? 'Cookies' : 'Cookies'}</a>
+        <button type="button" data-abrir-cookies>
+          {es ? 'Preferencias de cookies' : 'Cookie preferences'}
+        </button>
+      </nav>
+      <p class="pie__autor">
+        {t('pie.hechaPor')}
+        <a href="https://nestek.es" rel="noopener" target="_blank">NESTEK.es</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .pie {
+    padding-block: var(--seccion-corta) var(--s-6);
+    font-size: var(--t-cuerpo-s);
+  }
+
+  .pie__superior {
+    display: grid;
+    gap: var(--s-7);
+    padding-bottom: var(--s-7);
+  }
+  @media (min-width: 60rem) {
+    .pie__superior {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      gap: var(--s-8);
+    }
+  }
+
+  .pie__logo {
+    color: var(--cal);
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .pie__lema {
+    margin-top: var(--s-5);
+    max-width: 32ch;
+    color: var(--texto-apagado);
+    line-height: 1.6;
+  }
+
+  .pie__redes {
+    display: flex;
+    gap: var(--s-2);
+    margin-top: var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  .pie__redes a {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    color: var(--cal);
+    border: 1px solid var(--filete);
+    transition: background-color var(--dur-rapida) var(--ease-suave),
+      color var(--dur-rapida) var(--ease-suave);
+  }
+  .pie__redes a:hover {
+    background-color: var(--cal);
+    color: var(--tinta);
+  }
+
+  .pie__columnas {
+    display: grid;
+    gap: var(--s-6);
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  }
+
+  .pie__columna ul {
+    list-style: none;
+    margin: var(--s-4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.1rem;
+  }
+  .pie__columna a {
+    display: inline-block;
+    /* Objetivo táctil holgado también en el pie, donde el dedo
+       tiene menos precisión. */
+    padding-block: 0.45rem;
+    color: var(--cal);
+    text-decoration: none;
+    line-height: 1.4;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .pie__columna a:hover {
+    color: var(--acento);
+  }
+  .pie__dato {
+    padding-block: 0.45rem;
+    color: var(--texto-apagado);
+    line-height: 1.4;
+  }
+  .pie__cejilla-suelta {
+    margin-top: var(--s-5);
+  }
+
+  .pie__zonas {
+    border-top: 1px solid var(--filete);
+    padding-top: var(--s-5);
+  }
+  .pie__zonas p {
+    margin-top: var(--s-3);
+    color: var(--texto-apagado);
+    line-height: 1.7;
+    max-width: 70ch;
+    font-size: var(--t-menudo);
+  }
+
+  .pie__inferior {
+    border-top: 1px solid var(--filete);
+    margin-top: var(--s-6);
+    padding-top: var(--s-5);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3) var(--s-6);
+    align-items: center;
+    justify-content: space-between;
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+  }
+
+  .pie__legal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+    order: 3;
+  }
+  @media (min-width: 60rem) {
+    .pie__legal {
+      order: 0;
+    }
+  }
+  .pie__legal a,
+  .pie__legal button {
+    color: var(--texto-apagado);
+    text-decoration: none;
+    font-size: inherit;
+    padding-block: 0.4rem;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .pie__legal a:hover,
+  .pie__legal button:hover {
+    color: var(--cal);
+  }
+
+  .pie__autor a {
+    color: var(--texto-apagado);
+    text-decoration-color: var(--filete);
+    text-underline-offset: 0.2em;
+  }
+  .pie__autor a:hover {
+    color: var(--cal);
+  }
+</style>

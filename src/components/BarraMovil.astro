@@ -1,0 +1,184 @@
+---
+import Icono from '../components/Icono.astro';
+import { site, ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+
+/* En la propia página de contacto el botón «Tu proyecto» llevaría a
+   donde ya estás. Se oculta y quedan solo los canales directos, que
+   ahí siguen aportando (llamar es más rápido que rellenar un
+   formulario para quien tiene prisa). */
+const enContacto = Astro.url.pathname === ruta('contacto', lang);
+
+const mensajeWa = encodeURIComponent(
+  lang === 'es'
+    ? 'Hola Unero, me gustaría hablar de un proyecto en Ibiza.'
+    : "Hello Unero, I'd like to talk about a project in Ibiza."
+);
+const urlWa = `https://wa.me/${site.whatsapp.replace(/\D/g, '')}?text=${mensajeWa}`;
+---
+
+{/*
+  Barra de acción en móvil.
+
+  Aparece al dejar atrás la primera pantalla, no antes: en el hero el
+  usuario todavía está decidiendo si le interesa, y tapar la fotografía
+  con botones resta más de lo que suma. A partir de ahí acompaña siempre,
+  para que el siguiente paso esté a un pulgar de distancia.
+
+  Se oculta en escritorio, donde la cabecera ya lleva su propio CTA.
+*/}
+<div
+  class="barra-movil"
+  id="barra-movil"
+  aria-hidden="true"
+  data-oculta
+  data-sin-cta={enContacto ? 'si' : undefined}
+>
+  <a
+    class="barra-movil__accion"
+    href={urlWa}
+    target="_blank"
+    rel="noopener"
+    tabindex="-1"
+  >
+    <Icono nombre="whatsapp" tamano={19} />
+    <span>{t('cta.whatsapp')}</span>
+  </a>
+  <a
+    class="barra-movil__accion"
+    href={`tel:${site.telefonos[0].numero}`}
+    tabindex="-1"
+  >
+    <Icono nombre="telefono" tamano={17} />
+    <span>{t('cta.llamar')}</span>
+  </a>
+  {
+    !enContacto && (
+      <a
+        class="barra-movil__accion barra-movil__accion--destacada"
+        href={ruta('contacto', lang)}
+        tabindex="-1"
+      >
+        <span>{t('cta.proyectoCorto')}</span>
+        <Icono nombre="flecha-derecha" tamano={16} />
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .barra-movil {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 55;
+    display: grid;
+    grid-template-columns: auto auto minmax(0, 1fr);
+    align-items: stretch;
+    background-color: var(--cal-puro);
+    border-top: 1px solid var(--piedra-clara);
+    /* Respeta la barra de gestos de iOS. */
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    translate: 0 0;
+    transition: translate var(--dur-media) var(--ease-salida);
+  }
+
+  .barra-movil[data-oculta] {
+    translate: 0 110%;
+  }
+
+  /* Sin el CTA, los dos canales se reparten el ancho completo. */
+  .barra-movil[data-sin-cta] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .barra-movil[data-sin-cta] .barra-movil__accion:last-child {
+    border-right: 0;
+  }
+
+  .barra-movil__accion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    /* 3.5rem = 56px: cómodo para el pulgar sin robar altura de pantalla. */
+    min-height: 3.5rem;
+    padding-inline: 1rem;
+    font-size: var(--t-menudo);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--tinta);
+    border-right: 1px solid var(--piedra-clara);
+  }
+
+  .barra-movil__accion--destacada {
+    background-color: var(--tinta);
+    color: var(--cal);
+    border-right: 0;
+  }
+
+  /* En pantallas muy estrechas solo queda el icono de los canales
+     directos, para que el CTA principal no se comprima. */
+  @media (max-width: 24rem) {
+    .barra-movil__accion:not(.barra-movil__accion--destacada) span {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+  }
+
+  @media (min-width: 68rem) {
+    .barra-movil {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Muestra la barra una vez superada la primera pantalla.
+   * Un centinela colocado al 85% de la altura del viewport evita
+   * escuchar `scroll`, que en móvil es el evento más caro que hay.
+   */
+  const barra = document.getElementById('barra-movil');
+
+  if (barra && window.matchMedia('(max-width: 67.999rem)').matches) {
+    const centinela = document.createElement('div');
+    centinela.setAttribute('aria-hidden', 'true');
+    centinela.style.cssText =
+      'position:absolute;top:85vh;left:0;width:1px;height:1px;pointer-events:none';
+    document.body.prepend(centinela);
+
+    const mostrar = (visible: boolean) => {
+      if (visible) {
+        delete barra.dataset.oculta;
+        barra.removeAttribute('aria-hidden');
+        // Los enlaces solo entran en el orden de tabulación cuando la
+        // barra está realmente a la vista.
+        barra
+          .querySelectorAll('a')
+          .forEach((a) => a.removeAttribute('tabindex'));
+        document.body.classList.add('con-barra-movil');
+      } else {
+        barra.dataset.oculta = '';
+        barra.setAttribute('aria-hidden', 'true');
+        barra.querySelectorAll('a').forEach((a) => (a.tabIndex = -1));
+        document.body.classList.remove('con-barra-movil');
+      }
+    };
+
+    new IntersectionObserver(
+      ([entrada]) => mostrar(!entrada.isIntersecting),
+      { threshold: 0 }
+    ).observe(centinela);
+  }
+</script>

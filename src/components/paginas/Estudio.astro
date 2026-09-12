@@ -1,0 +1,432 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { site, ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import * as schema from '../../lib/schema';
+
+import imgPrincipal from '../../assets/proyectos/cas-mut/foto1.webp';
+import imgObra from '../../assets/site/foto8.webp';
+import imgDetalle from '../../assets/proyectos/ses-torres-ii/foto12.webp';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const alternativa = ruta('estudio', es ? 'en' : 'es');
+
+const copy = es
+  ? {
+      titulo: 'Sobre Unero | Constructora en Ibiza desde 2011',
+      descripcion:
+        'Quiénes somos: una empresa constructora con base en Ibiza, con dirección propia de obra y quince años levantando villas, reformas y promociones en la isla.',
+      cejilla: 'Estudio',
+      h1: 'Una empresa constructora de Ibiza',
+      entradilla:
+        'Desde 2011 construimos en la isla. Sin intermediarios, sin ceder la responsabilidad y con la misma persona al frente desde la primera visita hasta la entrega.',
+      parrafos: [
+        'Unero nació en Ibiza en 2011. Empezamos haciendo obra para otros y acabamos promoviendo vivienda propia, lo que nos dio una perspectiva que no se aprende de otra forma: saber lo que cuesta de verdad cada partida cuando el dinero es tuyo, y saber en qué momento del calendario se pierde.',
+        'Hoy hacemos tres cosas: construir casas de obra nueva, rehabilitar casas existentes y desarrollar promociones. Y una cuarta que a menudo va con las anteriores: el interiorismo, para que la casa se entregue terminada y no a medio vestir.',
+        'No somos un estudio de arquitectura y no pretendemos serlo. Trabajamos con el arquitecto que el cliente elija, y nuestro valor está en el otro lado: en que lo dibujado se pueda construir, en que los veinte oficios que mueve una casa no se esperen unos a otros, y en que la calidad que se prometió en el presupuesto esté en la obra.',
+      ],
+      valoresTitulo: 'Cómo entendemos este trabajo',
+      valores: [
+        {
+          t: 'Estar en la obra',
+          d: 'Nuestro jefe de obra está en la parcela, y es la misma persona que te atendió el primer día. La mayoría de los problemas de una obra son problemas de coordinación, y la coordinación no se hace por teléfono.',
+        },
+        {
+          t: 'Decir los plazos reales',
+          d: 'Una licencia tarda de seis a doce meses y no hay forma de acelerarla. Preferimos decirlo al principio y perder algún encargo antes que prometer un calendario que sabemos que no se va a cumplir.',
+        },
+        {
+          t: 'Presupuestos que se pueden leer',
+          d: 'Por partidas medidas, con precios unitarios y las exclusiones escritas en lenguaje comprensible. Un total redondo en una hoja no es un presupuesto: es una intención.',
+        },
+        {
+          t: 'No ahorrar donde no se ve',
+          d: 'Aislamiento, impermeabilización y carpintería son las tres cosas que no se pueden arreglar después sin romper. Si hay que ajustar, se ajusta en superficie o en acabados, nunca ahí.',
+        },
+        {
+          t: 'Construir para la isla',
+          d: 'Sal en el aire, sol vertical en agosto, materiales que llegan en barco y oficios comprometidos desde primavera. Planificar sabiendo eso es la mitad del trabajo.',
+        },
+        {
+          t: 'Seguir cogiendo el teléfono',
+          d: 'La garantía legal es de diez años en estructura. Que un constructor siga respondiendo en el año cuatro no se puede poner en un contrato, pero se le puede preguntar a sus clientes anteriores.',
+        },
+      ],
+      obraTitulo: 'Lo que no sale en las fotos',
+      obraTexto:
+        'Las fotografías de una casa terminada enseñan el resultado, no el trabajo. El trabajo es la cimentación en un terreno con roca a medio metro, el plan de juntas de un hormigón visto dibujado antes de hormigonar, el recubrimiento de armadura dimensionado para ambiente marino, y el electricista pasando antes de que se cierre el falso techo. Nada de eso se puede ver cuando la casa está acabada, y es exactamente lo que se paga.',
+      colaborarTitulo: 'Para estudios de arquitectura',
+      colaborarTexto:
+        'Trabajamos habitualmente con estudios de fuera de la isla. Lo que aportamos: conocimiento de la normativa insular y de los tiempos reales de cada ayuntamiento, plazos de suministro de material a Baleares, y una revisión constructiva del proyecto antes de que salga a licencia. Si estás proyectando una casa en Ibiza y quieres una segunda lectura desde la obra, escríbenos.',
+      contactoTitulo: 'Hablar con nosotros',
+    }
+  : {
+      titulo: 'About Unero | Construction company in Ibiza since 2011',
+      descripcion:
+        'Who we are: a construction company based in Ibiza, with in-house site management and fifteen years building villas, renovations and developments on the island.',
+      cejilla: 'Studio',
+      h1: 'A construction company from Ibiza',
+      entradilla:
+        'We have been building on the island since 2011. No middlemen, no handing off responsibility, and the same person leading from the first visit to the handover.',
+      parrafos: [
+        'Unero was founded in Ibiza in 2011. We started building for others and ended up developing our own housing, which gave us a perspective you cannot learn any other way: knowing what each item really costs when the money is yours, and knowing at what point in the calendar it gets lost.',
+        'Today we do three things: build new houses, refurbish existing ones and develop housing schemes. And a fourth that often comes with them: interior design, so the house is handed over finished rather than half dressed.',
+        'We are not an architecture studio and we do not pretend to be. We work with whichever architect the client chooses, and our value lies on the other side: making sure what is drawn can be built, that the twenty trades a house involves are not waiting on each other, and that the quality promised in the quote is the quality on site.',
+      ],
+      valoresTitulo: 'How we see this work',
+      valores: [
+        {
+          t: 'Being on site',
+          d: 'Our site manager is on the plot, and it is the same person who dealt with you on day one. Most problems on a build are coordination problems, and coordination does not happen over the phone.',
+        },
+        {
+          t: 'Stating real timescales',
+          d: 'A permit takes six to twelve months and there is no way to speed it up. We would rather say so at the start and lose the occasional job than promise a programme we know will be missed.',
+        },
+        {
+          t: 'Quotes you can read',
+          d: 'By measured items, with unit rates and the exclusions written in plain language. A round figure on a single sheet is not a quote: it is an intention.',
+        },
+        {
+          t: 'Not saving where it does not show',
+          d: 'Insulation, waterproofing and joinery are the three things that cannot be fixed later without breaking things. If something has to give, it gives on floor area or finishes, never there.',
+        },
+        {
+          t: 'Building for the island',
+          d: 'Salt in the air, vertical sun in August, materials that arrive by boat and trades committed from spring. Planning with that in mind is half the job.',
+        },
+        {
+          t: 'Still answering the phone',
+          d: 'The statutory guarantee is ten years on structure. A builder still answering in year four is not something you can put in a contract, but you can ask their previous clients.',
+        },
+      ],
+      obraTitulo: 'What the photographs do not show',
+      obraTexto:
+        'Photographs of a finished house show the result, not the work. The work is the foundation in ground with rock half a metre down, the joint layout of exposed concrete drawn before the pour, the reinforcement cover sized for a marine environment, and the electrician going through before the ceiling is closed. None of that can be seen once the house is finished, and it is exactly what is being paid for.',
+      colaborarTitulo: 'For architecture studios',
+      colaborarTexto:
+        'We regularly work with studios from outside the island. What we bring: knowledge of island planning rules and the real timescales of each town hall, lead times for material shipped to the Balearics, and a buildability review of the design before it goes for permit. If you are designing a house in Ibiza and want a second reading from a builder, get in touch.',
+      contactoTitulo: 'Talk to us',
+    };
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: copy.cejilla, href: ruta('estudio', lang) },
+  ]),
+  {
+    '@type': 'AboutPage',
+    name: copy.h1,
+    description: copy.descripcion,
+    mainEntity: { '@id': 'https://unero.es/#unero' },
+  },
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas items={[{ nombre: copy.cejilla }]} lang={lang} />
+
+      <div class="est-intro">
+        <div class="est-intro__texto">
+          <p class="cejilla">{copy.cejilla}</p>
+          <h1 class="display-xl est-intro__titulo">{copy.h1}</h1>
+          <p class="est-intro__entradilla">{copy.entradilla}</p>
+        </div>
+        <div class="est-intro__medio marco marco--4-5">
+          <Image
+            src={imgPrincipal}
+            alt={
+              es
+                ? 'Villa en una ladera de pinos en Ibiza, con fachada de hormigón visto, muro de piedra seca, tarima de madera y piscina.'
+                : 'Villa on a pine-covered slope in Ibiza, with an exposed concrete façade, a dry-stone wall, timber decking and a pool.'
+            }
+            widths={[480, 720, 1024]}
+            sizes="(min-width: 62rem) 42vw, 92vw"
+            loading="eager"
+            decoding="sync"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+
+      <div class="prosa est-prosa">
+        {copy.parrafos.map((p) => <p>{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== Valores ========================= -->
+  <section class="seccion tema-hueso">
+    <div class="envoltura">
+      <h2 class="display-l titulo-filete">{copy.valoresTitulo}</h2>
+      <ul class="valores">
+        {
+          copy.valores.map((v, i) => (
+            <li class="valor revelar" style={`--retardo:${i * 60}ms`}>
+              <span class="valor__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="valor__titulo">{v.t}</h3>
+              <p class="valor__texto">{v.d}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- =================== Lo que no sale en fotos ================ -->
+  <section class="seccion tema-oscuro">
+    <div class="envoltura">
+      <div class="est-obra">
+        <div>
+          <h2 class="display-l">{copy.obraTitulo}</h2>
+          <p class="est-obra__texto">{copy.obraTexto}</p>
+        </div>
+        <div class="est-obra__medios">
+          <div class="marco marco--4-5">
+            <Image
+              src={imgObra}
+              alt={
+                es
+                  ? 'Obra en ejecución con excavación, armaduras de acero y apuntalamiento.'
+                  : 'Construction underway with excavation, steel reinforcement and shoring.'
+              }
+              widths={[360, 540, 720]}
+              sizes="(min-width: 62rem) 22vw, 45vw"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div class="marco marco--4-5">
+            <Image
+              src={imgDetalle}
+              alt={
+                es
+                  ? 'Planta sótano en hormigón visto con pilar central, durante la fase de estructura.'
+                  : 'Basement floor in exposed concrete with a central column, during the structural stage.'
+              }
+              widths={[360, 540, 720]}
+              sizes="(min-width: 62rem) 22vw, 45vw"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================== Para estudios + contacto ================= -->
+  <section class="seccion">
+    <div class="envoltura">
+      <div class="est-doble">
+        <div class="est-bloque">
+          <h2 class="display-m">{copy.colaborarTitulo}</h2>
+          <p class="est-bloque__texto">{copy.colaborarTexto}</p>
+          <a href={ruta('contacto', lang)} class="enlace-flecha">
+            {t('cta.hablemos')}
+            <Icono nombre="flecha-derecha" tamano={14} />
+          </a>
+        </div>
+
+        <div class="est-bloque">
+          <h2 class="display-m">{copy.contactoTitulo}</h2>
+          <ul class="est-contacto">
+            <li>
+              <a href={`mailto:${site.email}`}>
+                <Icono nombre="sobre" tamano={16} />
+                {site.email}
+              </a>
+            </li>
+            {
+              site.telefonos.map((tel) => (
+                <li>
+                  <a href={`tel:${tel.numero}`}>
+                    <Icono nombre="telefono" tamano={15} />
+                    {tel.etiqueta}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <span class="est-contacto__dato">
+                <Icono nombre="ubicacion" tamano={16} />
+                {site.direccion.localidad}, {site.direccion.provincia}
+              </span>
+            </li>
+            <li>
+              <span class="est-contacto__dato">
+                <Icono nombre="reloj" tamano={16} />
+                {t('pie.lunesViernes')} · {site.horario.apertura}–{site.horario.cierre}
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  .est-intro {
+    display: grid;
+    gap: var(--s-6);
+    margin-top: var(--s-6);
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .est-intro {
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      gap: var(--s-8);
+    }
+  }
+  .est-intro__titulo {
+    margin-top: var(--s-4);
+  }
+  .est-intro__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 48ch;
+    text-wrap: pretty;
+  }
+
+  .est-prosa {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    max-width: 64ch;
+  }
+
+  .titulo-filete {
+    padding-bottom: var(--s-5);
+    border-bottom: 1px solid var(--filete);
+    margin-bottom: var(--s-6);
+  }
+
+  .valores {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 44rem) {
+    .valores {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 68rem) {
+    .valores {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .valor__num {
+    display: block;
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+  .valor__titulo {
+    margin-top: var(--s-3);
+    font-size: var(--t-display-s);
+  }
+  .valor__texto {
+    margin-top: 0.55rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .est-obra {
+    display: grid;
+    gap: var(--s-7);
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .est-obra {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: var(--s-8);
+    }
+  }
+  .est-obra__texto {
+    margin-top: var(--s-5);
+    max-width: 58ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+  .est-obra__medios {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-4);
+  }
+
+  .est-doble {
+    display: grid;
+    gap: var(--s-7);
+  }
+  @media (min-width: 56rem) {
+    .est-doble {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-8);
+    }
+  }
+  .est-bloque {
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--filete);
+  }
+  .est-bloque__texto {
+    margin-top: var(--s-4);
+    margin-bottom: var(--s-5);
+    max-width: 54ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .est-contacto {
+    list-style: none;
+    padding: 0;
+    margin-top: var(--s-4);
+    display: grid;
+    gap: 0.1rem;
+  }
+  .est-contacto a,
+  .est-contacto__dato {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.75rem;
+    font-size: var(--t-cuerpo-s);
+    color: var(--texto);
+    text-decoration: none;
+  }
+  .est-contacto a:hover {
+    color: var(--acento);
+  }
+  .est-contacto__dato {
+    color: var(--texto-apagado);
+  }
+  .est-contacto :global(svg) {
+    flex: none;
+    opacity: 0.55;
+  }
+</style>

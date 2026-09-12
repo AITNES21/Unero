@@ -1,0 +1,546 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, type Idioma, type ClaveRuta } from '../../config/site';
+import { numero, useT } from '../../i18n/ui';
+import {
+  propiedades,
+  bi,
+  biLista,
+  etiquetaEstadoPropiedad,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  lang: Idioma;
+  /** Sin valor, muestra venta y alquiler juntas. */
+  operacion?: 'venta' | 'alquiler';
+}
+const { lang, operacion } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+
+const lista = await propiedades(operacion);
+
+const clave: ClaveRuta = operacion === 'venta'
+  ? 'venta'
+  : operacion === 'alquiler'
+    ? 'alquiler'
+    : 'propiedades';
+const alternativa = ruta(clave, es ? 'en' : 'es');
+
+const copyBase = es
+  ? {
+      cejilla: 'Propiedades',
+      nota: 'Las propiedades vendidas o alquiladas se mantienen publicadas: forman parte de nuestro historial. Si buscas algo parecido, podemos construirlo.',
+      pestanas: [
+        { texto: 'Todas', clave: 'propiedades' as ClaveRuta },
+        { texto: 'En venta', clave: 'venta' as ClaveRuta },
+        { texto: 'En alquiler', clave: 'alquiler' as ClaveRuta },
+      ],
+    }
+  : {
+      cejilla: 'Properties',
+      nota: 'Properties already sold or let stay published: they are part of our record. If you are looking for something similar, we can build it.',
+      pestanas: [
+        { texto: 'All', clave: 'propiedades' as ClaveRuta },
+        { texto: 'For sale', clave: 'venta' as ClaveRuta },
+        { texto: 'To rent', clave: 'alquiler' as ClaveRuta },
+      ],
+    };
+
+const variantes = {
+  propiedades: es
+    ? {
+        titulo: 'Propiedades en venta y alquiler en Ibiza | Unero',
+        descripcion:
+          'Villas y viviendas en venta y alquiler en Ibiza de la mano de la constructora que las conoce por dentro. Promociones propias y propiedades seleccionadas.',
+        h1: 'Propiedades',
+        entradilla:
+          'Viviendas en venta y villas en alquiler en Ibiza. Somos constructora, así que de estas casas conocemos lo que no se ve: cómo están hechas.',
+      }
+    : {
+        titulo: 'Properties for sale and to rent in Ibiza | Unero',
+        descripcion:
+          'Villas and homes for sale and to rent in Ibiza, through the builder who knows them from the inside. Our own developments and selected properties.',
+        h1: 'Properties',
+        entradilla:
+          'Homes for sale and villas to rent in Ibiza. We are builders, so with these houses we know what you cannot see: how they are made.',
+      },
+  venta: es
+    ? {
+        titulo: 'Viviendas en venta en Ibiza | Obra nueva | Unero',
+        descripcion:
+          'Viviendas de obra nueva en venta en Ibiza, de promoción propia. Casas con piscina, jardín mediterráneo y acabados de calidad, construidas y entregadas por nosotros.',
+        h1: 'En venta',
+        entradilla:
+          'Promociones propias de obra nueva en Ibiza. Las proyectamos, las construimos y las entregamos completas.',
+      }
+    : {
+        titulo: 'Homes for sale in Ibiza | New build | Unero',
+        descripcion:
+          'New-build homes for sale in Ibiza, from our own developments. Houses with pool, Mediterranean garden and quality finishes, built and handed over by us.',
+        h1: 'For sale',
+        entradilla:
+          'Our own new-build developments in Ibiza. We design them, build them and hand them over complete.',
+      },
+  alquiler: es
+    ? {
+        titulo: 'Villas de alquiler en Ibiza | Propiedades exclusivas | Unero',
+        descripcion:
+          'Villas exclusivas en alquiler en Ibiza: piscina, jardín privado y servicios incluidos. Propiedades seleccionadas con arquitectura y materiales de primer nivel.',
+        h1: 'En alquiler',
+        entradilla:
+          'Villas exclusivas en la isla, con piscina, jardín privado y servicios incluidos. Consulta disponibilidad por temporada.',
+      }
+    : {
+        titulo: 'Villas to rent in Ibiza | Exclusive properties | Unero',
+        descripcion:
+          'Exclusive villas to rent in Ibiza: pool, private garden and services included. Selected properties with first-rate architecture and materials.',
+        h1: 'To rent',
+        entradilla:
+          'Exclusive villas on the island, with pool, private garden and services included. Ask about availability by season.',
+      },
+};
+
+const copy = variantes[clave as keyof typeof variantes];
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas(
+    [
+      { nombre: t('nav.inicio'), href: ruta('home', lang) },
+      { nombre: copyBase.cejilla, href: ruta('propiedades', lang) },
+      ...(operacion ? [{ nombre: copy.h1, href: ruta(clave, lang) }] : []),
+    ]
+  ),
+  {
+    '@type': 'CollectionPage',
+    name: copy.h1,
+    description: copy.descripcion,
+  },
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas
+        items={
+          operacion
+            ? [
+                { nombre: copyBase.cejilla, href: ruta('propiedades', lang) },
+                { nombre: copy.h1 },
+              ]
+            : [{ nombre: copyBase.cejilla }]
+        }
+        lang={lang}
+      />
+
+      <header class="prop-cabecera">
+        <p class="cejilla">{copyBase.cejilla}</p>
+        <h1 class="display-xl prop-cabecera__titulo">{copy.h1}</h1>
+        <p class="prop-cabecera__entradilla">{copy.entradilla}</p>
+      </header>
+
+      <nav class="pestanas" aria-label={copyBase.cejilla}>
+        <ul>
+          {
+            copyBase.pestanas.map((p) => (
+              <li>
+                <a
+                  href={ruta(p.clave, lang)}
+                  class="pestanas__enlace"
+                  aria-current={p.clave === clave ? 'page' : undefined}
+                >
+                  {p.texto}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {
+        lista.length === 0 ? (
+          <p class="prop-vacio">{t('gen.pendiente')}</p>
+        ) : (
+          <div class="propiedades">
+            {lista.map((p, i) => {
+              const d = p.data;
+              const caracteristicas = biLista(d.caracteristicas, lang);
+              const servicios = biLista(d.servicios, lang);
+              const relato = biLista(d.relato, lang);
+              const vendida = d.estado !== 'disponible';
+              return (
+                <article class:list={['propiedad', vendida && 'propiedad--cerrada']}>
+                  <div class="propiedad__medio marco marco--3-2">
+                    <Image
+                      src={d.portada}
+                      alt={bi(d.portadaAlt, lang) ?? bi(d.titulo, lang)!}
+                      widths={[540, 800, 1100, 1440]}
+                      sizes="(min-width: 62rem) 52vw, 92vw"
+                      loading={i === 0 ? 'eager' : 'lazy'}
+                      decoding={i === 0 ? 'sync' : 'async'}
+                    />
+                    <span
+                      class:list={[
+                        'propiedad__estado',
+                        vendida && 'propiedad__estado--cerrada',
+                      ]}
+                    >
+                      {etiquetaEstadoPropiedad(d.estado, lang)}
+                    </span>
+                  </div>
+
+                  <div class="propiedad__cuerpo">
+                    <p class="propiedad__meta">
+                      <Icono nombre="ubicacion" tamano={13} />
+                      {bi(d.ubicacion, lang)}
+                    </p>
+                    <h2 class="display-m propiedad__titulo">{bi(d.titulo, lang)}</h2>
+
+                    <ul class="propiedad__cifras">
+                      {d.dormitorios && (
+                        <li>
+                          <strong>{d.dormitorios}</strong>
+                          {es ? 'dormitorios' : 'bedrooms'}
+                        </li>
+                      )}
+                      {d.banos && (
+                        <li>
+                          <strong>{d.banos}</strong>
+                          {es ? 'baños' : 'bathrooms'}
+                        </li>
+                      )}
+                      {d.superficie && (
+                        <li>
+                          <strong>{numero(d.superficie, lang)} m²</strong>
+                          {es ? 'terraza' : 'terrace'}
+                        </li>
+                      )}
+                      {d.precio && (
+                        <li>
+                          <strong>{bi(d.precio, lang)}</strong>
+                        </li>
+                      )}
+                    </ul>
+
+                    <div class="prosa propiedad__prosa">
+                      {relato.length > 0
+                        ? relato.map((x) => <p>{x}</p>)
+                        : <p>{bi(d.resumen, lang)}</p>}
+                    </div>
+
+                    {caracteristicas.length > 0 && (
+                      <details class="propiedad__mas">
+                        <summary>
+                          {es ? 'Características' : 'Features'}
+                          <span class="propiedad__signo" aria-hidden="true" />
+                        </summary>
+                        <ul class="propiedad__lista">
+                          {caracteristicas.map((x) => (
+                            <li>
+                              <Icono nombre="comprobado" tamano={13} />
+                              {x}
+                            </li>
+                          ))}
+                        </ul>
+                        {servicios.length > 0 && (
+                          <>
+                            <p class="propiedad__subtitulo">
+                              {es ? 'Servicios incluidos' : 'Services included'}
+                            </p>
+                            <ul class="propiedad__lista">
+                              {servicios.map((x) => (
+                                <li>
+                                  <Icono nombre="comprobado" tamano={13} />
+                                  {x}
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </details>
+                    )}
+
+                    <div class="propiedad__acciones">
+                      <a href={ruta('contacto', lang)} class="boton boton--solido">
+                        {vendida
+                          ? es
+                            ? 'Quiero algo parecido'
+                            : 'I want something similar'
+                          : es
+                            ? 'Solicitar información'
+                            : 'Request information'}
+                      </a>
+                      {d.enlaceExterno && (
+                        <a
+                          href={d.enlaceExterno}
+                          class="enlace-flecha"
+                          target="_blank"
+                          rel="noopener"
+                        >
+                          {es ? 'Ficha completa' : 'Full listing'}
+                          <Icono nombre="flecha-arriba-derecha" tamano={13} />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        )
+      }
+
+      <p class="nota-indice">{copyBase.nota}</p>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} sobrio />
+</Base>
+
+<style>
+  .prop-cabecera {
+    margin-top: var(--s-6);
+    max-width: 52rem;
+  }
+  .prop-cabecera__titulo {
+    margin-top: var(--s-4);
+  }
+  .prop-cabecera__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 54ch;
+    text-wrap: pretty;
+  }
+
+  .pestanas {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--filete);
+  }
+  .pestanas ul {
+    display: flex;
+    gap: var(--s-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+  .pestanas__enlace {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    font-size: var(--t-menudo);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--texto-apagado);
+    border: 1px solid var(--filete);
+    transition: color var(--dur-rapida) var(--ease-suave),
+      border-color var(--dur-rapida) var(--ease-suave),
+      background-color var(--dur-rapida) var(--ease-suave);
+  }
+  .pestanas__enlace:hover {
+    color: var(--texto);
+    border-color: var(--piedra);
+  }
+  .pestanas__enlace[aria-current] {
+    background-color: var(--tinta);
+    border-color: var(--tinta);
+    color: var(--cal);
+  }
+
+  .propiedades {
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  .propiedad {
+    display: grid;
+    gap: var(--s-5);
+  }
+  @media (min-width: 62rem) {
+    .propiedad {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: var(--s-7);
+      align-items: start;
+    }
+  }
+
+  /* Una propiedad ya vendida se atenúa, pero sigue siendo legible:
+     acredita trabajo hecho y merece estar publicada. */
+  .propiedad--cerrada .propiedad__medio :global(img) {
+    filter: saturate(0.55);
+  }
+
+  .propiedad__estado {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5rem 0.9rem;
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: var(--track-cejilla);
+    text-transform: uppercase;
+    background-color: var(--mar);
+    color: var(--cal);
+  }
+  .propiedad__estado--cerrada {
+    background-color: var(--tinta);
+  }
+
+  .propiedad__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: var(--t-cejilla);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .propiedad__titulo {
+    margin-top: 0.5rem;
+  }
+
+  .propiedad__cifras {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-4) var(--s-5);
+    margin-top: var(--s-5);
+    padding-block: var(--s-4);
+    border-block: 1px solid var(--filete);
+    list-style: none;
+    padding-inline: 0;
+  }
+  .propiedad__cifras li {
+    display: grid;
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    line-height: 1.35;
+  }
+  .propiedad__cifras strong {
+    font-family: var(--fuente-display);
+    font-size: var(--t-display-s);
+    font-weight: 400;
+    color: var(--texto);
+  }
+
+  .propiedad__prosa {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-s);
+  }
+
+  .propiedad__mas {
+    margin-top: var(--s-5);
+    border-top: 1px solid var(--filete);
+  }
+  .propiedad__mas summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-block: var(--s-4);
+    cursor: pointer;
+    list-style: none;
+    font-size: var(--t-menudo);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .propiedad__mas summary::-webkit-details-marker {
+    display: none;
+  }
+  .propiedad__signo {
+    position: relative;
+    width: 0.9rem;
+    height: 0.9rem;
+    flex: none;
+  }
+  .propiedad__signo::before,
+  .propiedad__signo::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto 0;
+    height: 1px;
+    background-color: currentColor;
+    transition: rotate var(--dur-media) var(--ease-salida);
+  }
+  .propiedad__signo::after {
+    rotate: 90deg;
+  }
+  .propiedad__mas[open] .propiedad__signo::after {
+    rotate: 180deg;
+  }
+
+  .propiedad__lista {
+    display: grid;
+    gap: 0.35rem;
+    padding: 0 0 var(--s-4);
+    list-style: none;
+  }
+  @media (min-width: 34rem) {
+    .propiedad__lista {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.35rem var(--s-4);
+    }
+  }
+  .propiedad__lista li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.45;
+  }
+  .propiedad__lista :global(svg) {
+    flex: none;
+    color: var(--acento);
+    translate: 0 0.15rem;
+  }
+  .propiedad__subtitulo {
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+    margin-bottom: var(--s-3);
+  }
+
+  .propiedad__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4);
+    margin-top: var(--s-5);
+  }
+
+  .prop-vacio {
+    margin-top: var(--s-7);
+    color: var(--texto-apagado);
+  }
+
+  .nota-indice {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+    max-width: 62ch;
+  }
+</style>

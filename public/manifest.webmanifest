@@ -1,0 +1,16 @@
+{
+  "name": "Unero — Constructora en Ibiza",
+  "short_name": "Unero",
+  "description": "Construcción de villas, reformas integrales e interiorismo en Ibiza y Formentera.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#f7f4ee",
+  "theme_color": "#f7f4ee",
+  "lang": "es-ES",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "/favicon-96.png", "sizes": "96x96", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,261 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { SERVICIOS } from '../../config/servicios';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const alternativa = ruta('servicios', es ? 'en' : 'es');
+
+const copy = es
+  ? {
+      titulo: 'Servicios de construcción y reformas en Ibiza | Unero',
+      descripcion:
+        'Construcción de casas, villas llave en mano, reformas integrales e interiorismo en Ibiza y Formentera. Un servicio por cada tipo de proyecto.',
+      cejilla: 'Servicios',
+      h1: 'Qué hacemos',
+      entradilla:
+        'Cinco servicios con una misma forma de trabajar: dirección propia de obra, presupuesto que se puede leer y una sola persona responsable de principio a fin.',
+      cierreTitulo: 'No sabes en qué categoría encaja tu proyecto',
+      cierreTexto:
+        'Es lo normal. Casi ninguna obra entra limpia en una casilla: una compra para reformar puede acabar siendo una ampliación, y una parcela puede dar para dos viviendas en lugar de una. Cuéntanoslo y te decimos qué estamos viendo.',
+    }
+  : {
+      titulo: 'Construction and renovation services in Ibiza | Unero',
+      descripcion:
+        'House construction, turnkey villas, full renovations and interior design in Ibiza and Formentera. One service for each type of project.',
+      cejilla: 'Services',
+      h1: 'What we do',
+      entradilla:
+        'Five services with one way of working: our own site management, a quote you can actually read, and one person accountable from start to finish.',
+      cierreTitulo: 'Not sure which category your project fits',
+      cierreTexto:
+        'That is normal. Almost no job fits cleanly into a box: a purchase to renovate can end up as an extension, and a plot can turn out to take two houses instead of one. Tell us about it and we will tell you what we are seeing.',
+    };
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: copy.cejilla, href: ruta('servicios', lang) },
+  ]),
+  {
+    '@type': 'CollectionPage',
+    name: copy.h1,
+    description: copy.descripcion,
+    hasPart: SERVICIOS.map((s) => ({
+      '@type': 'Service',
+      name: s[lang].h1,
+      description: s[lang].entradilla,
+      url: new URL(ruta(s.clave, lang), 'https://unero.es').href,
+    })),
+  },
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas items={[{ nombre: copy.cejilla }]} lang={lang} />
+
+      <header class="hub-cabecera">
+        <p class="cejilla">{copy.cejilla}</p>
+        <h1 class="display-xl hub-cabecera__titulo">{copy.h1}</h1>
+        <p class="hub-cabecera__entradilla">{copy.entradilla}</p>
+      </header>
+    </div>
+  </section>
+
+  <!-- Cada servicio como una banda editorial a ancho completo:
+       la fotografía lleva el peso y el texto explica de qué va. -->
+  <div class="hub">
+    {
+      SERVICIOS.map((s, i) => (
+        <section class:list={['banda', i % 2 === 1 && 'banda--invertida']}>
+          <div class="envoltura banda__rejilla">
+            <a
+              href={ruta(s.clave, lang)}
+              class="banda__medio marco marco--3-2 zoom"
+              tabindex="-1"
+              aria-hidden="true"
+            >
+              <Image
+                src={s.imagen}
+                alt=""
+                widths={[480, 720, 1024, 1280]}
+                sizes="(min-width: 62rem) 50vw, 92vw"
+                loading={i === 0 ? 'eager' : 'lazy'}
+                decoding={i === 0 ? 'sync' : 'async'}
+              />
+            </a>
+
+            <div class="banda__texto">
+              <p class="banda__num">{String(i + 1).padStart(2, '0')}</p>
+              <h2 class="display-l banda__titulo">
+                <a href={ruta(s.clave, lang)}>{s[lang].h1}</a>
+              </h2>
+              <p class="banda__entradilla">{s[lang].entradilla}</p>
+
+              <ul class="banda__puntos">
+                {s[lang].incluye.slice(0, 4).map((b) => (
+                  <li>
+                    <Icono nombre="comprobado" tamano={14} grosor={1.5} />
+                    {b.t}
+                  </li>
+                ))}
+              </ul>
+
+              <a href={ruta(s.clave, lang)} class="enlace-flecha banda__cta">
+                {t('cta.saberMas')}
+                <Icono nombre="flecha-derecha" tamano={14} />
+              </a>
+            </div>
+          </div>
+        </section>
+      ))
+    }
+  </div>
+
+  <section class="seccion tema-hueso">
+    <div class="envoltura-estrecha cierre">
+      <h2 class="display-m">{copy.cierreTitulo}</h2>
+      <p class="cierre__texto">{copy.cierreTexto}</p>
+      <a href={ruta('contacto', lang)} class="boton boton--solido">
+        {t('cta.proyecto')}
+        <Icono nombre="flecha-derecha" tamano={15} />
+      </a>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  .hub-cabecera {
+    margin-top: var(--s-6);
+    max-width: 52rem;
+  }
+  .hub-cabecera__titulo {
+    margin-top: var(--s-4);
+  }
+  .hub-cabecera__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 52ch;
+    text-wrap: pretty;
+  }
+
+  .banda {
+    padding-block: clamp(2.5rem, 5vw, 4.5rem);
+    border-top: 1px solid var(--filete);
+  }
+  .banda:first-child {
+    border-top: 0;
+  }
+
+  .banda__rejilla {
+    display: grid;
+    gap: var(--s-5);
+    align-items: center;
+  }
+  @media (min-width: 62rem) {
+    .banda__rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-8);
+    }
+    .banda--invertida .banda__medio {
+      order: 2;
+    }
+  }
+
+  .banda__medio {
+    display: block;
+  }
+
+  .banda__num {
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+
+  .banda__titulo {
+    margin-top: var(--s-3);
+  }
+  .banda__titulo a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .banda__titulo a:hover {
+    color: var(--acento);
+  }
+
+  .banda__entradilla {
+    margin-top: var(--s-4);
+    max-width: 52ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  .banda__puntos {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 34rem) {
+    .banda__puntos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.4rem var(--s-4);
+    }
+  }
+  .banda__puntos li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.45;
+    color: var(--texto);
+  }
+  .banda__puntos :global(svg) {
+    flex: none;
+    color: var(--acento);
+    translate: 0 0.15rem;
+  }
+
+  .banda__cta {
+    margin-top: var(--s-5);
+  }
+
+  .cierre {
+    display: grid;
+    gap: var(--s-5);
+    justify-items: start;
+    text-align: left;
+  }
+  .cierre__texto {
+    max-width: 58ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+</style>

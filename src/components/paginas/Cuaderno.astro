@@ -1,0 +1,317 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import Migas from '../Migas.astro';
+import TarjetaArticulo from '../TarjetaArticulo.astro';
+import BloqueCta from '../BloqueCta.astro';
+import { ruta, rutaCategoria, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import {
+  articulos,
+  articulosDeCategoria,
+  categoriasConContenido,
+  categoriaPorId,
+  bi,
+  minutosDeLectura,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  lang: Idioma;
+  /** Si se pasa, la página actúa como índice de ese tema. */
+  categoria?: string;
+}
+const { lang, categoria } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+
+const temas = await categoriasConContenido(lang);
+const entrada = categoria ? await categoriaPorId(categoria) : undefined;
+const lista = categoria
+  ? await articulosDeCategoria(categoria, lang)
+  : await articulos(lang);
+
+/* En el índice general se destaca el primero; en un tema, no: allí
+   todos los artículos compiten en igualdad. */
+const destacado = !categoria ? lista[0] : undefined;
+const resto = destacado ? lista.slice(1) : lista;
+
+const aqui = categoria ? rutaCategoria(categoria, lang) : ruta('cuaderno', lang);
+const alternativa = categoria
+  ? rutaCategoria(categoria, es ? 'en' : 'es')
+  : ruta('cuaderno', es ? 'en' : 'es');
+
+const copy = es
+  ? {
+      cejilla: 'Cuaderno',
+      h1General: 'Ibiza, arquitectura y materiales',
+      entradillaGeneral:
+        'Lo que hemos aprendido construyendo en la isla: costes reales, normativa, materiales que aguantan la sal y las decisiones de proyecto que hacen que una casa se disfrute en agosto. Escrito para quien está pensando en construir aquí.',
+      tituloGeneral:
+        'Construir en Ibiza: costes y materiales | Cuaderno Unero',
+      descGeneral:
+        'Guías sobre construir y reformar en Ibiza: cuánto cuesta, qué comprobar antes de comprar una parcela y materiales que aguantan el clima.',
+    }
+  : {
+      cejilla: 'Journal',
+      h1General: 'Ibiza, architecture and materials',
+      entradillaGeneral:
+        'What we have learnt building on the island: real costs, planning rules, materials that survive salt air, and the design decisions that make a house enjoyable in August. Written for anyone thinking of building here.',
+      tituloGeneral:
+        'Building in Ibiza: costs and materials | Unero Journal',
+      descGeneral:
+        'Guides on building and renovating in Ibiza: what it costs, what to check before buying a plot, and materials that cope with the climate.',
+    };
+
+const h1 = entrada ? bi(entrada.data.nombre, lang)! : copy.h1General;
+const entradilla = entrada
+  ? bi(entrada.data.descripcion, lang)!
+  : copy.entradillaGeneral;
+const titulo = entrada
+  ? `${h1} | ${copy.cejilla} Unero`
+  : copy.tituloGeneral;
+const descripcion = entrada ? entradilla : copy.descGeneral;
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas(
+    [
+      { nombre: t('nav.inicio'), href: ruta('home', lang) },
+      { nombre: copy.cejilla, href: ruta('cuaderno', lang) },
+      ...(entrada ? [{ nombre: h1, href: aqui }] : []),
+    ]
+  ),
+  {
+    '@type': entrada ? 'CollectionPage' : 'Blog',
+    name: h1,
+    description: descripcion,
+    inLanguage: es ? 'es-ES' : 'en-GB',
+    publisher: { '@id': 'https://unero.es/#unero' },
+  },
+]);
+---
+
+<Base
+  titulo={titulo}
+  descripcion={descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura">
+      <Migas
+        items={
+          entrada
+            ? [
+                { nombre: copy.cejilla, href: ruta('cuaderno', lang) },
+                { nombre: h1 },
+              ]
+            : [{ nombre: copy.cejilla }]
+        }
+        lang={lang}
+      />
+
+      <header class="cuad-cabecera">
+        <p class="cejilla">{entrada ? t('cua.tema') : copy.cejilla}</p>
+        <h1 class="display-xl cuad-cabecera__titulo">{h1}</h1>
+        <p class="cuad-cabecera__entradilla">{entradilla}</p>
+      </header>
+
+      <!-- Temas: navegación horizontal y enlazado interno entre
+           categorías, que es lo que reparte autoridad por el blog. -->
+      <nav class="temas" aria-label={t('cua.temas')}>
+        <ul class="temas__lista">
+          <li>
+            <a
+              href={ruta('cuaderno', lang)}
+              class="temas__enlace"
+              aria-current={!categoria ? 'page' : undefined}
+            >
+              {t('cua.todos')}
+            </a>
+          </li>
+          {
+            temas.map((c) => (
+              <li>
+                <a
+                  href={rutaCategoria(c.id, lang)}
+                  class="temas__enlace"
+                  aria-current={categoria === c.id ? 'page' : undefined}
+                >
+                  {bi(c.data.nombre, lang)}
+                  <span class="temas__cuenta">{c.total}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      {
+        lista.length === 0 ? (
+          <p class="cuad-vacio">{t('cua.vacio')}</p>
+        ) : (
+          <div class="cuad-rejilla">
+            {destacado &&
+              (async () => {
+                const cat = await categoriaPorId(destacado.data.categoria);
+                return (
+                  <TarjetaArticulo
+                    slug={destacado.id}
+                    titulo={destacado.data.titulo}
+                    descripcion={destacado.data.descripcion}
+                    categoria={bi(cat?.data.nombre, lang) ?? destacado.data.categoria}
+                    fecha={destacado.data.fecha}
+                    minutos={minutosDeLectura(destacado.body)}
+                    portada={destacado.data.portada}
+                    portadaAlt={destacado.data.portadaAlt}
+                    lang={lang}
+                    destacado
+                    prioridad
+                    nivelTitulo={2}
+                  />
+                );
+              })()}
+
+            {resto.map(async (a, i) => {
+              const cat = await categoriaPorId(a.data.categoria);
+              return (
+                <div class="revelar" style={`--retardo:${(i % 3) * 80}ms`}>
+                  <TarjetaArticulo
+                    slug={a.id}
+                    titulo={a.data.titulo}
+                    descripcion={a.data.descripcion}
+                    categoria={bi(cat?.data.nombre, lang) ?? a.data.categoria}
+                    fecha={a.data.fecha}
+                    minutos={minutosDeLectura(a.body)}
+                    portada={a.data.portada}
+                    portadaAlt={a.data.portadaAlt}
+                    lang={lang}
+                    prioridad={!destacado && i < 3}
+                    nivelTitulo={2}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )
+      }
+
+      <p class="cuad-rss">
+        <a href={es ? '/cuaderno/rss.xml' : '/en/journal/rss.xml'} class="enlace-flecha">
+          {es ? 'Suscribirse por RSS' : 'Subscribe by RSS'}
+          <Icono nombre="flecha-arriba-derecha" tamano={13} />
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  .cuad-cabecera {
+    margin-top: var(--s-6);
+    max-width: 52rem;
+  }
+  .cuad-cabecera__titulo {
+    margin-top: var(--s-4);
+  }
+  .cuad-cabecera__entradilla {
+    margin-top: var(--s-5);
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 58ch;
+    text-wrap: pretty;
+  }
+
+  .temas {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px solid var(--filete);
+  }
+  .temas__lista {
+    display: flex;
+    gap: var(--s-2);
+    list-style: none;
+    margin: 0;
+    padding: 0 var(--gutter) 0.25rem;
+    margin-inline: calc(var(--gutter) * -1);
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .temas__lista::-webkit-scrollbar {
+    display: none;
+  }
+  @media (min-width: 60rem) {
+    .temas__lista {
+      flex-wrap: wrap;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+  }
+
+  .temas__enlace {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex: none;
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    font-size: var(--t-menudo);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    text-decoration: none;
+    color: var(--texto-apagado);
+    border: 1px solid var(--filete);
+    transition: color var(--dur-rapida) var(--ease-suave),
+      border-color var(--dur-rapida) var(--ease-suave),
+      background-color var(--dur-rapida) var(--ease-suave);
+  }
+  .temas__enlace:hover {
+    color: var(--texto);
+    border-color: var(--piedra);
+  }
+  .temas__enlace[aria-current] {
+    background-color: var(--tinta);
+    border-color: var(--tinta);
+    color: var(--cal);
+  }
+  .temas__cuenta {
+    font-size: 0.6875rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.6;
+  }
+
+  .cuad-rejilla {
+    display: grid;
+    gap: var(--s-7) var(--s-5);
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  @media (min-width: 48rem) {
+    .cuad-rejilla {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 75rem) {
+    .cuad-rejilla {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  .cuad-vacio {
+    margin-top: var(--s-7);
+    color: var(--texto-apagado);
+  }
+
+  .cuad-rss {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+  }
+</style>

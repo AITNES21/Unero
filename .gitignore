@@ -1,0 +1,18 @@
+# Astro
+dist/
+.astro/
+
+# Dependencias
+node_modules/
+
+# Entorno
+.env
+.env.production
+.DS_Store
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.capturas/
+.rutas.txt
+.barrido.log

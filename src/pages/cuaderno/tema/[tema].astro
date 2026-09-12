@@ -1,0 +1,16 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Cuaderno from '../../../components/paginas/Cuaderno.astro';
+import { categoriasConContenido } from '../../../lib/contenido';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  // Solo se genera página para los temas que tienen artículos: una
+  // categoría vacía es contenido de baja calidad a ojos de Google.
+  const temas = await categoriasConContenido('es');
+  return temas.map((tema) => ({ params: { tema: tema.id } }));
+};
+
+const { tema } = Astro.params;
+---
+
+<Cuaderno lang="es" categoria={tema} />

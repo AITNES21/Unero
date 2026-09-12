@@ -1,0 +1,172 @@
+---
+import Base from '../../layouts/Base.astro';
+import Migas from '../Migas.astro';
+import Icono from '../Icono.astro';
+import { ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import { DOCUMENTOS, type Documento } from '../../config/legal';
+import * as schema from '../../lib/schema';
+
+interface Props {
+  documento: Documento;
+  lang: Idioma;
+}
+const { documento, lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+const c = documento[lang];
+
+/* Renderizado del Markdown del documento. Se usa el mismo procesador
+   que el resto del sitio para que tablas, enlaces y listas salgan con
+   los estilos de `.prosa`. */
+const { marked } = await import('marked');
+const html = await marked.parse(c.cuerpo, { async: true, gfm: true });
+
+/* Fecha de última revisión: la del último despliegue del documento. */
+const revision = new Intl.DateTimeFormat(es ? 'es-ES' : 'en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(new Date());
+
+const otros = DOCUMENTOS.filter((d) => d.clave !== documento.clave);
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.migas([
+    { nombre: t('nav.inicio'), href: ruta('home', lang) },
+    { nombre: c.h1, href: ruta(documento.clave, lang) },
+  ]),
+]);
+---
+
+<Base
+  titulo={c.titulo}
+  descripcion={c.descripcion}
+  lang={lang}
+  alternativa={ruta(documento.clave, es ? 'en' : 'es')}
+  jsonLd={jsonLd}
+>
+  <section class="seccion-corta">
+    <div class="envoltura-estrecha">
+      <Migas items={[{ nombre: c.h1 }]} lang={lang} />
+
+      <header class="legal-cabecera">
+        <p class="cejilla">{t('pie.legal')}</p>
+        <h1 class="display-l legal-cabecera__titulo">{c.h1}</h1>
+      </header>
+
+      {
+        documento.pendiente && (
+          <aside class="legal-aviso" role="note">
+            <Icono nombre="documento" tamano={16} />
+            <p>{documento.pendiente[lang]}</p>
+          </aside>
+        )
+      }
+
+      <div class="prosa legal-cuerpo" set:html={html} />
+
+      <p class="legal-revision">
+        {es ? 'Última revisión:' : 'Last revised:'} {revision}
+      </p>
+
+      <nav class="legal-otros" aria-label={t('pie.legal')}>
+        {
+          otros.map((d) => (
+            <a href={ruta(d.clave, lang)} class="enlace-flecha">
+              {d[lang].h1}
+              <Icono nombre="flecha-derecha" tamano={14} />
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal-cabecera {
+    margin-top: var(--s-6);
+    margin-bottom: var(--s-7);
+  }
+  .legal-cabecera__titulo {
+    margin-top: var(--s-4);
+  }
+
+  /* Aviso de datos pendientes. Visible a propósito: un documento legal
+     incompleto y silencioso es peor que uno que dice qué le falta. */
+  .legal-aviso {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    padding: var(--s-4) var(--s-5);
+    margin-bottom: var(--s-7);
+    border-left: 2px solid var(--arcilla);
+    background-color: rgb(164 98 60 / 0.07);
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.55;
+  }
+  .legal-aviso :global(svg) {
+    color: var(--arcilla);
+    translate: 0 0.2rem;
+  }
+
+  .legal-cuerpo :global(h2) {
+    font-size: var(--t-display-s);
+    margin-top: 2.2em;
+  }
+  .legal-cuerpo :global(h3) {
+    font-family: var(--fuente-texto);
+    font-size: var(--t-cuerpo);
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-top: 1.8em;
+  }
+  .legal-cuerpo :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--t-cuerpo-s);
+    margin-block: 1.8em;
+  }
+  .legal-cuerpo :global(th),
+  .legal-cuerpo :global(td) {
+    text-align: left;
+    padding: 0.65rem 0.5rem;
+    border-bottom: 1px solid var(--filete);
+    vertical-align: top;
+  }
+  .legal-cuerpo :global(th) {
+    font-size: var(--t-cejilla);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--texto-apagado);
+  }
+  .legal-cuerpo :global(code) {
+    font-size: 0.9em;
+    background-color: var(--cal-hueso);
+    padding: 0.1em 0.35em;
+    word-break: break-all;
+  }
+  /* Las tablas anchas pueden desplazarse sin romper el ancho de página. */
+  .legal-cuerpo :global(table) {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .legal-revision {
+    margin-top: var(--s-7);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+    font-size: var(--t-menudo);
+    color: var(--texto-apagado);
+  }
+
+  .legal-otros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-5);
+    margin-top: var(--s-5);
+  }
+</style>

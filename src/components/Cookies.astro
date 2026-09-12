@@ -1,0 +1,280 @@
+---
+import { ruta, type Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+---
+
+{/*
+  Aviso de cookies.
+
+  Cumple lo que pide la AEPD: rechazar es tan fácil como aceptar (dos
+  botones del mismo peso visual), no hay muro de cookies, y nada se
+  activa antes de la decisión. Se comunica con Google Consent Mode v2,
+  que ya arranca en "denied" desde la etiqueta de <head>.
+*/}
+<div
+  class="cookies"
+  id="cookies"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="cookies-titulo"
+  hidden
+>
+  <div class="cookies__caja">
+    <h2 class="cejilla" id="cookies-titulo">{t('ck.titulo')}</h2>
+    <p class="cookies__texto">
+      {t('ck.texto')}
+      <a href={ruta('cookies', lang)}>{t('ck.mas')}</a>.
+    </p>
+
+    <div class="cookies__detalle" id="cookies-detalle" hidden>
+      <label class="cookies__opcion">
+        <input type="checkbox" checked disabled />
+        <span>
+          <strong>{t('ck.necesarias')}</strong>
+          {t('ck.necesariasDesc')}
+        </span>
+      </label>
+      <label class="cookies__opcion">
+        <input type="checkbox" id="cookies-analiticas" />
+        <span>
+          <strong>{t('ck.analiticas')}</strong>
+          {t('ck.analiticasDesc')}
+        </span>
+      </label>
+    </div>
+
+    <div class="cookies__acciones">
+      <button type="button" class="boton boton--solido" data-ck="todas">
+        {t('ck.aceptar')}
+      </button>
+      <button type="button" class="boton boton--linea" data-ck="ninguna">
+        {t('ck.rechazar')}
+      </button>
+      <button type="button" class="cookies__mas" data-ck="config">
+        {t('ck.config')}
+      </button>
+      <button
+        type="button"
+        class="boton boton--linea"
+        data-ck="guardar"
+        hidden
+      >
+        {t('ck.guardar')}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookies {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: var(--z-cookies);
+    padding: var(--s-4);
+    padding-bottom: calc(var(--s-4) + env(safe-area-inset-bottom, 0px));
+    animation: subir var(--dur-media) var(--ease-salida) 400ms both;
+  }
+  .cookies[hidden] {
+    display: none;
+  }
+
+  @keyframes subir {
+    from {
+      opacity: 0;
+      translate: 0 1.5rem;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  .cookies__caja {
+    max-width: 34rem;
+    margin-inline: auto;
+    background-color: var(--cal-puro);
+    border: 1px solid var(--piedra-clara);
+    padding: var(--s-5);
+    box-shadow: 0 1.5rem 3rem -1rem rgb(23 24 26 / 0.18);
+  }
+  @media (min-width: 60rem) {
+    .cookies {
+      padding: var(--s-6);
+    }
+    .cookies__caja {
+      margin-inline: 0;
+    }
+  }
+
+  .cookies__texto {
+    margin-top: var(--s-3);
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.55;
+    color: var(--tinta);
+  }
+  .cookies__texto a {
+    color: var(--mar);
+    text-underline-offset: 0.2em;
+  }
+
+  .cookies__detalle {
+    display: grid;
+    gap: var(--s-3);
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--piedra-tenue);
+  }
+  .cookies__detalle[hidden] {
+    display: none;
+  }
+
+  .cookies__opcion {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    font-size: var(--t-menudo);
+    line-height: 1.5;
+    color: var(--piedra);
+    cursor: pointer;
+  }
+  .cookies__opcion input {
+    /* 1.15rem de caja + área de pulsación heredada de la etiqueta. */
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.15rem;
+    accent-color: var(--mar);
+  }
+  .cookies__opcion strong {
+    display: block;
+    color: var(--tinta);
+    font-weight: 500;
+  }
+
+  .cookies__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-5);
+  }
+  .cookies__acciones .boton {
+    flex: 1 1 9rem;
+  }
+
+  .cookies__mas {
+    flex: 1 1 100%;
+    font-size: var(--t-menudo);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--piedra);
+    text-decoration: underline;
+    text-underline-offset: 0.22em;
+    min-height: 2.75rem;
+  }
+  .cookies__mas:hover {
+    color: var(--tinta);
+  }
+</style>
+
+<script>
+  const CLAVE = 'unero_consentimiento';
+  const caja = document.getElementById('cookies');
+
+  interface Consentimiento {
+    analiticas: boolean;
+    fecha: string;
+    /** Versión del texto informado. Si cambia, se vuelve a preguntar. */
+    v: number;
+  }
+  const VERSION = 1;
+
+  function leer(): Consentimiento | null {
+    try {
+      const bruto = localStorage.getItem(CLAVE);
+      if (!bruto) return null;
+      const c = JSON.parse(bruto) as Consentimiento;
+      return c.v === VERSION ? c : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function aplicar(analiticas: boolean) {
+    // gtag se define en la etiqueta en línea de <head>.
+    window.gtag?.('consent', 'update', {
+      analytics_storage: analiticas ? 'granted' : 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+    });
+  }
+
+  function guardar(analiticas: boolean) {
+    try {
+      localStorage.setItem(
+        CLAVE,
+        JSON.stringify({ analiticas, fecha: new Date().toISOString(), v: VERSION })
+      );
+    } catch {
+      /* Sin almacenamiento la decisión solo dura la sesión. */
+    }
+    aplicar(analiticas);
+    if (caja) caja.hidden = true;
+  }
+
+  function abrir() {
+    if (!caja) return;
+    caja.hidden = false;
+    const previo = leer();
+    const casilla = document.getElementById('cookies-analiticas');
+    if (casilla instanceof HTMLInputElement) {
+      casilla.checked = previo?.analiticas ?? false;
+    }
+  }
+
+  if (caja) {
+    const detalle = document.getElementById('cookies-detalle');
+    const botonGuardar = caja.querySelector<HTMLElement>('[data-ck="guardar"]');
+    const botonConfig = caja.querySelector<HTMLElement>('[data-ck="config"]');
+
+    caja.addEventListener('click', (e) => {
+      const boton = (e.target as HTMLElement).closest<HTMLElement>('[data-ck]');
+      if (!boton) return;
+
+      switch (boton.dataset.ck) {
+        case 'todas':
+          guardar(true);
+          break;
+        case 'ninguna':
+          guardar(false);
+          break;
+        case 'config':
+          if (detalle) detalle.hidden = false;
+          botonConfig?.setAttribute('hidden', '');
+          botonGuardar?.removeAttribute('hidden');
+          break;
+        case 'guardar': {
+          const casilla = document.getElementById('cookies-analiticas');
+          guardar(casilla instanceof HTMLInputElement ? casilla.checked : false);
+          break;
+        }
+      }
+    });
+
+    // Solo se pregunta si no hay una decisión vigente.
+    const decision = leer();
+    if (decision) aplicar(decision.analiticas);
+    else abrir();
+
+    // El enlace del pie permite cambiar de opinión, como exige el RGPD.
+    document
+      .querySelectorAll('[data-abrir-cookies]')
+      .forEach((b) => b.addEventListener('click', abrir));
+  }
+</script>

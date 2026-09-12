@@ -1,0 +1,386 @@
+---
+import { Image } from 'astro:assets';
+import Icono from './Icono.astro';
+import type { ImageMetadata } from 'astro';
+import type { Idioma } from '../config/site';
+import { useT } from '../i18n/ui';
+
+export interface Foto {
+  src: ImageMetadata;
+  alt: string;
+  ancha?: boolean;
+}
+
+interface Props {
+  fotos: Foto[];
+  lang: Idioma;
+  /** Se usa para etiquetar la región de la galería. */
+  titulo?: string;
+}
+
+const { fotos, lang, titulo } = Astro.props;
+const t = useT(lang);
+
+/*
+  «Ancha» se ignora si la fotografía no tiene píxeles para ocupar dos
+  columnas. Vale más una foto nítida a media caja que una borrosa a
+  caja completa, y así un descuido al marcar la casilla en el CMS no
+  puede empeorar la página.
+*/
+const UMBRAL_ANCHA = 1200;
+const celdas = fotos.map((f) => ({
+  ...f,
+  ancha: f.ancha === true && f.src.width >= UMBRAL_ANCHA,
+}));
+---
+
+{
+  fotos.length > 0 && (
+    <div class="galeria" data-galeria>
+      <ul class="galeria__mosaico">
+        {celdas.map((foto, i) => (
+          <li class:list={['galeria__celda', foto.ancha && 'galeria__celda--ancha']}>
+            <button
+              type="button"
+              class="galeria__disparador zoom"
+              data-indice={i}
+              aria-label={`${t('gal.abrir')}: ${foto.alt}`}
+            >
+              <Image
+                src={foto.src}
+                alt={foto.alt}
+                widths={foto.ancha ? [640, 960, 1280, 1600] : [480, 720, 960]}
+                sizes={
+                  foto.ancha
+                    ? '(min-width: 60rem) 80vw, 100vw'
+                    : '(min-width: 60rem) 40vw, 100vw'
+                }
+                loading="lazy"
+                decoding="async"
+                class="galeria__img"
+              />
+              <span class="galeria__lupa" aria-hidden="true">
+                <Icono nombre="mas" tamano={16} />
+              </span>
+            </button>
+            <p class="galeria__pie">{foto.alt}</p>
+          </li>
+        ))}
+      </ul>
+
+      {/*
+        Lightbox sobre <dialog> nativo: el navegador aporta el atrapado de
+        foco, el cierre con Escape y la capa modal, sin código propio ni
+        dependencias. Las imágenes se sirven en un único tamaño grande y
+        solo se materializan al abrirse.
+      */}
+      <dialog class="lupa" data-lupa aria-label={titulo ?? t('proy.galeria')}>
+        <div class="lupa__barra">
+          <p class="lupa__contador" data-contador aria-live="polite" />
+          <button type="button" class="lupa__boton" data-cerrar aria-label={t('gal.cerrar')}>
+            <Icono nombre="cerrar" tamano={18} />
+          </button>
+        </div>
+
+        <div class="lupa__escena" data-escena>
+          <img class="lupa__img" data-imagen alt="" />
+        </div>
+
+        <div class="lupa__navegacion">
+          <button type="button" class="lupa__boton" data-anterior aria-label={t('gal.anterior')}>
+            <Icono nombre="flecha-izquierda" tamano={18} />
+          </button>
+          <button type="button" class="lupa__boton" data-siguiente aria-label={t('gal.siguiente')}>
+            <Icono nombre="flecha-derecha" tamano={18} />
+          </button>
+        </div>
+      </dialog>
+
+      {/* Fuentes de datos para el lightbox, sin JavaScript en línea. */}
+      <script type="application/json" data-fuente set:html={JSON.stringify(
+        fotos.map((f) => ({
+          src: f.src.src,
+          w: f.src.width,
+          h: f.src.height,
+          alt: f.alt,
+        }))
+      )} />
+      <span class="solo-lectores" data-plantilla-contador>{t('gal.contador', { n: '{n}', total: '{total}' })}</span>
+    </div>
+  )
+}
+
+<style>
+  .galeria__mosaico {
+    display: grid;
+    gap: var(--s-5) var(--s-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  @media (min-width: 48rem) {
+    .galeria__mosaico {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-7) var(--s-5);
+    }
+    .galeria__celda--ancha {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .galeria__disparador {
+    display: block;
+    width: 100%;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    background-color: var(--piedra-tenue);
+    cursor: zoom-in;
+  }
+
+  .galeria__img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Indicador de ampliación: aparece al pasar el cursor, y en táctil
+     se muestra siempre con opacidad baja para que se entienda que la
+     imagen es interactiva. */
+  .galeria__lupa {
+    position: absolute;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: grid;
+    place-items: center;
+    background-color: var(--cal);
+    color: var(--tinta);
+    opacity: 0.85;
+    transition: opacity var(--dur-rapida) var(--ease-suave);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .galeria__lupa {
+      opacity: 0;
+    }
+    .galeria__disparador:hover .galeria__lupa,
+    .galeria__disparador:focus-visible .galeria__lupa {
+      opacity: 1;
+    }
+  }
+
+  .galeria__pie {
+    margin-top: 0.7rem;
+    font-size: var(--t-menudo);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 60ch;
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lupa {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: var(--tinta);
+    color: var(--cal);
+    overflow: hidden;
+  }
+  .lupa::backdrop {
+    background-color: rgb(23 24 26 / 0.92);
+  }
+  .lupa[open] {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .lupa__barra {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-3) var(--s-4);
+    padding-top: calc(var(--s-3) + env(safe-area-inset-top, 0px));
+  }
+
+  .lupa__contador {
+    font-size: var(--t-menudo);
+    letter-spacing: 0.1em;
+    color: #a9a29a;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .lupa__boton {
+    width: 3rem;
+    height: 3rem;
+    display: grid;
+    place-items: center;
+    color: var(--cal);
+    border: 1px solid rgb(247 244 238 / 0.22);
+    transition: background-color var(--dur-rapida) var(--ease-suave),
+      color var(--dur-rapida) var(--ease-suave);
+  }
+  .lupa__boton:hover {
+    background-color: var(--cal);
+    color: var(--tinta);
+  }
+  .lupa__boton:focus-visible {
+    outline: 2px solid var(--cal);
+    outline-offset: 2px;
+  }
+
+  .lupa__escena {
+    display: grid;
+    place-items: center;
+    padding: 0 var(--s-3);
+    min-height: 0;
+    touch-action: pan-y;
+  }
+
+  .lupa__img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .lupa__navegacion {
+    display: flex;
+    justify-content: center;
+    gap: var(--s-3);
+    padding: var(--s-4);
+    padding-bottom: calc(var(--s-4) + env(safe-area-inset-bottom, 0px));
+  }
+</style>
+
+<script>
+  /**
+   * Lightbox de galería.
+   *
+   * Se apoya en <dialog> para el comportamiento modal (foco atrapado y
+   * cierre con Escape los da el navegador). Admite teclado, gesto de
+   * arrastre en táctil y precarga la imagen siguiente y la anterior
+   * para que el salto sea inmediato.
+   */
+  interface Entrada {
+    src: string;
+    w: number;
+    h: number;
+    alt: string;
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-galeria]').forEach((galeria) => {
+    const dialogo = galeria.querySelector<HTMLDialogElement>('[data-lupa]');
+    const fuente = galeria.querySelector<HTMLScriptElement>('[data-fuente]');
+    const imagen = galeria.querySelector<HTMLImageElement>('[data-imagen]');
+    const contador = galeria.querySelector<HTMLElement>('[data-contador]');
+    const escena = galeria.querySelector<HTMLElement>('[data-escena]');
+    const plantilla =
+      galeria.querySelector<HTMLElement>('[data-plantilla-contador]')?.textContent ??
+      '{n} / {total}';
+
+    if (!dialogo || !fuente || !imagen || !escena) return;
+
+    let fotos: Entrada[] = [];
+    try {
+      fotos = JSON.parse(fuente.textContent || '[]');
+    } catch {
+      return;
+    }
+    if (!fotos.length) return;
+
+    let actual = 0;
+
+    function pintar(i: number) {
+      actual = (i + fotos.length) % fotos.length;
+      const foto = fotos[actual];
+      imagen!.src = foto.src;
+      imagen!.alt = foto.alt;
+      // width/height evitan el salto de maquetación al cambiar de foto.
+      imagen!.width = foto.w;
+      imagen!.height = foto.h;
+      if (contador) {
+        contador.textContent = plantilla
+          .replace('{n}', String(actual + 1))
+          .replace('{total}', String(fotos.length));
+      }
+      // Precarga de vecinos.
+      for (const salto of [1, -1]) {
+        const vecino = fotos[(actual + salto + fotos.length) % fotos.length];
+        const pre = new Image();
+        pre.src = vecino.src;
+      }
+    }
+
+    galeria.querySelectorAll<HTMLElement>('[data-indice]').forEach((boton) => {
+      boton.addEventListener('click', () => {
+        pintar(Number(boton.dataset.indice));
+        dialogo.showModal();
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    const cerrar = () => dialogo.close();
+    galeria.querySelector('[data-cerrar]')?.addEventListener('click', cerrar);
+    galeria
+      .querySelector('[data-siguiente]')
+      ?.addEventListener('click', () => pintar(actual + 1));
+    galeria
+      .querySelector('[data-anterior]')
+      ?.addEventListener('click', () => pintar(actual - 1));
+
+    // Clic en el fondo (fuera de la imagen) cierra.
+    escena.addEventListener('click', (e) => {
+      if (e.target === escena) cerrar();
+    });
+
+    dialogo.addEventListener('close', () => {
+      document.body.style.overflow = '';
+      // Devuelve el foco a la miniatura de la que se partió.
+      galeria
+        .querySelector<HTMLElement>(`[data-indice="${actual}"]`)
+        ?.focus({ preventScroll: true });
+    });
+
+    dialogo.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        pintar(actual + 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        pintar(actual - 1);
+      }
+    });
+
+    // Gesto horizontal en táctil.
+    let inicioX = 0;
+    let inicioY = 0;
+    escena.addEventListener(
+      'touchstart',
+      (e) => {
+        inicioX = e.touches[0].clientX;
+        inicioY = e.touches[0].clientY;
+      },
+      { passive: true }
+    );
+    escena.addEventListener(
+      'touchend',
+      (e) => {
+        const dx = e.changedTouches[0].clientX - inicioX;
+        const dy = e.changedTouches[0].clientY - inicioY;
+        // Solo si el gesto es claramente horizontal, para no capturar
+        // el scroll vertical.
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+          pintar(actual + (dx < 0 ? 1 : -1));
+        }
+      },
+      { passive: true }
+    );
+  });
+</script>

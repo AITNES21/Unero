@@ -1,0 +1,1004 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import TarjetaProyecto from '../TarjetaProyecto.astro';
+import TarjetaArticulo from '../TarjetaArticulo.astro';
+import BloqueCta from '../BloqueCta.astro';
+import Faq from '../Faq.astro';
+import { site, ruta, type Idioma } from '../../config/site';
+import { useT } from '../../i18n/ui';
+import {
+  proyectosDestacados,
+  articulos,
+  bi,
+  etiquetaTipo,
+  etiquetaEstado,
+  minutosDeLectura,
+  categoriaPorId,
+} from '../../lib/contenido';
+import * as schema from '../../lib/schema';
+
+import heroImg from '../../assets/proyectos/ses-torres-ii/foto10.webp';
+import imgConstruccion from '../../assets/site/foto8.webp';
+import imgReforma from '../../assets/proyectos/talamanca/foto13.webp';
+import imgInteriorismo from '../../assets/proyectos/interiorismo/salon.webp';
+import imgPromociones from '../../assets/site/foto7.webp';
+import imgEstudio from '../../assets/proyectos/cas-mut/foto1.webp';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const t = useT(lang);
+const es = lang === 'es';
+
+const destacados = await proyectosDestacados(3);
+const ultimos = (await articulos(lang)).slice(0, 3);
+const alternativa = ruta('home', es ? 'en' : 'es');
+
+/* ---------- Copy de la página ---------- */
+const copy = es
+  ? {
+      titulo: 'Constructora en Ibiza | Villas, obra nueva y reformas | Unero',
+      descripcion:
+        'Constructora en Ibiza con dirección propia de obra. Construimos villas llave en mano, reformas integrales e interiorismo en toda la isla y Formentera. Desde 2011.',
+      cejillaHero: 'Construcción y reformas · Ibiza y Formentera',
+      h1a: 'Construimos casas',
+      h1b: 'para vivir Ibiza',
+      entradilla:
+        'Obra nueva, reformas integrales e interiorismo en toda la isla. Con dirección propia de obra, los oficios de siempre y la exigencia de quien va a entregar las llaves en mano.',
+      manifiestoCejilla: 'Quiénes somos',
+      manifiestoTitulo: 'Una constructora, no una intermediaria',
+      manifiestoParrafos: [
+        'Unero es una empresa constructora con base en Ibiza. Desde 2011 levantamos villas de obra nueva, rehabilitamos casas existentes y las entregamos terminadas, con el interiorismo incluido si hace falta.',
+        'No subcontratamos la responsabilidad. Quien habla contigo el primer día es quien va a estar en la parcela cuando se hormigone, cuando llegue la carpintería y cuando haya que decidir sobre la marcha. Trabajamos con el estudio de arquitectura que elijas y, si no tienes ninguno, te presentamos a los que conocemos.',
+        'Construir en una isla tiene sus propias reglas: cada material llega en barco, los buenos oficios están comprometidos en primavera y la normativa no perdona. Saber eso es la mitad del trabajo.',
+      ],
+      datos: [
+        { cifra: '2011', texto: 'Construyendo en la isla' },
+        { cifra: 'Ibiza', texto: 'y Formentera' },
+        { cifra: 'Llave', texto: 'en mano, del solar a las llaves' },
+        { cifra: 'Propia', texto: 'Dirección de obra, no subcontratada' },
+      ],
+      proyectosCejilla: 'Proyectos',
+      proyectosTitulo: 'Casas terminadas',
+      proyectosTexto:
+        'La forma más honesta de explicar cómo trabajamos es enseñar lo que hemos entregado. Materiales, encuentros y remates.',
+      serviciosCejilla: 'Servicios',
+      serviciosTitulo: 'Qué hacemos',
+      procesoCejilla: 'Cómo trabajamos',
+      procesoTitulo: 'De la primera visita a las llaves',
+      procesoTexto:
+        'Un proceso claro, con las decisiones ordenadas y los plazos dichos de antemano. Sin sorpresas al final.',
+      zonasCejilla: 'Dónde trabajamos',
+      zonasTitulo: 'Toda la isla',
+      zonasTexto:
+        'Trabajamos en los cinco municipios de Ibiza y en Formentera. Conocer la normativa de cada ayuntamiento y a los oficios de cada zona ahorra meses de tramitación.',
+      cuadernoCejilla: 'Cuaderno',
+      cuadernoTitulo: 'Ibiza, arquitectura y materiales',
+      cuadernoTexto:
+        'Lo que hemos aprendido construyendo aquí, escrito para quien está pensando en hacerlo.',
+      faqTitulo: 'Preguntas frecuentes',
+    }
+  : {
+      titulo: 'Construction company in Ibiza | Villas and renovations | Unero',
+      descripcion:
+        'Construction company in Ibiza with in-house site management. We build turnkey villas, full renovations and interiors across the island and Formentera. Since 2011.',
+      cejillaHero: 'Construction and renovation · Ibiza and Formentera',
+      h1a: 'We build houses',
+      h1b: 'made for living in Ibiza',
+      entradilla:
+        'New builds, full renovations and interior design across the island. With our own site management, the traditional trades, and the standards of a team that will hand over the keys itself.',
+      manifiestoCejilla: 'Who we are',
+      manifiestoTitulo: 'A builder, not a middleman',
+      manifiestoParrafos: [
+        'Unero is a construction company based in Ibiza. Since 2011 we have been building new villas, refurbishing existing houses and handing them over finished, interior design included where needed.',
+        'We do not subcontract responsibility. Whoever speaks to you on the first day is the person who will be on the plot when the concrete is poured, when the joinery arrives and when a decision has to be made on the spot. We work with whichever architect you choose and, if you do not have one, we will introduce you to the studios we know.',
+        'Building on an island has its own rules: every material arrives by boat, the good trades are committed by spring, and the planning rules are unforgiving. Knowing that is half the job.',
+      ],
+      datos: [
+        { cifra: '2011', texto: 'Building on the island since' },
+        { cifra: 'Ibiza', texto: 'and Formentera' },
+        { cifra: 'Turnkey', texto: 'from the plot to the keys' },
+        { cifra: 'In-house', texto: 'Site management, never subcontracted' },
+      ],
+      proyectosCejilla: 'Projects',
+      proyectosTitulo: 'Finished houses',
+      proyectosTexto:
+        'The most honest way to explain how we work is to show what we have handed over. Materials, junctions and finishing.',
+      serviciosCejilla: 'Services',
+      serviciosTitulo: 'What we do',
+      procesoCejilla: 'How we work',
+      procesoTitulo: 'From the first visit to the keys',
+      procesoTexto:
+        'A clear process, with the decisions in order and the timescales stated up front. No surprises at the end.',
+      zonasCejilla: 'Where we work',
+      zonasTitulo: 'The whole island',
+      zonasTexto:
+        'We work across the five municipalities of Ibiza and in Formentera. Knowing each town hall’s rules and the local trades saves months of paperwork.',
+      cuadernoCejilla: 'Journal',
+      cuadernoTitulo: 'Ibiza, architecture and materials',
+      cuadernoTexto:
+        'What we have learnt building here, written for anyone thinking of doing it.',
+      faqTitulo: 'Frequently asked questions',
+    };
+
+const servicios = es
+  ? [
+      {
+        nombre: 'Construcción de casas',
+        texto:
+          'Obra nueva sobre tu parcela, con la estructura, la envolvente y las instalaciones ejecutadas por nuestro equipo.',
+        href: ruta('construccion', lang),
+        img: imgConstruccion,
+        alt: 'Obra en ejecución con excavación, armaduras de acero y apuntalamiento.',
+      },
+      {
+        nombre: 'Villas llave en mano',
+        texto:
+          'El proyecto completo: licencias, obra, piscina, jardín e interiorismo. Una sola interlocución hasta las llaves.',
+        href: ruta('villas', lang),
+        img: heroImg,
+        alt: 'Terraza de una villa con tumbonas blancas, piscina y celosía de madera.',
+      },
+      {
+        nombre: 'Reformas integrales',
+        texto:
+          'Rehabilitar, ampliar o cambiar por completo una casa existente, resolviendo lo que aparece al abrir.',
+        href: ruta('reformas', lang),
+        img: imgReforma,
+        alt: 'Interior diáfano recién entregado, con carpintería corrida abierta a la terraza.',
+      },
+      {
+        nombre: 'Interiorismo',
+        texto:
+          'Amueblar y vestir la casa para que se entregue terminada y no a medio hacer.',
+        href: ruta('interiorismo', lang),
+        img: imgInteriorismo,
+        alt: 'Salón con sofás blancos y terraza abierta al paisaje.',
+      },
+      {
+        nombre: 'Promociones de viviendas',
+        texto:
+          'Desarrollo de vivienda para inversores y propietarios de suelo, con control de coste y de plazo.',
+        href: ruta('promociones', lang),
+        img: imgPromociones,
+        alt: 'Edificio de viviendas de obra nueva con fachada de hormigón.',
+      },
+    ]
+  : [
+      {
+        nombre: 'House construction',
+        texto:
+          'New build on your plot, with the structure, envelope and services executed by our own team.',
+        href: ruta('construccion', lang),
+        img: imgConstruccion,
+        alt: 'Construction work underway with excavation, steel reinforcement and shoring.',
+      },
+      {
+        nombre: 'Turnkey villas',
+        texto:
+          'The complete project: permits, construction, pool, garden and interiors. One point of contact through to the keys.',
+        href: ruta('villas', lang),
+        img: heroImg,
+        alt: 'Villa terrace with white loungers, pool and a timber screen.',
+      },
+      {
+        nombre: 'Full renovations',
+        texto:
+          'Refurbish, extend or completely change an existing house, resolving whatever appears once it is opened up.',
+        href: ruta('reformas', lang),
+        img: imgReforma,
+        alt: 'Newly handed-over open-plan interior with continuous joinery onto the terrace.',
+      },
+      {
+        nombre: 'Interior design',
+        texto:
+          'Furnishing and styling the house so that it is handed over finished, not half done.',
+        href: ruta('interiorismo', lang),
+        img: imgInteriorismo,
+        alt: 'Living room with white sofas and a terrace open to the landscape.',
+      },
+      {
+        nombre: 'Residential developments',
+        texto:
+          'Housing development for investors and landowners, with cost and programme under control.',
+        href: ruta('promociones', lang),
+        img: imgPromociones,
+        alt: 'New-build apartment building with a concrete façade.',
+      },
+    ];
+
+const pasos = es
+  ? [
+      { t: 'Visita y horquilla', d: 'Vamos a ver la parcela o la casa y te decimos en qué rango se mueve. Sin coste.' },
+      { t: 'Proyecto', d: 'Colaboramos con tu arquitecto desde el principio, para que lo dibujado se pueda construir.' },
+      { t: 'Presupuesto y contrato', d: 'Por partidas medidas, con las exclusiones escritas de forma legible.' },
+      { t: 'Obra', d: 'Dirección propia en la parcela y certificaciones mensuales contra avance real.' },
+      { t: 'Entrega', d: 'Repaso conjunto, documentación, garantías y llaves.' },
+    ]
+  : [
+      { t: 'Visit and range', d: 'We come to see the plot or the house and tell you what range it falls into. No cost.' },
+      { t: 'Design', d: 'We collaborate with your architect from the start, so that what is drawn can be built.' },
+      { t: 'Quote and contract', d: 'By measured items, with the exclusions written in plain language.' },
+      { t: 'Construction', d: 'Our own management on site and monthly certificates against real progress.' },
+      { t: 'Handover', d: 'Joint inspection, documentation, guarantees and keys.' },
+    ];
+
+const preguntas = es
+  ? [
+      {
+        pregunta: '¿Cuánto cuesta construir una casa en Ibiza?',
+        respuesta:
+          '<p>Nuestros proyectos de obra nueva con acabados de calidad parten de unos <strong>3.000 €/m² construido</strong>. Una vivienda de 300 m² con piscina y materiales de gama alta se mueve, orientativamente, entre 900.000 € y 1.500.000 € de coste de construcción, sin contar el solar, los honorarios técnicos ni los impuestos.</p><p>La horquilla es amplia porque la parcela manda: pendiente, accesibilidad, profundidad de la roca y distancia a las acometidas pueden cambiar el precio un 40 % con el mismo programa. Lo explicamos con detalle en <a href="/cuaderno/cuanto-cuesta-construir-una-casa-en-ibiza/">este artículo</a>.</p>',
+      },
+      {
+        pregunta: '¿Cuánto se tarda en construir una villa?',
+        respuesta:
+          '<p>De 12 a 18 meses de obra para una vivienda unifamiliar. Pero hay que contar antes el proyecto (3-6 meses) y la licencia (6-12 meses, y es la fase que nadie controla). Desde la primera conversación hasta poder dormir en la casa, <strong>dos años es un plazo realista</strong>.</p>',
+      },
+      {
+        pregunta: '¿Trabajáis con mi arquitecto o tenéis uno propio?',
+        respuesta:
+          '<p>Trabajamos con el estudio que elijas, y es lo más habitual. Nos entendemos bien con arquitectos de fuera de la isla que necesitan un constructor que conozca la normativa local, los oficios y los plazos de suministro. Si todavía no tienes estudio, te presentamos a los que conocemos y decides tú.</p>',
+      },
+      {
+        pregunta: '¿Puedo construir en la parcela que estoy pensando comprar?',
+        respuesta:
+          '<p>No todas las parcelas son edificables, y en Ibiza el suelo rústico está muy protegido. Antes de firmar nada hay que comprobar la edificabilidad real con una consulta urbanística al ayuntamiento. Es la verificación que más disgustos evita, y la hacemos contigo antes de la compra.</p>',
+      },
+      {
+        pregunta: '¿Qué incluye una entrega llave en mano?',
+        respuesta:
+          '<p>Gestión de licencias, obra completa (estructura, envolvente, instalaciones y acabados), piscina y exteriores, y el interiorismo si lo quieres. Al final: repaso conjunto de remates, documentación as-built, manuales, certificados y garantías. Una sola interlocución de principio a fin.</p>',
+      },
+      {
+        pregunta: '¿Trabajáis solo en Ibiza?',
+        respuesta:
+          '<p>Ibiza y Formentera son nuestra base y la mayor parte de nuestro trabajo. También hemos construido en la península —puedes ver los proyectos de <a href="/proyectos/marbella/">Marbella</a> y <a href="/proyectos/boadilla/">Boadilla del Monte</a>— y mantenemos una línea de <a href="/trasteros-mostoles/">trasteros en alquiler en Móstoles</a>.</p>',
+      },
+    ]
+  : [
+      {
+        pregunta: 'How much does it cost to build a house in Ibiza?',
+        respuesta:
+          '<p>Our new-build projects with quality finishes start at around <strong>€3,000 per built m²</strong>. A 300 m² house with a pool and high-end materials falls, indicatively, between €900,000 and €1,500,000 in construction cost, excluding the plot, professional fees and taxes.</p><p>The range is wide because the plot dictates: slope, access, depth of rock and distance to services can change the price by 40 % for the same brief.</p>',
+      },
+      {
+        pregunta: 'How long does it take to build a villa?',
+        respuesta:
+          '<p>12 to 18 months of construction for a detached house. But before that comes the design (3-6 months) and the permit (6-12 months, and that is the stage nobody controls). From the first conversation to sleeping in the house, <strong>two years is a realistic timescale</strong>.</p>',
+      },
+      {
+        pregunta: 'Do you work with my architect or do you have your own?',
+        respuesta:
+          '<p>We work with whichever studio you choose, and that is the norm. We get on well with architects from outside the island who need a builder who knows the local planning rules, the trades and the lead times. If you do not yet have a studio, we will introduce you to the ones we know and you decide.</p>',
+      },
+      {
+        pregunta: 'Can I build on the plot I am thinking of buying?',
+        respuesta:
+          '<p>Not every plot is buildable, and rural land in Ibiza is heavily protected. Before signing anything, the real development potential has to be confirmed through a planning enquiry at the town hall. It is the check that prevents the most grief, and we do it with you before you buy.</p>',
+      },
+      {
+        pregunta: 'What does a turnkey handover include?',
+        respuesta:
+          '<p>Permit management, the complete build (structure, envelope, services and finishes), pool and outdoor areas, and the interior design if you want it. At the end: a joint inspection of the finishing, as-built documentation, manuals, certificates and guarantees. One point of contact from start to finish.</p>',
+      },
+      {
+        pregunta: 'Do you only work in Ibiza?',
+        respuesta:
+          '<p>Ibiza and Formentera are our base and most of our work. We have also built on the mainland — see the <a href="/en/projects/marbella/">Marbella</a> and <a href="/en/projects/boadilla/">Boadilla del Monte</a> projects — and we run a line of <a href="/en/storage-units-mostoles/">storage units for rent in Móstoles</a>.</p>',
+      },
+    ];
+
+const jsonLd = schema.grafo([
+  schema.empresa(lang),
+  schema.webSite(lang),
+  schema.faq(
+    preguntas.map((p) => ({
+      pregunta: p.pregunta,
+      // El schema exige texto plano en la respuesta.
+      respuesta: p.respuesta.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+    }))
+  ),
+]);
+---
+
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={alternativa}
+  jsonLd={jsonLd}
+  imagenAlt={es
+    ? 'Villa construida por Unero en Ibiza, con terraza, piscina y celosía de madera.'
+    : 'Villa built by Unero in Ibiza, with terrace, pool and timber screen.'}
+  sobreHero
+>
+  <!-- ============================ HERO ============================ -->
+  <section class="hero">
+    <div class="hero__medio">
+      <Image
+        src={heroImg}
+        alt={
+          es
+            ? 'Terraza de una villa construida por Unero en Ibiza, con tumbonas blancas, borde de piscina y celosía vertical de madera bajo un cielo azul intenso.'
+            : 'Terrace of a villa built by Unero in Ibiza, with white loungers, the pool edge and a vertical timber screen under a deep blue sky.'
+        }
+        widths={[640, 960, 1280, 1600, 1920]}
+        sizes="100vw"
+        loading="eager"
+        decoding="sync"
+        fetchpriority="high"
+        class="hero__img"
+      />
+    </div>
+
+    <div class="envoltura hero__contenido">
+      <p class="cejilla hero__cejilla">{copy.cejillaHero}</p>
+      <h1 class="display-xl hero__titulo">
+        {copy.h1a}<br /><em class="hero__enfasis">{copy.h1b}</em>
+      </h1>
+      <p class="hero__entradilla">{copy.entradilla}</p>
+
+      <div class="hero__acciones">
+        <!-- Acceso a la galería: el elemento que el cliente considera
+             imprescindible. Se mantiene como acción principal del hero. -->
+        <a href={ruta('proyectos', lang)} class="boton boton--claro hero__principal">
+          {t('cta.verProyectos')}
+          <Icono nombre="flecha-derecha" tamano={15} />
+        </a>
+        <a href={ruta('contacto', lang)} class="boton hero__secundario">
+          {t('cta.proyecto')}
+        </a>
+      </div>
+    </div>
+
+    <span class="hero__pista" aria-hidden="true">
+      <Icono nombre="chevron-abajo" tamano={16} />
+    </span>
+  </section>
+
+  <!-- ========================= MANIFIESTO ========================= -->
+  <section class="seccion">
+    <div class="envoltura">
+      <div class="manifiesto revelar">
+        <div class="manifiesto__izq">
+          <p class="cejilla">{copy.manifiestoCejilla}</p>
+          <h2 class="display-l manifiesto__titulo">{copy.manifiestoTitulo}</h2>
+        </div>
+        <div class="manifiesto__der prosa">
+          {copy.manifiestoParrafos.map((p) => <p>{p}</p>)}
+          <p>
+            <a href={ruta('estudio', lang)} class="enlace-flecha">
+              {es ? 'Conocer el estudio' : 'About the studio'}
+              <Icono nombre="flecha-derecha" tamano={14} />
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <ul class="datos revelar">
+        {
+          copy.datos.map((d) => (
+            <li class="datos__item">
+              <span class="datos__cifra">{d.cifra}</span>
+              <span class="datos__texto">{d.texto}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========================== PROYECTOS ========================= -->
+  <section class="seccion tema-hueso">
+    <div class="envoltura">
+      <header class="cabecera-seccion revelar">
+        <div>
+          <p class="cejilla">{copy.proyectosCejilla}</p>
+          <h2 class="display-l">{copy.proyectosTitulo}</h2>
+        </div>
+        <div class="cabecera-seccion__aparte">
+          <p>{copy.proyectosTexto}</p>
+          <a href={ruta('proyectos', lang)} class="enlace-flecha">
+            {t('cta.verTodos')}
+            <Icono nombre="flecha-derecha" tamano={14} />
+          </a>
+        </div>
+      </header>
+
+      <div class="rejilla-proyectos">
+        {
+          destacados.map(async (p, i) => {
+            const cat = p.data;
+            return (
+              <div class="revelar" style={`--retardo:${i * 90}ms`}>
+                <TarjetaProyecto
+                  slug={p.id}
+                  titulo={cat.titulo}
+                  resumen={bi(cat.resumen, lang) ?? ''}
+                  ubicacion={bi(cat.ubicacion, lang)}
+                  tipo={etiquetaTipo(cat.tipo, lang)}
+                  estado={etiquetaEstado(cat.estado, lang)}
+                  portada={cat.portada}
+                  portadaAlt={bi(cat.portadaAlt, lang) ?? cat.titulo}
+                  lang={lang}
+                  indice={i + 1}
+                  formato={i === 0 ? '3-2' : '4-5'}
+                  hueco={i === 0 ? 'completo' : 'mitad'}
+                  prioridad={i === 0}
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================== SERVICIOS ========================= -->
+  <section class="seccion">
+    <div class="envoltura">
+      <header class="cabecera-seccion revelar">
+        <div>
+          <p class="cejilla">{copy.serviciosCejilla}</p>
+          <h2 class="display-l">{copy.serviciosTitulo}</h2>
+        </div>
+        <div class="cabecera-seccion__aparte">
+          <a href={ruta('servicios', lang)} class="enlace-flecha">
+            {es ? 'Ver todos los servicios' : 'See all services'}
+            <Icono nombre="flecha-derecha" tamano={14} />
+          </a>
+        </div>
+      </header>
+
+      <ul class="lista-servicios">
+        {
+          servicios.map((s, i) => (
+            <li class="servicio revelar" style={`--retardo:${i * 70}ms`}>
+              <a href={s.href} class="servicio__enlace">
+                <span class="servicio__num">{String(i + 1).padStart(2, '0')}</span>
+                <span class="servicio__texto">
+                  <span class="servicio__nombre display-s">{s.nombre}</span>
+                  <span class="servicio__desc">{s.texto}</span>
+                </span>
+                <span class="servicio__miniatura marco marco--1-1 zoom">
+                  <Image
+                    src={s.img}
+                    alt={s.alt}
+                    widths={[160, 320]}
+                    sizes="120px"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+                <span class="servicio__flecha">
+                  <Icono nombre="flecha-derecha" tamano={16} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- =========================== PROCESO ========================== -->
+  <section class="seccion tema-oscuro">
+    <div class="envoltura">
+      <header class="cabecera-seccion revelar">
+        <div>
+          <p class="cejilla">{copy.procesoCejilla}</p>
+          <h2 class="display-l">{copy.procesoTitulo}</h2>
+        </div>
+        <div class="cabecera-seccion__aparte">
+          <p>{copy.procesoTexto}</p>
+          <a href={ruta('proceso', lang)} class="enlace-flecha">
+            {es ? 'Ver el proceso completo' : 'See the full process'}
+            <Icono nombre="flecha-derecha" tamano={14} />
+          </a>
+        </div>
+      </header>
+
+      <ol class="pasos">
+        {
+          pasos.map((p, i) => (
+            <li class="paso revelar" style={`--retardo:${i * 70}ms`}>
+              <span class="paso__num">{String(i + 1).padStart(2, '0')}</span>
+              <h3 class="paso__titulo">{p.t}</h3>
+              <p class="paso__desc">{p.d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================ ZONAS =========================== -->
+  <section class="seccion">
+    <div class="envoltura">
+      <div class="zonas revelar">
+        <div class="zonas__texto">
+          <p class="cejilla">{copy.zonasCejilla}</p>
+          <h2 class="display-l zonas__titulo">{copy.zonasTitulo}</h2>
+          <p class="zonas__parrafo">{copy.zonasTexto}</p>
+          <ul class="zonas__lista">
+            {site.zonas.map((z) => <li>{z}</li>)}
+          </ul>
+        </div>
+        <div class="zonas__medio marco marco--4-5">
+          <Image
+            src={imgEstudio}
+            alt={
+              es
+                ? 'Villa en una ladera de pinos en Ibiza, con fachada de hormigón visto, muro de piedra seca, tarima de madera y piscina.'
+                : 'Villa on a pine-covered slope in Ibiza, with an exposed concrete façade, a dry-stone wall, timber decking and a pool.'
+            }
+            widths={[480, 720, 960]}
+            sizes="(min-width: 60rem) 40vw, 92vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================== CUADERNO ========================== -->
+  {
+    ultimos.length > 0 && (
+      <section class="seccion tema-hueso">
+        <div class="envoltura">
+          <header class="cabecera-seccion revelar">
+            <div>
+              <p class="cejilla">{copy.cuadernoCejilla}</p>
+              <h2 class="display-l">{copy.cuadernoTitulo}</h2>
+            </div>
+            <div class="cabecera-seccion__aparte">
+              <p>{copy.cuadernoTexto}</p>
+              <a href={ruta('cuaderno', lang)} class="enlace-flecha">
+                {t('cua.todos')}
+                <Icono nombre="flecha-derecha" tamano={14} />
+              </a>
+            </div>
+          </header>
+
+          <div class="rejilla-articulos">
+            {ultimos.map(async (a, i) => {
+              const cat = await categoriaPorId(a.data.categoria);
+              return (
+                <div class="revelar" style={`--retardo:${i * 90}ms`}>
+                  <TarjetaArticulo
+                    slug={a.id}
+                    titulo={a.data.titulo}
+                    descripcion={a.data.descripcion}
+                    categoria={bi(cat?.data.nombre, lang) ?? a.data.categoria}
+                    fecha={a.data.fecha}
+                    minutos={minutosDeLectura(a.body)}
+                    portada={a.data.portada}
+                    portadaAlt={a.data.portadaAlt}
+                    lang={lang}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ============================= FAQ ============================ -->
+  <section class="seccion">
+    <div class="envoltura">
+      <div class="revelar">
+        <Faq preguntas={preguntas} lang={lang} titulo={copy.faqTitulo} />
+      </div>
+    </div>
+  </section>
+
+  <BloqueCta lang={lang} />
+</Base>
+
+<style>
+  /* ---------------------------- HERO ---------------------------- */
+  .hero {
+    position: relative;
+    /* 100svh evita el salto por la barra de direcciones en móvil.
+       El mínimo garantiza que el texto respire en pantallas bajas. */
+    min-height: min(100svh, 54rem);
+    display: grid;
+    align-items: end;
+    isolation: isolate;
+    background-color: var(--tinta);
+    color: var(--cal);
+    padding-top: var(--alto-cabecera);
+    padding-bottom: clamp(3rem, 8vh, 6rem);
+    overflow: hidden;
+  }
+
+  .hero__medio {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .hero__medio :global(.hero__img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* En móvil interesa el borde derecho de la foto (la piscina y las
+       tumbonas); en pantallas anchas, el centro. */
+    object-position: 62% 50%;
+  }
+  @media (min-width: 60rem) {
+    .hero__medio :global(.hero__img) {
+      object-position: 50% 48%;
+    }
+  }
+
+  /* Velo en dos capas.
+     La de abajo asienta el titular sobre un fondo oscuro; la de arriba
+     es una banda corta que solo protege la legibilidad de la cabecera.
+     Separarlas evita apagar el cielo, que es la mitad del valor de
+     esta fotografía. */
+  .hero__medio::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgb(18 19 21 / 0.42) 0%,
+        rgb(18 19 21 / 0.12) 14%,
+        rgb(18 19 21 / 0) 26%
+      ),
+      linear-gradient(
+        to top,
+        rgb(18 19 21 / 0.9) 0%,
+        rgb(18 19 21 / 0.74) 26%,
+        rgb(18 19 21 / 0.4) 52%,
+        rgb(18 19 21 / 0.06) 78%,
+        rgb(18 19 21 / 0) 100%
+      );
+  }
+
+  .hero__contenido {
+    position: relative;
+  }
+
+  .hero__cejilla {
+    color: var(--cal);
+    /* Sombra muy sutil: la cejilla es texto pequeño sobre fotografía y
+       necesita un apoyo extra allí donde la imagen aclara. */
+    text-shadow: 0 1px 12px rgb(18 19 21 / 0.55);
+  }
+
+  .hero__titulo {
+    margin-top: var(--s-4);
+    max-width: 20ch;
+  }
+
+  .hero__enfasis {
+    font-style: italic;
+  }
+
+  .hero__entradilla {
+    margin-top: var(--s-5);
+    max-width: 46ch;
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: rgb(247 244 238 / 0.88);
+    text-wrap: pretty;
+  }
+
+  .hero__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3);
+    margin-top: var(--s-6);
+  }
+  .hero__principal {
+    flex: 1 1 auto;
+    min-width: 14rem;
+  }
+  .hero__secundario {
+    flex: 1 1 auto;
+    min-width: 14rem;
+    background-color: transparent;
+    color: var(--cal);
+    border-color: rgb(247 244 238 / 0.55);
+  }
+  .hero__secundario:hover {
+    background-color: rgb(247 244 238 / 0.14);
+    border-color: var(--cal);
+  }
+  @media (min-width: 30rem) {
+    .hero__principal,
+    .hero__secundario {
+      flex: 0 0 auto;
+    }
+  }
+
+  .hero__pista {
+    position: absolute;
+    left: 50%;
+    bottom: 1rem;
+    translate: -50% 0;
+    color: rgb(247 244 238 / 0.6);
+    animation: respirar 2.8s var(--ease-suave) infinite;
+  }
+  @keyframes respirar {
+    0%,
+    100% {
+      translate: -50% 0;
+      opacity: 0.35;
+    }
+    50% {
+      translate: -50% 0.4rem;
+      opacity: 0.9;
+    }
+  }
+  @media (max-height: 40rem), (min-width: 60rem) {
+    .hero__pista {
+      display: none;
+    }
+  }
+
+  /* ------------------------- MANIFIESTO ------------------------- */
+  .manifiesto {
+    display: grid;
+    gap: var(--s-5);
+  }
+  @media (min-width: 60rem) {
+    .manifiesto {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+      gap: var(--s-8);
+    }
+  }
+  .manifiesto__titulo {
+    margin-top: var(--s-4);
+  }
+  .manifiesto__der {
+    max-width: 62ch;
+  }
+
+  .datos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-5);
+    margin-top: clamp(3rem, 6vw, 5rem);
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--filete);
+    list-style: none;
+  }
+  @media (min-width: 60rem) {
+    .datos {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .datos__cifra {
+    display: block;
+    font-family: var(--fuente-display);
+    font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+    line-height: 1;
+    color: var(--acento);
+  }
+  .datos__texto {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: var(--t-menudo);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 22ch;
+  }
+
+  /* ------------------- Cabecera de sección --------------------- */
+  .cabecera-seccion__aparte {
+    display: grid;
+    gap: var(--s-4);
+    justify-items: start;
+  }
+  .cabecera-seccion__aparte p {
+    max-width: 46ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  /* -------------------------- Proyectos ------------------------ */
+  .rejilla-proyectos {
+    display: grid;
+    gap: var(--s-7) var(--s-5);
+  }
+  @media (min-width: 48rem) {
+    .rejilla-proyectos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    /* El primero, a doble ancho: jerarquía sin recurrir a más tamaño
+       de tipografía. */
+    .rejilla-proyectos > :first-child {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 75rem) {
+    .rejilla-proyectos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* -------------------------- Servicios ------------------------ */
+  .lista-servicios {
+    list-style: none;
+    border-top: 1px solid var(--filete);
+  }
+  .servicio {
+    border-bottom: 1px solid var(--filete);
+  }
+  .servicio__enlace {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s-4);
+    padding-block: var(--s-5);
+    text-decoration: none;
+    color: inherit;
+    transition: padding-left var(--dur-media) var(--ease-salida);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .servicio__enlace:hover {
+      padding-left: 0.75rem;
+    }
+  }
+
+  .servicio__num {
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    color: var(--texto-apagado);
+    letter-spacing: 0.1em;
+  }
+
+  .servicio__texto {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .servicio__nombre {
+    transition: color var(--dur-rapida) var(--ease-suave);
+  }
+  .servicio__enlace:hover .servicio__nombre {
+    color: var(--acento);
+  }
+  .servicio__desc {
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.55;
+    color: var(--texto-apagado);
+    max-width: 58ch;
+  }
+
+  .servicio__miniatura {
+    display: none;
+    width: 5.5rem;
+    flex: none;
+  }
+  .servicio__flecha {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--texto-apagado);
+    transition: translate var(--dur-media) var(--ease-salida),
+      color var(--dur-rapida) var(--ease-suave);
+  }
+  .servicio__enlace:hover .servicio__flecha {
+    translate: 0.35rem 0;
+    color: var(--texto);
+  }
+
+  @media (min-width: 48rem) {
+    .servicio__enlace {
+      grid-template-columns: auto minmax(0, 1fr) auto auto;
+      gap: var(--s-6);
+    }
+    .servicio__miniatura {
+      display: block;
+    }
+  }
+
+  /* --------------------------- Pasos --------------------------- */
+  .pasos {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+    list-style: none;
+    padding: 0;
+    counter-reset: paso;
+  }
+  @media (min-width: 40rem) {
+    .pasos {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 68rem) {
+    .pasos {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--s-5);
+    }
+  }
+  .paso {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--filete);
+  }
+  .paso__num {
+    display: block;
+    font-size: var(--t-cejilla);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+    color: var(--acento);
+  }
+  .paso__titulo {
+    margin-top: var(--s-3);
+    font-size: var(--t-display-s);
+  }
+  .paso__desc {
+    margin-top: 0.6rem;
+    font-size: var(--t-cuerpo-s);
+    line-height: 1.6;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+
+  /* --------------------------- Zonas --------------------------- */
+  .zonas {
+    display: grid;
+    gap: var(--s-6);
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .zonas {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      gap: var(--s-8);
+    }
+  }
+  .zonas__titulo {
+    margin-top: var(--s-4);
+  }
+  .zonas__parrafo {
+    margin-top: var(--s-5);
+    max-width: 52ch;
+    color: var(--texto-apagado);
+    text-wrap: pretty;
+  }
+  .zonas__lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    margin-top: var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  .zonas__lista li {
+    font-size: var(--t-menudo);
+    letter-spacing: 0.02em;
+    color: var(--texto);
+    border: 1px solid var(--filete);
+    padding: 0.45rem 0.8rem;
+  }
+  .zonas__medio {
+    order: -1;
+  }
+  @media (min-width: 60rem) {
+    .zonas__medio {
+      order: 0;
+    }
+  }
+
+  /* ------------------------- Artículos ------------------------- */
+  .rejilla-articulos {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+  }
+  @media (min-width: 48rem) {
+    .rejilla-articulos {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

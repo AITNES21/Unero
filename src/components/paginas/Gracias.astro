@@ -1,0 +1,169 @@
+---
+import Base from '../../layouts/Base.astro';
+import Icono from '../Icono.astro';
+import TarjetaArticulo from '../TarjetaArticulo.astro';
+import { site, ruta, type Idioma } from '../../config/site';
+import { articulos, categoriaPorId, bi, minutosDeLectura } from '../../lib/contenido';
+
+interface Props {
+  lang: Idioma;
+}
+const { lang } = Astro.props;
+const es = lang === 'es';
+const lecturas = (await articulos(lang)).slice(0, 3);
+
+const copy = es
+  ? {
+      titulo: 'Mensaje enviado | Unero',
+      descripcion: 'Hemos recibido tu mensaje. Te respondemos en un día laborable.',
+      h1: 'Mensaje recibido',
+      texto:
+        'Gracias por escribirnos. Lo lee una persona del equipo, no un formulario automático, y te respondemos en un día laborable. Si es urgente, llámanos y lo resolvemos antes.',
+      mientrasTitulo: 'Mientras esperas',
+      mientrasTexto:
+        'Si estás pensando en construir en la isla, estos tres artículos responden las preguntas que más nos hacen.',
+      volver: 'Volver al inicio',
+    }
+  : {
+      titulo: 'Message sent | Unero',
+      descripcion: 'We have received your message. We will reply within one working day.',
+      h1: 'Message received',
+      texto:
+        'Thank you for writing. A person on the team reads it, not an automated form, and we reply within one working day. If it is urgent, call us and we will sort it sooner.',
+      mientrasTitulo: 'While you wait',
+      mientrasTexto:
+        'If you are thinking about building on the island, these three articles answer the questions we are asked most.',
+      volver: 'Back to the home page',
+    };
+---
+
+{/*
+  Página de agradecimiento.
+
+  Va con noindex: es una página de resultado, no de entrada, y
+  posicionarla no aporta nada. Se mantiene la ruta porque el formulario
+  la usa como destino cuando el visitante no tiene JavaScript.
+*/}
+<Base
+  titulo={copy.titulo}
+  descripcion={copy.descripcion}
+  lang={lang}
+  alternativa={ruta('gracias', es ? 'en' : 'es')}
+  noIndexar
+>
+  <section class="seccion">
+    <div class="envoltura-estrecha gracias">
+      <span class="gracias__marca" aria-hidden="true">
+        <Icono nombre="comprobado" tamano={26} grosor={1.25} />
+      </span>
+      <h1 class="display-l">{copy.h1}</h1>
+      <p class="gracias__texto">{copy.texto}</p>
+
+      <ul class="gracias__canales">
+        {
+          site.telefonos.map((tel) => (
+            <li>
+              <a href={`tel:${tel.numero}`} class="enlace-flecha">
+                <Icono nombre="telefono" tamano={14} />
+                {tel.etiqueta}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={`mailto:${site.email}`} class="enlace-flecha">
+            <Icono nombre="sobre" tamano={14} />
+            {site.email}
+          </a>
+        </li>
+      </ul>
+
+      <a href={ruta('home', lang)} class="boton boton--linea gracias__volver">
+        {copy.volver}
+      </a>
+    </div>
+  </section>
+
+  {
+    lecturas.length > 0 && (
+      <section class="seccion-corta tema-hueso">
+        <div class="envoltura">
+          <header class="gracias__cabecera">
+            <h2 class="display-m">{copy.mientrasTitulo}</h2>
+            <p>{copy.mientrasTexto}</p>
+          </header>
+          <div class="gracias__rejilla">
+            {lecturas.map(async (a) => {
+              const cat = await categoriaPorId(a.data.categoria);
+              return (
+                <TarjetaArticulo
+                  slug={a.id}
+                  titulo={a.data.titulo}
+                  descripcion={a.data.descripcion}
+                  categoria={bi(cat?.data.nombre, lang) ?? a.data.categoria}
+                  fecha={a.data.fecha}
+                  minutos={minutosDeLectura(a.body)}
+                  portada={a.data.portada}
+                  portadaAlt={a.data.portadaAlt}
+                  lang={lang}
+                />
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .gracias {
+    display: grid;
+    gap: var(--s-5);
+    justify-items: start;
+    padding-top: var(--s-6);
+  }
+  .gracias__marca {
+    display: grid;
+    place-items: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    border: 1px solid var(--mar);
+    color: var(--mar);
+  }
+  .gracias__texto {
+    font-size: var(--t-cuerpo-l);
+    line-height: 1.5;
+    color: var(--texto-apagado);
+    max-width: 54ch;
+    text-wrap: pretty;
+  }
+  .gracias__canales {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-5);
+    list-style: none;
+    padding: 0;
+  }
+  .gracias__volver {
+    margin-top: var(--s-3);
+  }
+
+  .gracias__cabecera {
+    margin-bottom: var(--s-6);
+  }
+  .gracias__cabecera p {
+    margin-top: var(--s-3);
+    color: var(--texto-apagado);
+    max-width: 56ch;
+  }
+  .gracias__rejilla {
+    display: grid;
+    gap: var(--s-6) var(--s-5);
+  }
+  @media (min-width: 48rem) {
+    .gracias__rejilla {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>

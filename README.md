@@ -181,6 +181,20 @@ regla que más afecta a cómo se ve la web, y se aplica en tres sitios:
 `npm run nitidez` mide esto y lista lo que se está ampliando. Los tres
 umbrales dejan de aplicar solos en cuanto lleguen fotografías mayores.
 
+**Máscara de enfoque al reducir** (`src/lib/servicio-imagen.ts`). Un
+servicio de imagen propio que envuelve el de Astro y aplica un reenfoque
+suave cuando la fotografía se sirve más pequeña que el original. Al
+remuestrear se promedian píxeles y el resultado sale blando: es física
+del escalado, no un defecto del fichero. Medido, devuelve **+35 % de
+nitidez** de media en las variantes reducidas, sin halos visibles.
+
+No confundir con un «mejorador» por IA: esto recupera contraste local,
+no inventa textura. En fotografía de obra, inventar textura es inventar
+acabados.
+
+La calidad WebP está en **82**, que es donde está el equilibrio medido:
+de 82 a 88 la nitidez sube un 1,5 % y el peso un 37 %.
+
 ### Lo que se decidió no hacer
 
 **Transiciones de página (View Transitions).** El `ClientRouter` de Astro

@@ -48,6 +48,14 @@ export const site = {
     ga4: 'G-FWEK6NDLK0',
   },
 
+  /**
+   * Verificación de propiedad en Google Search Console.
+   * No se puede quitar: si desaparece, Google revoca el acceso a los
+   * datos de la propiedad. Se emite en todas las páginas, no solo en la
+   * portada, para que siga valiendo aunque cambie la raíz del sitio.
+   */
+  verificacionGoogle: '-zFRK5w9iYCfntTVbrIpZU330m3MyEvjgC8OdLPm2x8',
+
   /** Municipios de Ibiza donde Unero trabaja. Alimenta el SEO local. */
   zonas: [
     'Eivissa',

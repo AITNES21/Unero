@@ -227,9 +227,24 @@ se dispara al empujar a `main`: instala, construye, **audita** y publica.
 Configuración necesaria en el repositorio (una sola vez):
 
 - **Settings → Pages → Source:** *GitHub Actions*.
-- **Settings → Pages → Custom domain:** `unero.es` (el fichero
-  `public/CNAME` ya lo declara).
+- **Settings → Pages → Custom domain:** `unero.es`.
 - **Enforce HTTPS** activado.
+
+> **Trampa con la que ya tropezamos.** El `CNAME` está en `public/`, no en
+> la raíz del repositorio, que es donde lo tenía la web v1. Es lo correcto
+> —así viaja dentro del artefacto que publica el Action— pero al moverlo,
+> GitHub dejó de verlo en la rama y **borró el dominio personalizado de
+> los ajustes**, dejando unero.es en 404 aunque el despliegue hubiera ido
+> bien. Si vuelve a pasar: Settings → Pages → Custom domain → escribir
+> `unero.es` → Save. No hay que mover el fichero.
+
+> **El workflow de Jekyll.** Mientras la fuente de Pages estuvo en «Deploy
+> from a branch», GitHub intentaba montar el repositorio con Jekyll y
+> fallaba al leer los ficheros `.astro` como si fueran YAML. Con la fuente
+> en *GitHub Actions* deja de ejecutarse. El fichero `public/.nojekyll`
+> está ahí como seguro adicional: sin él, Jekyll descartaría la carpeta
+> `_astro/`, que empieza por guion bajo y contiene todo el CSS, el
+> JavaScript y las imágenes.
 
 ## Servicios de terceros
 

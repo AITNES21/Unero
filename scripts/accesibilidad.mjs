@@ -146,12 +146,55 @@ try {
     );
     const scrollBloqueado = await pagina.evaluate(() => document.body.style.overflow === 'hidden');
 
+    /* Esta comprobación faltaba y por eso se coló el fallo: la capa del
+       menú tapaba el botón de cerrar, de modo que se abría y no había
+       forma de cerrarlo con el dedo. Se verifica que el clic llegue de
+       verdad al botón y que se distinga del fondo. */
+    const cierre = await pagina.evaluate(() => {
+      const b = document.getElementById('boton-menu');
+      const r = b.getBoundingClientRect();
+      const encima = document.elementFromPoint(
+        Math.round(r.left + r.width / 2),
+        Math.round(r.top + r.height / 2)
+      );
+      const lum = (c) => {
+        const [x, y, z] = c.match(/\d+/g).slice(0, 3).map((n) => {
+          n /= 255;
+          return n <= 0.03928 ? n / 12.92 : ((n + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * x + 0.7152 * y + 0.0722 * z;
+      };
+      const l1 = lum(getComputedStyle(b).color);
+      const l2 = lum(getComputedStyle(document.getElementById('menu-movil')).backgroundColor);
+      return {
+        alcanzable: !!(encima && (encima === b || b.contains(encima))),
+        contraste: (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05),
+      };
+    });
+
+
+    // Cerrar pulsando el mismo botón: el gesto natural en móvil.
+    await pagina.click('#boton-menu');
+    await pagina.waitForTimeout(450);
+    const cerradoConBoton =
+      (await pagina.getAttribute('#boton-menu', 'aria-expanded')) === 'false' &&
+      (await pagina.evaluate(() => document.getElementById('menu-movil').hidden));
+
+    // Y volver a abrir para probar el cierre con Escape.
+    await pagina.click('#boton-menu');
+    await pagina.waitForTimeout(300);
     await pagina.keyboard.press('Escape');
     await pagina.waitForTimeout(450);
     const cerradoTrasEscape = await pagina.getAttribute('#boton-menu', 'aria-expanded');
     const scrollRestaurado = await pagina.evaluate(() => document.body.style.overflow === '');
 
     notas.push(['menú móvil: aria-expanded al abrir', abierto === 'true']);
+    notas.push(['menú móvil: el botón de cerrar recibe el clic', cierre.alcanzable]);
+    notas.push([
+      `menú móvil: el botón de cerrar se distingue del fondo (${cierre.contraste.toFixed(1)}:1)`,
+      cierre.contraste >= 3,
+    ]);
+    notas.push(['menú móvil: se cierra pulsando el mismo botón', cerradoConBoton]);
     notas.push(['menú móvil: el foco entra en la capa', focoDentro === true]);
     notas.push(['menú móvil: bloquea el scroll del fondo', scrollBloqueado === true]);
     notas.push(['menú móvil: Escape lo cierra', cerradoTrasEscape === 'false']);

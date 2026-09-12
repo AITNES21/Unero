@@ -291,6 +291,19 @@ function activoRama(e: Enlace) {
     color: var(--tinta);
   }
 
+  /* Con el menú abierto, la cabecera se superpone a una capa de color
+     cal. Sobre el hero el texto es cal, así que sin esto el botón de
+     cerrar sería blanco sobre blanco: invisible. */
+  .cabecera[data-menu-abierto] {
+    color: var(--tinta);
+    background-color: transparent;
+    border-bottom-color: transparent;
+  }
+  .cabecera[data-menu-abierto] :global(.boton--solido) {
+    background-color: var(--tinta);
+    color: var(--cal);
+  }
+
   .cabecera__barra {
     max-width: var(--ancho-max);
     margin-inline: auto;
@@ -638,10 +651,17 @@ function activoRama(e: Enlace) {
     };
     let devolverFoco: HTMLElement | null = null;
 
-    const enfocables = () =>
-      Array.from(
+    /* El botón de cerrar vive en la cabecera, fuera de la capa, así que
+       se añade a mano al final del recorrido: si no, el tabulador nunca
+       llegaría a él y solo se podría cerrar con Escape. Va el último
+       para que al abrir el menú lo primero sea navegar, y el cerrar
+       quede a un Shift+Tab, que es donde se busca. */
+    const enfocables = () => [
+      ...Array.from(
         capa.querySelectorAll<HTMLElement>('a[href], button:not([disabled])')
-      ).filter((el) => el.offsetParent !== null);
+      ).filter((el) => el.offsetParent !== null),
+      disparador,
+    ];
 
     function abrir() {
       devolverFoco = document.activeElement as HTMLElement;
@@ -650,17 +670,22 @@ function activoRama(e: Enlace) {
       void capa.offsetHeight;
       capa.dataset.abierto = '';
       disparador.setAttribute('aria-expanded', 'true');
+      cabecera?.setAttribute('data-menu-abierto', '');
       if (etiqueta) etiqueta.textContent = textos.cerrar;
       // Bloquea el scroll del fondo sin provocar salto de maquetación.
       const ancho = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = 'hidden';
       if (ancho > 0) document.body.style.paddingRight = `${ancho}px`;
-      enfocables()[0]?.focus();
+      /* El foco entra en el primer enlace del menú, no en el botón de
+         cerrar: quien abre el menú quiere navegar. El botón de cerrar
+         queda a un Shift+Tab, que es donde se espera encontrarlo. */
+      capa.querySelector<HTMLElement>('a[href]')?.focus();
     }
 
     function cerrar({ devolver = true } = {}) {
       delete capa.dataset.abierto;
       disparador.setAttribute('aria-expanded', 'false');
+      cabecera?.removeAttribute('data-menu-abierto');
       if (etiqueta) etiqueta.textContent = textos.abrir;
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';

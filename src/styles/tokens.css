@@ -90,8 +90,11 @@
   /* ---- Otros ---- */
   --radio: 0px; /* geometría precisa: sin esquinas redondeadas */
   --alto-cabecera: 4.5rem;
-  --z-cabecera: 60;
+  /* La cabecera va por ENCIMA de la capa del menú: el botón de
+     hamburguesa es también el de cerrar, y si la capa lo tapa el menú
+     se queda abierto sin salida. */
   --z-menu: 70;
+  --z-cabecera: 80;
   --z-lightbox: 90;
   --z-cookies: 95;
 }
